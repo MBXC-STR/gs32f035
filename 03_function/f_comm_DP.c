@@ -456,9 +456,14 @@ void InitSciaGpioDp(void)
 	PieVectTable.SCITXINTA = SCI_DP_TXD_isr;
     #endif
     EDIS;
-	IER |= M_INT9;   	            //  Enable interrupts:
-	PieCtrlRegs.PIEIER9.bit.INTx1 = 1;
+	// IER |= M_INT9;   	            //  Enable interrupts:
+    #ifdef TARGET_GS32
+    interrupt_enable(INT_SCIA_RX);
+    interrupt_enable(INT_SCIA_TX);
+    #else
+    PieCtrlRegs.PIEIER9.bit.INTx1 = 1;
 	PieCtrlRegs.PIEIER9.bit.INTx2 = 1;
+    #endif
 }
 
 
@@ -484,9 +489,14 @@ void InitScibGpioDp(void)
 	PieVectTable.SCITXINTA = SCI_DP_TXD_isr;
     #endif
     EDIS;
-	IER |= M_INT9;   	            //  Enable interrupts:
+	// IER |= M_INT9;   	            //  Enable interrupts:
+    #ifdef TARGET_GS32
+    interrupt_enable(INT_SCIA_RX);
+    interrupt_enable(INT_SCIA_TX);
+    #else
 	PieCtrlRegs.PIEIER9.bit.INTx1 = 1;
 	PieCtrlRegs.PIEIER9.bit.INTx2 = 1;
+    #endif
 }
 
 //=====================================================================

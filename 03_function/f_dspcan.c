@@ -278,12 +278,16 @@ Uint16 InitdspECan(Uint16 baud)		// Initialize eCAN-A module
 
 // 锟斤拷锟斤拷锟叫断筹拷始锟斤拷
     EALLOW;
+	#ifdef TARGET_GS32
+	interrupt_disable(INT_CANA0);
+	#else
     PieCtrlRegs.PIEIER9.bit.INTx5 = 0;                      // 锟斤拷止锟叫讹拷
-    ECanaRegs.CANGIM.all = 0;
+    #endif
+	ECanaRegs.CANGIM.all = 0;
     ECanaRegs.CANMIM.all = 0;                               // 锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟叫讹拷
     
     ECanaRegs.CANGIF0.all = 0xffffffff;
-    ECanaRegs.CANGIF1.all = 0xffffffff;                     // 锟斤拷锟斤拷卸锟�
+    ECanaRegs.CANGIF1.all = 0xffffffff;                     // 锟斤拷锟斤拷卸锟
 
     ECanaRegs.CANMIL.all = 0;                               // 选锟斤拷EcanA锟叫讹拷0
     ECanaRegs.CANGIM.all = 1;                               // 使锟斤拷锟叫讹拷0
@@ -294,8 +298,12 @@ Uint16 InitdspECan(Uint16 baud)		// Initialize eCAN-A module
 	PieVectTable.ECAN0INTA = &eCanRxIsr;                    // CANA 0卸
 	#endif
     EDIS;
+	#ifdef TARGET_GS32
+	interrupt_enable(INT_CANA0);
+	#else
     PieCtrlRegs.PIEIER9.bit.INTx5 = 1;                      // 使锟斤拷ECAN1锟叫讹拷
-    IER |= M_INT9; 											// Enable CPU INT9
+    #endif
+    // IER |= M_INT9; 											// Enable CPU INT9
 	eCanTranEnFlag = 0;                                     // 锟斤拷锟斤拷锟斤拷锟斤拷始锟斤拷锟斤拷志
 	eCanReEnFlag = 0;
 	return CAN_INIT_SUCC;									// 锟斤拷始锟斤拷锟缴癸拷 

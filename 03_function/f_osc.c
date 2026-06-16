@@ -298,11 +298,21 @@ void InitSciOSC(uint8 baudRate)
 //	SciRxBufStr.err  = 0;									// ��մ��ڳ�����־							
 	SciRxBufStr.len = 0xff;
 #if 	(1 == OSC_SCI_SEL)	
-    PieCtrlRegs.PIEIER9.bit.INTx1 = 0;     					// PIE Group 9, INT1	RX�����ж� ��ֹ
-	PieCtrlRegs.PIEIER9.bit.INTx2 = 0;     					// PIE Group 9, INT2	TX�����ж�
+	#ifdef TARGET_GS32
+	interrupt_disable(INT_SCIA_RX);
+	interrupt_disable(INT_SCIA_TX);
+	#else
+    PieCtrlRegs.PIEIER9.bit.INTx1 = 0;     					// PIE Group 9, INT1	RXж ֹ
+	PieCtrlRegs.PIEIER9.bit.INTx2 = 0;     					// PIE Group 9, INT2	TXж
+	#endif
 #else
-    PieCtrlRegs.PIEIER9.bit.INTx3 = 0;     					// PIE Group 9, INT3	RX�����ж� ��ֹ
-	PieCtrlRegs.PIEIER9.bit.INTx4 = 0;     					// PIE Group 9, INT4	TX�����ж�
+	#ifdef TARGET_GS32
+	interrupt_disable(INT_LINA);
+	interrupt_disable(INT_LINB);
+	#else
+    PieCtrlRegs.PIEIER9.bit.INTx3 = 0;     					// PIE Group 9, INT3	RXж ֹ
+	PieCtrlRegs.PIEIER9.bit.INTx4 = 0;     					// PIE Group 9, INT4	TXж
+	#endif
 #endif
 	
 	// ����SCI-Aʹ�ùܽ�
@@ -370,24 +380,48 @@ void InitSciOSC(uint8 baudRate)
 	EDIS;
 	
 #if 	(1 == OSC_SCI_SEL)	
-	PieCtrlRegs.PIEIER9.bit.INTx1 = 1;						// ʹ���жϣ�
-	#if OSC_TX_INT_EN == 1
-		PieCtrlRegs.PIEIER9.bit.INTx2 = 1;
+	#ifdef TARGET_GS32
+	interrupt_enable(INT_SCIA_RX);
 	#else
+	PieCtrlRegs.PIEIER9.bit.INTx1 = 1;						// ʹжϣ
+	#endif
+	#if OSC_TX_INT_EN == 1
+		#ifdef TARGET_GS32
+		interrupt_enable(INT_SCIA_TX);
+		#else
+		PieCtrlRegs.PIEIER9.bit.INTx2 = 1;
+		#endif
+	#else
+		#ifdef TARGET_GS32
+		interrupt_disable(INT_SCIA_TX);
+		#else
 		PieCtrlRegs.PIEIER9.bit.INTx2 = 0;
+		#endif
 	#endif
 #else	
-	PieCtrlRegs.PIEIER9.bit.INTx3 = 1;						// ʹ���жϣ�
+		#ifdef TARGET_GS32
+		interrupt_enable(INT_LINA);
+		#else
+		PieCtrlRegs.PIEIER9.bit.INTx3 = 1;						// ʹжϣ
+		#endif
 	#if OSC_TX_INT_EN == 1
+		#ifdef TARGET_GS32
+		interrupt_enable(INT_LINB);
+		#else
 		PieCtrlRegs.PIEIER9.bit.INTx4 = 1;
+		#endif
 	#else
+		#ifdef TARGET_GS32
+		interrupt_disable(INT_LINB);
+		#else
 		PieCtrlRegs.PIEIER9.bit.INTx4 = 0;
+		#endif
 	#endif
 #endif	
 
 //	OscConFrameBuf[9] = 
 	PieCtrlRegs.PIECTRL.bit.ENPIE = 1;   					// Enable the PIE block��ʹ��PIEģ��
-	IER |= M_INT9; 											// Enable CPU INT9
+	// IER |= M_INT9; 											// Enable CPU INT9
 }
 		
 /*******************************************************************************

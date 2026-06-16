@@ -652,7 +652,11 @@ void SystemParChg05Ms()
             #else
             PieVectTable.EQEP1_INT = &PG_Zero_isr;
             #endif
+            #ifdef TARGET_GS32
+            interrupt_enable(INT_EQEP1);
+            #else
             PieCtrlRegs.PIEIER5.bit.INTx1 = 1;
+            #endif
             SysCtrlRegs.PCLKCR1.bit.EQEP1ENCLK = 1;
             EDIS;
         }
@@ -665,7 +669,12 @@ void SystemParChg05Ms()
             interrupt_register(INT_EQEP2, &PG_Zero_isr);
             #else
             PieVectTable.EQEP2_INT = &PG_Zero_isr;
+            #endif
+            #ifdef TARGET_GS32
+            interrupt_enable(INT_EQEP2);
+            #else
             PieCtrlRegs.PIEIER5.bit.INTx2 = 1;
+            #endif
             SysCtrlRegs.PCLKCR1.bit.EQEP2ENCLK = 1;
             EDIS;
         }

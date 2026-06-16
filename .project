@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>LinT_PMSM</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.cdt.managedbuilder.core.genmakebuilder</name>
+			<triggers>clean,full,incremental,</triggers>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.cdt.managedbuilder.core.ScannerConfigBuilder</name>
+			<triggers>full,incremental,</triggers>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.cdt.core.cnature</nature>
+		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
+		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>gs32_driver</name>
+			<type>2</type>
+			<locationURI>GS32_FW_LOC/gs32_driver</locationURI>
+		</link>
+	</linkedResources>
+	<variableList>
+		<variable>
+			<name>GS32_FW_LOC</name>
+			<value>$%7BGS32_SDK_LOC_DEF%7D</value>
+		</variable>
+		<variable>
+			<name>GS32_SDK_LOC</name>
+			<value>$%7BECLIPSE_HOME%7D/packages/gs32_sdk</value>
+		</variable>
+	</variableList>
+</projectDescription>

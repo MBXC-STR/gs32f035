@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><?fileVersion 4.0.0?><cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
+	<storageModule moduleId="org.eclipse.cdt.core.settings"><cconfiguration id="com.hpec.toolchains.riscv.config.elf.debug.flash.980314703.490272334">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="com.hpec.toolchains.riscv.config.elf.debug.flash.980314703.490272334" moduleId="org.eclipse.cdt.core.settings" name="Flash_ILM">
+				<macros>
+					<stringMacro name="GS32_SCR_PATH" type="VALUE_TEXT" value="${eclipse_home}\packages\GS32-DSPWare\utilities\scripts"/>
+					<stringMacro name="GS32_FW_PATH" type="VALUE_TEXT" value="${eclipse_home}\packages\GS32-DSPWare"/>
+					<stringMacro name="GS32_DRIVER_PATH" type="VALUE_TEXT" value="${eclipse_home}\packages\GS32-DSPWare\gs32_driver"/>
+					<stringMacro name="GS32_FLM_PATH" type="VALUE_TEXT" value="${eclipse_home}\packages\GS32-DSPWare\utilities\flashloader"/>
+				</macros>
+				<externalSettings/>
+				<extensions>
+					<extension id="org.eclipse.cdt.core.RV_ELF" point="org.eclipse.cdt.core.BinaryParser"/>
+					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+				</extensions>
+			</storageModule>
+			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+				<configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe,org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug" cleanCommand="${cross_rm} -rf" description="Recommended Configuration" id="com.hpec.toolchains.riscv.config.elf.debug.flash.980314703.490272334" name="Flash_ILM" parent="com.hpec.toolchains.riscv.config.elf.debug.flash" postbuildStep="">
+					<folderInfo id="com.hpec.toolchains.riscv.config.elf.debug.flash.980314703.490272334." name="/" resourcePath="">
+						<toolChain id="com.hpec.toolchains.riscv.toolchain.elf.flash.1074380698" name="GS RISC-V GCC" superClass="com.hpec.toolchains.riscv.toolchain.elf.flash">
+							<option id="com.hpec.toolchains.riscv.option.addtools.createflash.704080587" name="Create flash image" superClass="com.hpec.toolchains.riscv.option.addtools.createflash" value="true" valueType="boolean"/>
+							<option id="com.hpec.toolchains.riscv.option.addtools.createlisting.60032578" name="Create extended listing" superClass="com.hpec.toolchains.riscv.option.addtools.createlisting" value="true" valueType="boolean"/>
+							<option id="com.hpec.toolchains.riscv.option.addtools.printsize.1083699858" name="Print size" superClass="com.hpec.toolchains.riscv.option.addtools.printsize" value="true" valueType="boolean"/>
+							<option id="com.hpec.toolchains.riscv.option.optimization.level.601370360" name="Optimization Level" superClass="com.hpec.toolchains.riscv.option.optimization.level" value="com.hpec.toolchains.riscv.option.optimization.level.optimize" valueType="enumerated"/>
+							<option id="com.hpec.toolchains.riscv.option.optimization.other.1349540360" name="Other optimization flags" superClass="com.hpec.toolchains.riscv.option.optimization.other" value="-Wfatal-errors -funsigned-char --opt_level=off -O1" valueType="string"/>
+							<option id="com.hpec.toolchains.riscv.option.optimization.optlevel.379996268" name="Opt Level (--opt_level=on)" superClass="com.hpec.toolchains.riscv.option.optimization.optlevel"/>
+							<option id="com.hpec.toolchains.riscv.option.optimization.messagelength.845821617" name="Message length (-fmessage-length=0)" superClass="com.hpec.toolchains.riscv.option.optimization.messagelength"/>
+							<option id="com.hpec.toolchains.riscv.option.optimization.signedchar.168007744" name="'char' is signed (-fsigned-char)" superClass="com.hpec.toolchains.riscv.option.optimization.signedchar" value="false" valueType="boolean"/>
+							<option id="com.hpec.toolchains.riscv.option.optimization.functionsections.934204046" name="Function sections (-ffunction-sections)" superClass="com.hpec.toolchains.riscv.option.optimization.functionsections"/>
+							<option id="com.hpec.toolchains.riscv.option.optimization.datasections.1107222106" name="Data sections (-fdata-sections)" superClass="com.hpec.toolchains.riscv.option.optimization.datasections"/>
+							<option id="com.hpec.toolchains.riscv.option.debugging.level.2088694340" name="Debug level" superClass="com.hpec.toolchains.riscv.option.debugging.level" value="com.hpec.toolchains.riscv.option.debugging.level.default" valueType="enumerated"/>
+							<option id="com.hpec.toolchains.riscv.option.debugging.format.1990362058" name="Debug format" superClass="com.hpec.toolchains.riscv.option.debugging.format" value="com.hpec.toolchains.riscv.option.debugging.format.gdb" valueType="enumerated"/>
+							<option id="com.hpec.toolchains.riscv.option.toolchain.id.1221595674" superClass="com.hpec.toolchains.riscv.option.toolchain.id" value="2691190091" valueType="string"/>
+							<option id="com.hpec.toolchains.riscv.option.toolchain.name.1738895706" superClass="com.hpec.toolchains.riscv.option.toolchain.name" value="GS RISC-V GCC" valueType="string"/>
+							<option id="com.hpec.toolchains.riscv.option.command.prefix.211755096" name="Prefix" superClass="com.hpec.toolchains.riscv.option.command.prefix" value="gs-riscv-elf-" valueType="string"/>
+							<option id="com.hpec.toolchains.riscv.option.command.c.587896677" name="C compiler" superClass="com.hpec.toolchains.riscv.option.command.c" value="gcc" valueType="string"/>
+							<option id="com.hpec.toolchains.riscv.option.command.cpp.1004270776" name="C++ compiler" superClass="com.hpec.toolchains.riscv.option.command.cpp" value="g++" valueType="string"/>
+							<option id="com.hpec.toolchains.riscv.option.command.ar.656890093" name="Archiver" superClass="com.hpec.toolchains.riscv.option.command.ar" value="ar" valueType="string"/>
+							<option id="com.hpec.toolchains.riscv.option.command.objcopy.289457858" name="Hex/Bin converter" superClass="com.hpec.toolchains.riscv.option.command.objcopy" value="objcopy" valueType="string"/>
+							<option id="com.hpec.toolchains.riscv.option.command.objdump.973758042" name="Listing generator" superClass="com.hpec.toolchains.riscv.option.command.objdump" value="objdump" valueType="string"/>
+							<option id="com.hpec.toolchains.riscv.option.command.size.1227700078" name="Size command" superClass="com.hpec.toolchains.riscv.option.command.size" value="size" valueType="string"/>
+							<option id="com.hpec.toolchains.riscv.option.command.make.613355106" name="Build command" superClass="com.hpec.toolchains.riscv.option.command.make" value="make" valueType="string"/>
+							<option id="com.hpec.toolchains.riscv.option.command.rm.637351505" name="Remove command" superClass="com.hpec.toolchains.riscv.option.command.rm" value="rm" valueType="string"/>
+							<option id="com.hpec.toolchains.riscv.option.target.other.512948850" name="Other target flags" superClass="com.hpec.toolchains.riscv.option.target.other" value="--gsdi_ext1p2h -mgs_aux" valueType="string"/>
+							<option id="com.hpec.toolchains.riscv.option.target.isa.extensions.863983212" name="Other extensions" superClass="com.hpec.toolchains.riscv.option.target.isa.extensions" value="_xgsdida" valueType="string"/>
+							<option id="com.hpec.toolchains.riscv.option.target.saverestore.451894815" name="Small prologue/epilogue (-msave-restore)" superClass="com.hpec.toolchains.riscv.option.target.saverestore" value="false" valueType="boolean"/>
+							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.RV_ELF" id="com.hpec.toolchains.riscv.targetPlatform.1893682665" isAbstract="false" osList="all" superClass="com.hpec.toolchains.riscv.targetPlatform"/>
+							<builder buildPath="${workspace_loc:/gs32f0039_dsp}/Flash" id="com.hpec.toolchains.riscv.builder.1544091302" keepEnvironmentInBuildfile="false" name="Gnu Make Builder" parallelBuildOn="true" parallelizationNumber="12" superClass="com.hpec.toolchains.riscv.builder"/>
+							<tool id="com.hpec.toolchains.riscv.tool.assembler.742886573" name="GS RISC-V Assembler" superClass="com.hpec.toolchains.riscv.tool.assembler">
+								<option id="com.hpec.toolchains.riscv.option.assembler.usepreprocessor.1267208571" name="Use preprocessor" superClass="com.hpec.toolchains.riscv.option.assembler.usepreprocessor"/>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.hpec.toolchains.riscv.option.assembler.defs.1629617790" name="Defined symbols (-D)" superClass="com.hpec.toolchains.riscv.option.assembler.defs" valueType="definedSymbols">
+									<listOptionValue builtIn="false" value="FLASH_TARGET"/>
+									<listOptionValue builtIn="false" value="GS32_PART_NUM=0x035"/>
+									<listOptionValue builtIn="false" value="GS32_PIN_COUNT=80"/>
+									<listOptionValue builtIn="false" value="GS32F00xx=0x3000"/>
+									<listOptionValue builtIn="false" value="USING_VECTOR_INTERRUPT=1"/>
+								</option>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.hpec.toolchains.riscv.option.assembler.include.paths.2087190882" name="Include paths (-I)" superClass="com.hpec.toolchains.riscv.option.assembler.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${GS32_DRIVER_PATH}/driverlib/dsp/NMSIS_core&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/inc&quot;"/>
+								</option>
+								<inputType id="com.hpec.toolchains.riscv.tool.assembler.input.556887338" superClass="com.hpec.toolchains.riscv.tool.assembler.input"/>
+							</tool>
+							<tool id="com.hpec.toolchains.riscv.tool.c.compiler.261816171" name="GS RISC-V C Compiler" superClass="com.hpec.toolchains.riscv.tool.c.compiler">
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.hpec.toolchains.riscv.option.c.compiler.defs.95518298" name="Defined symbols (-D)" superClass="com.hpec.toolchains.riscv.option.c.compiler.defs" useByScannerDiscovery="true" valueType="definedSymbols">
+									<listOptionValue builtIn="false" value="FLASH_TARGET"/>
+									<listOptionValue builtIn="false" value="GS32_PART_NUM=0x035"/>
+									<listOptionValue builtIn="false" value="GS32_PIN_COUNT=80"/>
+									<listOptionValue builtIn="false" value="GS32F00xx=0x3000"/>
+									<listOptionValue builtIn="false" value="USING_VECTOR_INTERRUPT=1"/>
+								</option>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.hpec.toolchains.riscv.option.c.compiler.include.paths.827121704" name="Include paths (-I)" superClass="com.hpec.toolchains.riscv.option.c.compiler.include.paths" useByScannerDiscovery="true" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${GS32_DRIVER_PATH}/driverlib/dsp&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${GS32_DRIVER_PATH}/driverlib/sysctl&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${GS32_DRIVER_PATH}/init&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${GS32_DRIVER_PATH}/driverlib/dsp/NMSIS_core&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${GS32_DRIVER_PATH}/driverlib&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${GS32_DRIVER_PATH}/driverlib/device_gs32f00xx&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${GS32_DRIVER_PATH}/common&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/inc&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${GS32_DRIVER_PATH}/mathlib&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/05_public/28034_header&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/05_public/function_header&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/05_public/LinT_HD01_DEF_header&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/05_public/motor_header&quot;"/>
+								</option>
+								<inputType id="com.hpec.toolchains.riscv.tool.c.compiler.input.196012890" superClass="com.hpec.toolchains.riscv.tool.c.compiler.input"/>
+							</tool>
+							<tool id="com.hpec.toolchains.riscv.tool.cpp.compiler.1930398590" name="GS RISC-V C++ Compiler" superClass="com.hpec.toolchains.riscv.tool.cpp.compiler"/>
+							<tool id="com.hpec.toolchains.riscv.tool.c.linker.532871427" name="GS RISC-V C Linker" superClass="com.hpec.toolchains.riscv.tool.c.linker">
+								<option id="com.hpec.toolchains.riscv.option.c.linker.gcsections.1026060694" name="Remove unused sections (-Xlinker --gc-sections)" superClass="com.hpec.toolchains.riscv.option.c.linker.gcsections" value="true" valueType="boolean"/>
+								<option id="com.hpec.toolchains.riscv.option.c.linker.usenewlibnosys.1474079267" name="Do not use syscalls (--specs=nosys.specs)" superClass="com.hpec.toolchains.riscv.option.c.linker.usenewlibnosys" value="false" valueType="boolean"/>
+								<option id="com.hpec.toolchains.riscv.option.c.linker.nostart.376832897" name="Do not use standard start files (-nostartfiles)" superClass="com.hpec.toolchains.riscv.option.c.linker.nostart" value="true" valueType="boolean"/>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.hpec.toolchains.riscv.option.c.linker.flags.1800521004" name="Linker flags (-Xlinker [option])" superClass="com.hpec.toolchains.riscv.option.c.linker.flags" valueType="stringList">
+									<listOptionValue builtIn="false" value="--no-warn-rwx-segments"/>
+									<listOptionValue builtIn="false" value="--print-memory-usage"/>
+									<listOptionValue builtIn="false" value="--orphan-handling=warn"/>
+								</option>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.hpec.toolchains.riscv.option.c.linker.scriptfile.1227816264" name="Script files (-T)" superClass="com.hpec.toolchains.riscv.option.c.linker.scriptfile" valueType="stringList">
+									<listOptionValue builtIn="false" value="&quot;${GS32_DRIVER_PATH}/driverlib/dsp/ld_scripts_dsp/gs32f00xx_dsp_flashilm.ld&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${GS32_DRIVER_PATH}/driverlib/dsp/ld_scripts_dsp/GS32F035_mem.ld&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${GS32_DRIVER_PATH}/driverlib/dsp/ld_scripts_dsp/gs32f00xx_dsp_3.0_regs.ld&quot;"/>
+								</option>
+								<inputType id="com.hpec.toolchains.riscv.tool.c.linker.input.1883411043" superClass="com.hpec.toolchains.riscv.tool.c.linker.input">
+									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
+									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
+								</inputType>
+							</tool>
+							<tool id="com.hpec.toolchains.riscv.tool.cpp.linker.1495557046" name="GS RISC-V C++ Linker" superClass="com.hpec.toolchains.riscv.tool.cpp.linker">
+								<option id="com.hpec.toolchains.riscv.option.cpp.linker.gcsections.692010268" name="Remove unused sections (-Xlinker --gc-sections)" superClass="com.hpec.toolchains.riscv.option.cpp.linker.gcsections" value="true" valueType="boolean"/>
+							</tool>
+							<tool id="com.hpec.toolchains.riscv.tool.archiver.574750663" name="GS RISC-V Archiver" superClass="com.hpec.toolchains.riscv.tool.archiver"/>
+							<tool id="com.hpec.toolchains.riscv.tool.createflash.1731846366" name="GS RISC-V Create Flash Image" superClass="com.hpec.toolchains.riscv.tool.createflash"/>
+							<tool id="com.hpec.toolchains.riscv.tool.createlisting.1962175054" name="GS RISC-V Create Listing" superClass="com.hpec.toolchains.riscv.tool.createlisting">
+								<option id="com.hpec.toolchains.riscv.option.createlisting.source.1346716774" name="Display source (--source|-S)" superClass="com.hpec.toolchains.riscv.option.createlisting.source" value="true" valueType="boolean"/>
+								<option id="com.hpec.toolchains.riscv.option.createlisting.allheaders.1365481708" name="Display all headers (--all-headers|-x)" superClass="com.hpec.toolchains.riscv.option.createlisting.allheaders" value="true" valueType="boolean"/>
+								<option id="com.hpec.toolchains.riscv.option.createlisting.demangle.2006911223" name="Demangle names (--demangle|-C)" superClass="com.hpec.toolchains.riscv.option.createlisting.demangle" value="true" valueType="boolean"/>
+								<option id="com.hpec.toolchains.riscv.option.createlisting.linenumbers.2142635285" name="Display line numbers (--line-numbers|-l)" superClass="com.hpec.toolchains.riscv.option.createlisting.linenumbers" value="true" valueType="boolean"/>
+								<option id="com.hpec.toolchains.riscv.option.createlisting.wide.1720916024" name="Wide lines (--wide|-w)" superClass="com.hpec.toolchains.riscv.option.createlisting.wide" value="true" valueType="boolean"/>
+							</tool>
+							<tool id="com.hpec.toolchains.riscv.tool.createasm.1191916670" name="GS RISC-V Create ASM" superClass="com.hpec.toolchains.riscv.tool.createasm"/>
+							<tool id="com.hpec.toolchains.riscv.tool.printsize.1475297696" name="GS RISC-V Print Size" superClass="com.hpec.toolchains.riscv.tool.printsize">
+								<option id="com.hpec.toolchains.riscv.option.printsize.format.1340970779" name="Size format" superClass="com.hpec.toolchains.riscv.option.printsize.format"/>
+							</tool>
+						</toolChain>
+					</folderInfo>
+					<sourceEntries>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="01_system"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="02_motor"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="03_function"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="04_subprogram"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="05_public"/>
+						<entry excluding="dualcore" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="gs32_driver"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="inc"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+					</sourceEntries>
+				</configuration>
+			</storageModule>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+			<storageModule moduleId="ilg.gnumcueclipse.managedbuild.packs"/>
+		</cconfiguration></storageModule>
+	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+		<project id="gs32f0039_dsp.com.hpec.toolchains.riscv.target.elf.404923738" name="Executable" projectType="com.hpec.toolchains.riscv.target.elf"/>
+	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
+	<storageModule moduleId="refreshScope" versionNumber="2">
+		<configuration configurationName="Sysmem1.2"/>
+		<configuration configurationName="ILM"/>
+		<configuration configurationName="Flash_ILM"/>
+		<configuration configurationName="ILM1.2"/>
+		<configuration configurationName="ILM3.0"/>
+		<configuration configurationName="RAM1.2"/>
+		<configuration configurationName="RAM3.0"/>
+		<configuration configurationName="RAM1.1"/>
+		<configuration configurationName="Flash1.2">
+			<resource resourceType="PROJECT" workspacePath="/dsp_template"/>
+		</configuration>
+		<configuration configurationName="Flash3.0"/>
+		<configuration configurationName="Flash1.2_slv">
+			<resource resourceType="PROJECT" workspacePath="/dsp_template"/>
+		</configuration>
+		<configuration configurationName="Flash"/>
+		<configuration configurationName="Debug">
+			<resource resourceType="PROJECT" workspacePath="/i2c_dsp_ex01"/>
+		</configuration>
+		<configuration configurationName="Release">
+			<resource resourceType="PROJECT" workspacePath="/i2c_dsp_ex01"/>
+		</configuration>
+		<configuration configurationName="RAM"/>
+	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets">
+		<buildTargets/>
+	</storageModule>
+	<storageModule moduleId="scannerConfiguration">
+		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		<scannerConfigBuildInfo instanceId="com.hpec.toolchains.riscv.config.elf.debug.flash.980314703.490272334;com.hpec.toolchains.riscv.config.elf.debug.flash.980314703.490272334.;com.hpec.toolchains.riscv.tool.c.compiler.261816171;com.hpec.toolchains.riscv.tool.c.compiler.input.196012890">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="com.hpec.toolchains.riscv.config.elf.debug.flash.467974672;com.hpec.toolchains.riscv.config.elf.debug.flash.467974672.;com.hpec.toolchains.riscv.tool.c.compiler.32268414;com.hpec.toolchains.riscv.tool.c.compiler.input.618841120">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="com.hpec.toolchains.riscv.config.elf.debug.ram.1674594032;com.hpec.toolchains.riscv.config.elf.debug.ram.1674594032.;com.hpec.toolchains.riscv.tool.c.compiler.261586357;com.hpec.toolchains.riscv.tool.c.compiler.input.1518838804">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="com.hpec.toolchains.riscv.config.elf.debug.flash.1392390570;com.hpec.toolchains.riscv.config.elf.debug.flash.1392390570.;com.hpec.toolchains.riscv.tool.c.compiler.367401242;com.hpec.toolchains.riscv.tool.c.compiler.input.1585131121">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="com.hpec.toolchains.riscv.config.elf.debug.flash.980314703;com.hpec.toolchains.riscv.config.elf.debug.flash.980314703.;com.hpec.toolchains.riscv.tool.c.compiler.1337032655;com.hpec.toolchains.riscv.tool.c.compiler.input.2005061688">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="com.hpec.toolchains.riscv.config.elf.debug.flash.1730665559;com.hpec.toolchains.riscv.config.elf.debug.flash.1730665559.;com.hpec.toolchains.riscv.tool.c.compiler.389815370;com.hpec.toolchains.riscv.tool.c.compiler.input.1464667555">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+	</storageModule>
+</cproject>

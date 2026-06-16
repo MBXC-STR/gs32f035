@@ -1,20 +1,20 @@
 /****************************************************************
-ÎÄ¼þ¹¦ÄÜ: Òì²½»úºÍÍ¬²½»ú²ÎÊý±æÊ¶¹«¹²±äÁ¿ºÍº¯Êý¶¨Òå
-ÎÄ¼þ°æ±¾£º 
-×îÐÂ¸üÐÂ£º 
+ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½: ï¿½ì²½ï¿½ï¿½ï¿½ï¿½Í¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Íºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ï¿½Ä¼ï¿½ï¿½æ±¾ï¿½ï¿½ 
+ï¿½ï¿½ï¿½Â¸ï¿½ï¿½Â£ï¿½ 
 
 *************************************************************/
 #include "MotorParaIDinclude.h"
 #include "MotorPmsmParEst.h"
 #include "MotorEncoder.h"
 
-// // È«¾Ö±äÁ¿¶¨Òå
+// // È«ï¿½Ö±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 UV_BIAS_COFF_STRUCT		 gUVCoff;
-MOTOR_EXTERN_STRUCT		 gMotorExtReg;	            //µç»úÀ©Õ¹ÐÅÏ¢£¨µç»ú²ÎÊý±æÊ¶µÃµ½µÄÊý¾Ý£©
+MOTOR_EXTERN_STRUCT		 gMotorExtReg;	            //ï¿½ï¿½ï¿½ï¿½ï¿½Õ¹ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¶ï¿½Ãµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý£ï¿½
 MOTOR_PARA_EST           gGetParVarable;
 
 
-// // Í¬²½»ú¿ÕÔØ±æÊ¶Ë³Ðò
+// // Í¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø±ï¿½Ê¶Ë³ï¿½ï¿½
 PAR_EST_MAIN_STEP const pmTuneProgNoLoad[IDENTIFY_PROGRESS_LENGTH] = 
 {
     IDENTIFY_RS,
@@ -24,7 +24,7 @@ PAR_EST_MAIN_STEP const pmTuneProgNoLoad[IDENTIFY_PROGRESS_LENGTH] =
     IDENTIFY_END
 };
 
-// // Í¬²½»ú´øÔØ±æÊ¶Ë³Ðò
+// // Í¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø±ï¿½Ê¶Ë³ï¿½ï¿½
 PAR_EST_MAIN_STEP const pmTuneProgLoad[IDENTIFY_PROGRESS_LENGTH] = 
 {
     IDENTIFY_RS,
@@ -34,7 +34,7 @@ PAR_EST_MAIN_STEP const pmTuneProgLoad[IDENTIFY_PROGRESS_LENGTH] =
     IDENTIFY_END
 };
 
-// // Í¬²½»ú¿ª»·Ê¸Á¿¿ÕÔØ±æÊ¶Ë³Ðò
+// // Í¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¸ï¿½ï¿½ï¿½ï¿½ï¿½Ø±ï¿½Ê¶Ë³ï¿½ï¿½
 PAR_EST_MAIN_STEP const pmSVC_TuneProgNoLoad[IDENTIFY_PROGRESS_LENGTH] = 
 {
     IDENTIFY_RS,
@@ -43,7 +43,7 @@ PAR_EST_MAIN_STEP const pmSVC_TuneProgNoLoad[IDENTIFY_PROGRESS_LENGTH] =
     IDENTIFY_END,
     IDENTIFY_END
 };
-// // Í¬²½»ú¿ª»·Ê¸Á¿´øÔØ±æÊ¶Ë³Ðò
+// // Í¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¸ï¿½ï¿½ï¿½ï¿½ï¿½Ø±ï¿½Ê¶Ë³ï¿½ï¿½
 PAR_EST_MAIN_STEP const pmSVC_TuneProgLoad[IDENTIFY_PROGRESS_LENGTH] = 
 {
     IDENTIFY_RS,
@@ -72,27 +72,27 @@ PAR_EST_MAIN_STEP const debugTuneProcess[IDENTIFY_PROGRESS_LENGTH] =
     IDENTIFY_END
 };
 
-// // ÄÚ²¿º¯ÊýÉùÃ÷
+// // ï¿½Ú²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 void EndOfParIdentify(void);
 extern void BeforeRunRsIdentify(void);
 extern void ParSendTune(void);
 /****************************************************************
-    º¯Êý¹¦ÄÜ£º²ÎÊý±æÊ¶Ö÷Ñ­»·½á¹¹¿ØÖÆ
+    ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¶ï¿½ï¿½Ñ­ï¿½ï¿½ï¿½á¹¹ï¿½ï¿½ï¿½ï¿½
     
 *****************************************************************/
 void RunCaseGetPar(void)
 {    
-// ¹ÊÕÏ»òÕß¹¦ÄÜÍ£Ö¹µ÷Ð³ÔòÍ£Ö¹
+// ï¿½ï¿½ï¿½Ï»ï¿½ï¿½ß¹ï¿½ï¿½ï¿½Í£Ö¹ï¿½ï¿½Ð³ï¿½ï¿½Í£Ö¹
 	if((gError.ErrorCode.all != 0) || (gMainCmd.Command.bit.Start == 0))
 	{		
 		DisableDrive();
-        DINT;                                       // ÔÝÊ±Í£Ö¹ÖÐ¶Ï£¬ µÈÖÐ¶ÏÖØÐÂÉèÖÃ
+        DINT;                                       // ï¿½ï¿½Ê±Í£Ö¹ï¿½Ð¶Ï£ï¿½ ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         
         gGetParVarable.ParEstContent[gGetParVarable.ParEstMstep] = IDENTIFY_END;
         gGetParVarable.StatusWord = TUNE_FINISH;
 	}
     
-// ¼ÌÐøµ÷Ð³
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð³
     switch(gGetParVarable.ParEstContent[gGetParVarable.ParEstMstep])
     {
        case IDENTIFY_RS:
@@ -131,7 +131,7 @@ void RunCaseGetPar(void)
 }
 
 /************************************************************
-	²ÎÊý±æÊ¶ÐèÒªµÄ²ÎÊýµÄ³õÊ¼»¯
+	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¶ï¿½ï¿½Òªï¿½Ä²ï¿½ï¿½ï¿½ï¿½Ä³ï¿½Ê¼ï¿½ï¿½
 	
 ************************************************************/
 void PrepareParForTune(void)
@@ -139,7 +139,7 @@ void PrepareParForTune(void)
     int m_index;
     PAR_EST_MAIN_STEP *m_PIdentifyFlow;
     
-    //ËùÓÐ²ÎÊý±æÊ¶¹ý³ÌÖÐ·µ»ØµÄ±äÁ¿£¬¶¼ÒªÔ¤ÏÈ¸³Öµ£¬·ñÔò»áµ¼ÖÂ¶ÔÓ¦µÄ¹¦ÄÜÂë³ö´í    
+    //ï¿½ï¿½ï¿½Ð²ï¿½ï¿½ï¿½ï¿½ï¿½Ê¶ï¿½ï¿½ï¿½ï¿½ï¿½Ð·ï¿½ï¿½ØµÄ±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÒªÔ¤ï¿½È¸ï¿½Öµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½áµ¼ï¿½Â¶ï¿½Ó¦ï¿½Ä¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½    
 	gMotorExtReg.R1     = gMotorExtInfo.R1;         // IM motor
     gMotorExtReg.R2     = gMotorExtInfo.R2;
     gMotorExtReg.L0     = gMotorExtInfo.L0;
@@ -149,7 +149,7 @@ void PrepareParForTune(void)
     gMotorExtReg.RsPm   = gMotorExtInfo.RsPm;       // PM motor
     gMotorExtReg.LD     = gMotorExtInfo.LD;         
     gMotorExtReg.LQ     = gMotorExtInfo.LQ;
-    gEstBemf.BemfVolt   = gMotorExtInfo.BemfVolt;               // PM ×ª×Ó´ÅÁ´ %
+    gEstBemf.BemfVolt   = gMotorExtInfo.BemfVolt;               // PM ×ªï¿½Ó´ï¿½ï¿½ï¿½ %
 
     gPGData.PGDir               = gPGData.SpeedDir;
     gPGData.PGErrorFlag         = 0;
@@ -164,7 +164,7 @@ void PrepareParForTune(void)
     
     gGetParVarable.ParEstMstep = 0;
     gGetParVarable.StatusWord = TUNE_INITIAL;
-    gGetParVarable.IdSubStep = 1;                               // ×Ó¹ý³Ì²½Öè
+    gGetParVarable.IdSubStep = 1;                               // ï¿½Ó¹ï¿½ï¿½Ì²ï¿½ï¿½ï¿½
     gUVCoff.IdRsCnt = 0;
     gUVCoff.IdRsDelay = 0;    
 
@@ -215,13 +215,13 @@ void PrepareParForTuneBeforeRun(void)
 {
    // PAR_EST_MAIN_STEP *m_PIdentifyFlow;
     
-    //ËùÓÐ²ÎÊý±æÊ¶¹ý³ÌÖÐ·µ»ØµÄ±äÁ¿£¬¶¼ÒªÔ¤ÏÈ¸³Öµ£¬·ñÔò»áµ¼ÖÂ¶ÔÓ¦µÄ¹¦ÄÜÂë³ö´í 
+    //ï¿½ï¿½ï¿½Ð²ï¿½ï¿½ï¿½ï¿½ï¿½Ê¶ï¿½ï¿½ï¿½ï¿½ï¿½Ð·ï¿½ï¿½ØµÄ±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÒªÔ¤ï¿½È¸ï¿½Öµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½áµ¼ï¿½Â¶ï¿½Ó¦ï¿½Ä¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
 	gMotorExtReg.R1     = gMotorExtInfo.R1;         // IM motor
     gMotorExtReg.R2     = gMotorExtInfo.R2;
     gMotorExtReg.L0     = gMotorExtInfo.L0;
     gMotorExtReg.LM     = gMotorExtInfo.LM;
     gMotorExtReg.I0     = gMotorExtInfo.I0;   
-    gEstBemf.BemfVolt   = gMotorExtInfo.BemfVolt;               // PM ×ª×Ó´ÅÁ´ %
+    gEstBemf.BemfVolt   = gMotorExtInfo.BemfVolt;               // PM ×ªï¿½Ó´ï¿½ï¿½ï¿½ %
     gPGData.PGDir               = gPGData.SpeedDir;
     gPGData.PGErrorFlag         = 0;
     gPmParEst.CoderPos_deg      = gIPMPos.RotorZeroGet;
@@ -233,8 +233,8 @@ void PrepareParForTuneBeforeRun(void)
             
 }
 /*******************************************************************
-    º¯Êý¹¦ÄÜ: ½áÊø²ÎÊý±æÊ¶£¬»Ö¸´¶ÔÍâ²¿Ä£¿éµÄÐÞ¸Ä£¬×¼±¸ÔËÐÐ
-    ÑÓ³ÙÍÆ³ö£¬±ÜÃâÍË³ö²ÎÊý±æÊ¶ºó·´¸´½øÈë
+    ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¶ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½â²¿Ä£ï¿½ï¿½ï¿½ï¿½Þ¸Ä£ï¿½×¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿?
+    ï¿½Ó³ï¿½ï¿½Æ³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¶ï¿½ó·´¸ï¿½ï¿½ï¿½ï¿½ï¿½
 ********************************************************************/
 void EndOfParIdentify(void)
 { 
@@ -248,16 +248,24 @@ void EndOfParIdentify(void)
         }
     	DisableDrive();
         
-        EALLOW;  						                //ÉèÖÃÓÃ»§·þÎñ³ÌÐò
-        PIE_VECTTABLE_ADCINT = &ADC_Over_isr;		    //ADC½áÊøÖÐ¶Ï--INT1
-        PieVectTable.EPWM1_TZINT = &EPWM1_TZ_isr;		//¹ýÁ÷ÖÐ¶Ï--INT2
-        //PieVectTable.EPWM1_INT 	= &EPWM1_zero_isr;		//ÏÂÒçÖÐ¶Ï--INT3
-        PieCtrlRegs.PIEIER3.bit.INTx2 = 0;              //¹Ø±ÕEPWM2ÖÐ¶Ï
+        EALLOW;  						                //ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿?
+        #ifdef TARGET_GS32
+        interrupt_register(INT_ADC1, &ADC_Over_isr);
+        #else
+        PIE_VECTTABLE_ADCINT = &ADC_Over_isr;		    //ADCï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½--INT1
+        #endif
+        #ifdef TARGET_GS32
+        interrupt_register(INT_EPWM1_TZ, &EPWM1_TZ_isr);		//¹ýÁ÷ÖÐ¶Ï
+#else
+        PieVectTable.EPWM1_TZINT = &EPWM1_TZ_isr;		//ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½--INT2
+        #endif
+        //PieVectTable.EPWM1_INT 	= &EPWM1_zero_isr;		//ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½--INT3
+        PieCtrlRegs.PIEIER3.bit.INTx2 = 0;              //ï¿½Ø±ï¿½EPWM2ï¿½Ð¶ï¿½
         EDIS;
         
     	InitSetPWM();
        	InitSetAdc();
-        SetInterruptEnable();	                        // Èç¹û±æÊ¶ÏîÄ¿ÖÐÍ¾ÍË³ö£¬ÖÐ¶ÏÓÐ¿ÉÄÜÊÇ¹Ø±ÕµÄ£¬ÐëÔÚ´Ë´ò¿ª
+        SetInterruptEnable();	                        // ï¿½ï¿½ï¿½ï¿½ï¿½Ê¶ï¿½ï¿½Ä¿ï¿½ï¿½Í¾ï¿½Ë³ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½Ð¿ï¿½ï¿½ï¿½ï¿½Ç¹Ø±ÕµÄ£ï¿½ï¿½ï¿½ï¿½Ú´Ë´ï¿?
        	EINT;   							    
        	ERTM;
     	//gMainStatus.RunStep = STATUS_STOP;
@@ -274,7 +282,7 @@ void EndOfParIdentify(void)
 
 	if((gEstBemf.BemfVolt > gMotorInfo.Votage*12)||(gEstBemf.BemfVolt < gMotorInfo.Votage*4))
 	{
-	    gError.ErrorCode.all |= ERROR_COEFF;        //380VµÄ»°£¬ÔÚ456ºÍ152VÖ®Íâ¾Í±¨¾¯¸æ
+	    gError.ErrorCode.all |= ERROR_COEFF;        //380Vï¿½Ä»ï¿½ï¿½ï¿½ï¿½ï¿½456ï¿½ï¿½152VÖ®ï¿½ï¿½Í±ï¿½ï¿½ï¿½ï¿½ï¿?
 	}
 }
 

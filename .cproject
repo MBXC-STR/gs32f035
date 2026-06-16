@@ -71,6 +71,7 @@
 									<listOptionValue builtIn="false" value="GS32_PIN_COUNT=80"/>
 									<listOptionValue builtIn="false" value="GS32F00xx=0x3000"/>
 									<listOptionValue builtIn="false" value="USING_VECTOR_INTERRUPT=1"/>
+									<listOptionValue builtIn="false" value="TARGET_GS32=1"/>
 								</option>
 								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.hpec.toolchains.riscv.option.c.compiler.include.paths.827121704" name="Include paths (-I)" superClass="com.hpec.toolchains.riscv.option.c.compiler.include.paths" useByScannerDiscovery="true" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${GS32_DRIVER_PATH}/driverlib/dsp&quot;"/>
@@ -83,7 +84,6 @@
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/inc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${GS32_DRIVER_PATH}/mathlib&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/05_public/28034_header&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/05_public/function_header&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/05_public/LinT_HD01_DEF_header&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/05_public/motor_header&quot;"/>

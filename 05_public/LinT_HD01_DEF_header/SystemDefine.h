@@ -8,10 +8,12 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-//#include "DSP2803x_Device.h"
+#ifdef TARGET_GS32
+#include "DSP_GS32_Device.h"
+#else
+#include "DSP2803x_Device.h"
 #include "MotorDefine.h"
-#include "device.h"
-#include "board_cfg.h"          // ← GS32 系统时钟配置 (DEVICE_SYSCLK_FREQ等)
+#endif
 
 #define STLEN  1
 #define SOFT_INPUT_DETECT           0
@@ -44,15 +46,34 @@ extern "C" {
 ************************************************************/
 
 // // 定义DSP芯片和时钟
-#define      TMS320F28035   3                               //28035芯片（兼容宏）
+//#define    TMS320F2801        1                                   //2801芯片
+//#define    TMS320F2802        2                                   //2802芯片
+//#define      TMS320F2808      8                                   //2808芯片
+#define      TMS320F28035   3                               //28035芯片
 
-// ===== 系统时钟 — 从 board_cfg.h 取值 =====
-// board_cfg.h: DEVICE_SYSCLK_FREQ = 120MHz
-#define     DSP_CLOCK           (DEVICE_SYSCLK_FREQ / 1000000U)  // 120 (MHz)
-#define     PWM_CLK_DIV         0
-#define     PWM_CLOCK            DSP_CLOCK                    // PWM模块时钟 = 系统时钟
-#define     DBTIME_1140V         50                           // 1140V死区时间
-#define     DCTIME_1140V         14                           // 1140V死区补偿
+//#define        DSP_CLOCK100           100                             //100MHz时钟
+//#define      DSP_CLOCK80        80                                  // 80MHz
+#define    DSP_CLOCK60          60                           //60MHz时钟
+
+#ifdef       DSP_CLOCK100
+    #define     DSP_CLOCK           100                     //100MHz时钟
+    #define     PWM_CLK_DIV         0
+    #define     PWM_CLOCK           100                     //PWM模块时钟周期
+    #define     DBTIME_1140V         50                      //1140V死区时间
+    #define     DCTIME_1140V         14                      //1140V死区补偿
+#endif
+#ifdef      DSP_CLOCK80
+    #define     DSP_CLOCK           80                      //80MHz时钟
+    #define     PWM_CLK_DIV         0
+    #define     PWM_CLOCK           80                      //PWM模块时钟周期
+#endif
+#ifdef      DSP_CLOCK60
+    #define     DSP_CLOCK           60                      //60MHz时钟
+    #define     PWM_CLK_DIV         0
+    #define     PWM_CLOCK           60                      //PWM模块时钟周期
+    #define     DBTIME_1140V         30                     //1140V死区时间
+    #define     DCTIME_1140V         8                     //1140V死区补偿
+#endif
 
 #define     PWM_CLOCK_HALF      (PWM_CLOCK/2)               //PWM时钟除以2
 #define C_TIME_01MS         (DSP_CLOCK * 1000000 / 10000)
@@ -63,7 +84,12 @@ extern "C" {
 #define C_TIME_4MS          (DSP_CLOCK * 1000000 / 250)
 #define C_TIME_10MS         (DSP_CLOCK * 1000000 / 100)
 #define C_TIME_20MS         (DSP_CLOCK * 1000000 / 50)
-#define C_TIME_50MS         (DSP_CLOCK * 1000000 / 20)
+#define C_TIME_50MS         (CPU_CLK * 1000000 / 20)
+
+
+#define  READ_RAND_FLASH_WAITE      3                       //Flash中运行的等待时间
+#define  READ_PAGE_FLASH_WAITE      3                       //
+#define  READ_OTP_WAITE             8                       //OTP中读数据的等待时间
 
 
 /************************************************************

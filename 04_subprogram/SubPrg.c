@@ -7,33 +7,80 @@
 #include "MotorDefine.h"
 #include "SubPrgInclude.h"
 
+
+RAMFUNC_T
+s16 qsin(s16 x)
+{
+        int16_t result = 0;
+        float m_Input;
+
+        m_Input = __divf32((float)x, (float)65536);
+        result = (__sinpuf32(m_Input)) * 32767;
+
+        return result;
+}
+
+RAMFUNC_T
+u16 qsqrt(u32 x)
+{
+        uint16_t result = 0;
+
+        result = __sqrt(x);
+
+        return result;
+}
+
 /****************************************************************
 函数说明：反正切函数，该函数输入x，y，求得的反正切角度以及4象限的角度
 ****************************************************************/
-int atan(int x, int y)
+RAMFUNC_T
+s16 user_atan(s16 x, s16 y)
 {
-	int  result;
-	long m_Input;
+        int16 result;
+        long m_Input;
 
-	if(x == 0)
-	{
-		if(y < 0)			
-		{
-			return(-16384);
-		}
-		else
-		{
-			return(16384);
-		}
-	}
-	m_Input = (((long)y)<<16)/x;
-	result = qatan(m_Input);
-	if(x < 0)
-	{
-		result += 32768;
-	}
-	return result;
+        if (x == 0)
+        {
+                if (y < 0)
+                {
+                        return (-16384);
+                }
+                else
+                {
+                        return (16384);
+                }
+        }
+        result = (__atan2puf32(y, x)) * 65536;
+        return result;
 }
+
+/****************************************************************
+函数说明：反正切函数，该函数输入x，y，求得的反正切角度以及4象限的角度
+****************************************************************/
+//int atan(int x, int y)
+//{
+//	int  result;
+//	long m_Input;
+//
+//	if(x == 0)
+//	{
+//		if(y < 0)
+//		{
+//			return(-16384);
+//		}
+//		else
+//		{
+//			return(16384);
+//		}
+//	}
+//	m_Input = (((long)y)<<16)/x;
+//	result = qatan(m_Input);
+//	if(x < 0)
+//	{
+//		result += 32768;
+//	}
+//	return result;
+//}
 
 /****************************************************************
 函数说明：PID函数(暂时不考虑D增益的作用)
@@ -45,8 +92,11 @@ void PID(PID_STRUCT * pid)
 {
 	long m_Max,m_Min,m_Out,m_OutKp,m_OutKi;
     long vMax = 0x7FFFFFFF;
+#ifdef TARGET_GS32
     
+#else
     SETOVM;
+#endif
  	m_Max = ((long)pid->Max)<<16;						// 最大值
 	m_Min = ((long)pid->Min)<<16;						// 最小值
 	
@@ -73,7 +123,11 @@ void PID(PID_STRUCT * pid)
 	m_Out       = pid->Total + m_OutKp;
  	pid->Out    = __IQsat(m_Out,m_Max,m_Min);
     pid->Total  = __IQsat(pid->Total,m_Max,m_Min);
+#ifdef TARGET_GS32
+
+#else
     CLROVM;
+#endif
 }
 /****************************************************************
 函数说明：

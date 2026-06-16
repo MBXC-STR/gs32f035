@@ -107,7 +107,8 @@ extern Uint swap(Uint);				//
 extern int 	absl(long int);			//r 这个函数存在问题
 extern int 	qsin(int);				//正弦函数
 extern int 	qatan(long int);		//反正切函数
-extern int  atan(int x, int y);		//四象限反正切函数
+//extern int  atan(int x, int y);		//四象限反正切函数
+extern s16 user_atan(s16 x, s16 y);
 extern Uint qsqrt(Ulong);			//开方函数
 
 extern Uint GetInvCurrent(Uint);	//根据机型查询变频器额定电流函数

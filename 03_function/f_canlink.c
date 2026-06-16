@@ -22,7 +22,7 @@
 
 
 
-#define DEBUG_F_CANLINK              1
+#define DEBUG_F_CANLINK              0
 
 
 #if DEBUG_F_CANLINK

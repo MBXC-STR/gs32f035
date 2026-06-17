@@ -76,17 +76,17 @@ typedef struct FEISU_STRUCT_DEF{
 	Uint	LowFreqCNT;
 	Uint	UdcBak;
 	Uint	CheckMode;
-	int		SpeedLast;      // 停机频率
+	s16		SpeedLast;      // 停机频率
 	Uint	Speed5hz;
-	int		SpeedCheck;
-	int		SpeedMaxPu;
+	s16		SpeedCheck;
+	s16		SpeedMaxPu;
 	Uint	VoltCheck;
 	Uint	VoltCheckAim;
     Uint    VoltTemp;
-	int		CurDelta;
-	int		Ger4A;                      // 频率变化步长
-	int     CsrWtOver;                  // 等待电流闭环结束
-	int		UdcDelta;
+	s16		CurDelta;
+	s16		Ger4A;                      // 频率变化步长
+	s16     CsrWtOver;                  // 等待电流闭环结束
+	s16		UdcDelta;
 	Uint	UdcOld;
 }FEISU_STRUCT;	//转速跟踪使用变量的结构定义
 
@@ -94,22 +94,22 @@ typedef struct FEISU_STRUCT_NEW_DEF{
 	Uint  t_DetaTime;   // 追踪拖动开始计数器
 	Uint  stop_time;    // 短接开始标志
 	Uint  inh_mag ;     // 整个阶段计数器
-	int   the_endspeed;
-	int   open_cl;
-	int   wsre;
-	int   gDebugFlag;
+	s16   the_endspeed;
+	s16   open_cl;
+	s16   wsre;
+	s16   gDebugFlag;
 	Uint  xisspeed;
-	int   jicicg;       // 短接后电流小标志
-	int   jicics;
-	int   dbctime;
+	s16   jicicg;       // 短接后电流小标志
+	s16   jicics;
+	s16   dbctime;
 	Uint  xwjdbcbz;     // 循环奇偶判断计数器(4ms计数器)
-	int	  gTheta;
-	int   gThteta1;
-	int   gWs;
-	int   gWs_out;      // 短接后开始计数器
+	s16	  gTheta;
+	s16   gThteta1;
+	s16   gWs;
+	s16   gWs_out;      // 短接后开始计数器
 	long  ang_amu;
-	int   Ialph;
-	int   Ibeta;
+	s16   Ialph;
+	s16   Ibeta;
     
     // 以下是功能码传递的参数
     //Uint  FreqAdd;      //F5-30

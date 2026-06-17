@@ -382,7 +382,7 @@ void Main2msMotorD(void)
 void SendDataPrepare(void)		
 {
     Uint tempU;
-    int   mAiCounter;
+    s16   mAiCounter;
 	long  m_Long;
     Ulong mTotal1;
     Ulong mTotal2;
@@ -418,16 +418,16 @@ void SendDataPrepare(void)
         //if(((long)gRotorSpeed.SpeedApply * gIMTSetQ12.T) < 0)
 		if(((long)gRotorSpeed.SpeedApply * gLineCur.Temp) < 0)       // 之前的做法在过零时会存在突变，wyk
         {
-        	gLineCur.CurTorque = -(int)abs(gLineCur.Temp);
+        	gLineCur.CurTorque = -(s16)abs(gLineCur.Temp);
         }
         else
         {
-        	gLineCur.CurTorque = (int)abs(gLineCur.Temp);
+        	gLineCur.CurTorque = (s16)abs(gLineCur.Temp);
         }
 	}
     
 	//同步机角度转换
-	tempU = (Uint)((int)gRotorTrans.RTPos + gRotorTrans.PosComp);
+	tempU = (Uint)((s16)gRotorTrans.RTPos + gRotorTrans.PosComp);
     gRotorTrans.RtRealPos = ((Ulong)tempU * 3600L + 10) >> 16;
 	if(gMotorInfo.MotorType == MOTOR_TYPE_PM)
     {   

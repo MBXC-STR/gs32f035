@@ -136,7 +136,7 @@ void RunCaseGetPar(void)
 ************************************************************/
 void PrepareParForTune(void)
 {
-    int m_index;
+    s16 m_index;
     PAR_EST_MAIN_STEP *m_PIdentifyFlow;
     
     //ï¿½ï¿½ï¿½Ð²ï¿½ï¿½ï¿½ï¿½ï¿½Ê¶ï¿½ï¿½ï¿½ï¿½ï¿½Ð·ï¿½ï¿½ØµÄ±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÒªÔ¤ï¿½È¸ï¿½Öµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½áµ¼ï¿½Â¶ï¿½Ó¦ï¿½Ä¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½    
@@ -250,12 +250,12 @@ void EndOfParIdentify(void)
         
         EALLOW;  						                //ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿?
         #ifdef TARGET_GS32
-        interrupt_register(INT_ADC1, &ADC_Over_isr);
+        Interrupt_register(INT_ADC1, &ADC_Over_isr);
         #else
         PIE_VECTTABLE_ADCINT = &ADC_Over_isr;		    //ADCï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½--INT1
         #endif
         #ifdef TARGET_GS32
-        interrupt_register(INT_EPWM1_TZ, &EPWM1_TZ_isr);		//¹ýÁ÷ÖÐ¶Ï
+        Interrupt_register(INT_EPWM1_TZ, &EPWM1_TZ_isr);		//¹ýÁ÷ÖÐ¶Ï
 #else
         PieVectTable.EPWM1_TZINT = &EPWM1_TZ_isr;		//ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½--INT2
         #endif

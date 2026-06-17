@@ -21,7 +21,7 @@
 
 Uint gDebugBuffer[C_DEBUG_BUFF_SIZE];
 Uint gDebugPoint = 0;
-int  gDebugFlag;
+s16  gDebugFlag;
 
 
 

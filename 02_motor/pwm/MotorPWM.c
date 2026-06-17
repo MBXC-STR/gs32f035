@@ -227,9 +227,9 @@ void SquarePWMAngleCal(void)
 *************************************************************/
 /*void OutPutPWMVC(void)
 {
-	int   	SinU,SinV,SinW,Comp3;
-	int   	phase,phase3;
-	int     m_Ratio;
+	s16   	SinU,SinV,SinW,Comp3;
+	s16   	phase,phase3;
+	s16     m_Ratio;
     
 	phase = gPhase.OutPhase;
 	phase3= 16384 - phase;

@@ -88,19 +88,19 @@ typedef struct MOTOR_PARAMETER_IDENTIFY_STRUCT{
     TUNE_TO_FUNCTION_WORLD_ENUM         StatusWord;
     TUNE_FLOW_ENUM                      TuneType;                           // 功能传递的调谐类型选择
 
-    int  QtEstDelay;       // quit par-est delay counter
+    s16  QtEstDelay;       // quit par-est delay counter
 }MOTOR_PARA_EST;
 
 typedef struct IDENTIFY_RRLO_VARIABLE_STRUCT{
-int     WaitCnt;
-int     IsSampleValue[20];
-int     CurrentMax;
-int     CurrentRatio;
-int     RrL07PulseOverSig;
-int     RrL0CycleCnt;
-int     SampleTimes;
+s16     WaitCnt;
+s16     IsSampleValue[20];
+s16     CurrentMax;
+s16     CurrentRatio;
+s16     RrL07PulseOverSig;
+s16     RrL0CycleCnt;
+s16     SampleTimes;
 Uint    PwmCompareValue;
-int     UdcVoltage;
+s16     UdcVoltage;
 long    RrAndRsMax;
 long    RrAndRsMin;
 long    LoMax;
@@ -110,9 +110,9 @@ long    LoAccValue;
 } IDENTIFY_RRLO_VARIABLE;
 
 typedef struct IDENTIFY_LMIO_VARIABLE_STRUCT{
-int     WaitCnt;
-int     DestinationFreq;
-int     DataSavedNum;
+s16     WaitCnt;
+s16     DestinationFreq;
+s16     DataSavedNum;
 Uint    VFOvShock;
 long    lIsValue;
 long    LmAccValue;

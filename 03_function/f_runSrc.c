@@ -1787,7 +1787,7 @@ LOCALF void NormalRunCtrl(void)
     if (!runCmd.bit.common) // 运行中有停机命令
     {
         //+e if(function.f_code.torque_control&&(!(di_func[3]&0x20)))
-        //     frq_set=(int)speed_run*(long)(int)(function.f_code.maxfrq+2000)/0x7fff;
+        //     frq_set=(s16)speed_run*(long)(s16)(function.f_code.maxfrq+2000)/0x7fff;
         if (runMode == RUN_MODE_TORQUE_CTRL)
         {
             frq = frqRun;

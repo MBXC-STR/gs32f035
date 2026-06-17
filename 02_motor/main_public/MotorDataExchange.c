@@ -63,11 +63,11 @@ Uint gCoreNonStandardVesion = (CORE_NON_STANDARD_VERSION << 6) + CORE_NON_STANDA
 Uint gCoreTmpsoftNoAndVersion = (CORE_TEMP_SOFTWARE_NO << 6) + CORE_TEMP_SOFTWARE_VERSION;        // 高10位:临时软件号，低6位:临时升级过程
 Uint gCoreSoftType = (CORE_SOFT_TYPE << 8) + CORE_IS_TEMP_SOFTWARE;                               // 高8位:通用或非标，低8位:是否临时版本
 
-int  gSendToMotor05MsDataBuff[NUM_05MS_F2M];
-int  gSendToMotor2MsDataBuff[NUM_2ms_FUNC_TO_MOTOR + NUM_2ms_FUNC_TO_MOTOR_debug+3];
-int  gSendToFunctionDataBuff[NUM_2ms_MOTOR_TO_FUNC + NUM_2ms_MOTOR_TO_FUNC_debug];
-int  gRealTimeToFunctionDataBuff[NUM_05MS_M2F];
-int  gParaIdToFunctionDataBuff[NUM_TUNE_M2F];
+s16  gSendToMotor05MsDataBuff[NUM_05MS_F2M];
+s16  gSendToMotor2MsDataBuff[NUM_2ms_FUNC_TO_MOTOR + NUM_2ms_FUNC_TO_MOTOR_debug+3];
+s16  gSendToFunctionDataBuff[NUM_2ms_MOTOR_TO_FUNC + NUM_2ms_MOTOR_TO_FUNC_debug];
+s16  gRealTimeToFunctionDataBuff[NUM_05MS_M2F];
+s16  gParaIdToFunctionDataBuff[NUM_TUNE_M2F];
 
 Uint uReservedData;              // 保留参数
 Uint gSoftVersion = SOFT_VERSION;

@@ -36,18 +36,18 @@ typedef struct PM_CSR2_DATA_DEF
 	long    MaxOutVoltPer;
 	long    DeleteVMax;
 	long    DeleteVm;
-	int     ImMin;
+	s16     ImMin;
 
 	long 	DeltM;
 	long 	DeltT;
 	long    PhaseMax;
 	long    PhaseMin;
-	int     FreqSyn;
+	s16     FreqSyn;
 	long    It;
 	long    Im;
 
-	int     VoltOut;
-	int     PhaseOut;
+	s16     VoltOut;
+	s16     PhaseOut;
 	long 	UMOut;
 	long    UTOut;
 	long    UMTotal;
@@ -55,24 +55,24 @@ typedef struct PM_CSR2_DATA_DEF
 	long    UMComp;
 	long    UTComp;
 
-	int     OutFlag;
-	int     OutFlag1;
-	int     Csr1Flag;
-	int     Csr1Flag1;
-	int     ITSet;
-	int     CSREnable;
-    int     FluxWeakFlag;
+	s16     OutFlag;
+	s16     OutFlag1;
+	s16     Csr1Flag;
+	s16     Csr1Flag1;
+	s16     ITSet;
+	s16     CSREnable;
+    s16     FluxWeakFlag;
 }PM_CSR2_DATA;
 
 typedef struct UVW_VOLT_STRUCT_DEF{					
-	int  	U;					
-	int  	V;
-	int  	W;
+	s16  	U;					
+	s16  	V;
+	s16  	W;
 //    long     Zero;
-	int  	Alph;					
-	int  	Beta;
-    int     UdQ;
-    int    UqQ;
+	s16  	Alph;					
+	s16  	Beta;
+    s16     UdQ;
+    s16    UqQ;
 }UVW_VOLT_STRUCT;
 
 extern PM_CSR2_DATA    gPmCsr2;
@@ -80,7 +80,7 @@ extern UVW_VOLT_STRUCT gVoltUVW;
 
 
 extern void PMCsr2(void);
-extern void CalUVWVoltSet(int Phase);
+extern void CalUVWVoltSet(s16 Phase);
 #endif  // end of definition
 
 //===========================================================================

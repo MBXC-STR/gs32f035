@@ -1,12 +1,12 @@
 /************************************************************
-�ļ�����:����ͱ�Ƶ����������
-�ļ��汾�� 
-���¸��£� 
+锟侥硷拷锟斤拷锟斤拷:锟斤拷锟斤拷捅锟狡碉拷锟斤拷锟斤拷锟斤拷锟斤拷锟�
+锟侥硷拷锟芥本锟斤拷 
+锟斤拷锟铰革拷锟铰ｏ拷 
 
 *************************************************************/
 #include "MotorInvProtectInclude.h"
 
-// // ȫ�ֱ�������
+// // 全锟街憋拷锟斤拷锟斤拷锟斤拷
 OVER_LOAD_PROTECT		gOverLoad;
 PHASE_LOSE_STRUCT		gPhaseLose;
 BEFORE_RUN_PHASE_LOSE_STRUCT gBforeRunPhaseLose;
@@ -16,139 +16,139 @@ SOFT_INPUT_LOSE_STRUCT		gSoftInLose;
 #endif
 LOAD_LOSE_STRUCT		gLoadLose;
 FAN_CTRL_STRUCT			gFanCtrl;
-Ulong					gBuffResCnt;	//������豣������
+Ulong					gBuffResCnt;	//锟斤拷锟斤拷锟斤拷璞ｏ拷锟斤拷锟斤拷锟�
 CBC_PROTECT_STRUCT		gCBCProtect;
 struct FAULT_CODE_INFOR_STRUCT_DEF  gError;
 extern void FanSpeedCtrl(void);
-//��Ƶ���͵���Ĺ��ر�
-Uint const gInvOverLoadTable[10] =      /*������10��������9%������Сֵ:115%�������ֵ:196%*/
+//锟斤拷频锟斤拷锟酵碉拷锟斤拷墓锟斤拷乇锟�
+Uint const gInvOverLoadTable[10] =      /*锟斤拷锟斤拷锟斤拷10锟斤拷锟斤拷锟斤拷锟斤拷9%锟斤拷锟斤拷锟斤拷小值:115%锟斤拷锟斤拷锟斤拷锟街�:196%*/
 {
-		36000,				//115%��Ƶ������   		1Сʱ����  
-		18000,				//124%��Ƶ������	  	30���ӹ���
-        6000,				//133%��Ƶ������	  	10���ӹ���
-        1800,				//142%��Ƶ������	  	3���ӹ��� 
-        600,				//151%��Ƶ������   		1���ӹ���  
-        200,				//160%��Ƶ������   		20�����   
-        120,				//169%��Ƶ������   		12�����    
-        20,					//178%��Ƶ������   		6�����    ��Ϊ178% 2S����
-        20,					//187%��Ƶ������   		2�����    
-        5,					//196%��Ƶ������   		0.5�����   ����һ�����ֵ      2011-10-21-chzq
+		36000,				//115%锟斤拷频锟斤拷锟斤拷锟斤拷   		1小时锟斤拷锟斤拷  
+		18000,				//124%锟斤拷频锟斤拷锟斤拷锟斤拷	  	30锟斤拷锟接癸拷锟斤拷
+        6000,				//133%锟斤拷频锟斤拷锟斤拷锟斤拷	  	10锟斤拷锟接癸拷锟斤拷
+        1800,				//142%锟斤拷频锟斤拷锟斤拷锟斤拷	  	3锟斤拷锟接癸拷锟斤拷 
+        600,				//151%锟斤拷频锟斤拷锟斤拷锟斤拷   		1锟斤拷锟接癸拷锟斤拷  
+        200,				//160%锟斤拷频锟斤拷锟斤拷锟斤拷   		20锟斤拷锟斤拷锟�   
+        120,				//169%锟斤拷频锟斤拷锟斤拷锟斤拷   		12锟斤拷锟斤拷锟�    
+        20,					//178%锟斤拷频锟斤拷锟斤拷锟斤拷   		6锟斤拷锟斤拷锟�    锟斤拷为178% 2S锟斤拷锟斤拷
+        20,					//187%锟斤拷频锟斤拷锟斤拷锟斤拷   		2锟斤拷锟斤拷锟�    
+        5,					//196%锟斤拷频锟斤拷锟斤拷锟斤拷   		0.5锟斤拷锟斤拷锟�   锟斤拷锟斤拷一锟斤拷锟斤拷锟街�      2011-10-21-chzq
 };
 #if(SOFTSERIES == MD380SOFT)
-Uint const gInvOverLoadTableForP[10] =       /*������10��������4%������Сֵ:105%�������ֵ:141%*/
+Uint const gInvOverLoadTableForP[10] =       /*锟斤拷锟斤拷锟斤拷10锟斤拷锟斤拷锟斤拷锟斤拷4%锟斤拷锟斤拷锟斤拷小值:105%锟斤拷锟斤拷锟斤拷锟街�:141%*/
 {
-		36000,				//105%��Ƶ������   		1Сʱ����  
-		15000,				//109%��Ƶ������	  	25���ӹ���
-        6000,				//113%��Ƶ������	  	10���ӹ���
-        1800,				//117%��Ƶ������	  	3���ӹ��� 
-        600,				//121%��Ƶ������   		1���ӹ���  
-        300,				//125%��Ƶ������   		30�����   
-        100,				//129%��Ƶ������   		10�����    
-        30,					//133%��Ƶ������   		3�����    
-        10,					//137%��Ƶ������   		1�����  
-        5,					//141%��Ƶ������   		0.5�����     ����һ�����ֵ   2011-10-21-chzq
+		36000,				//105%锟斤拷频锟斤拷锟斤拷锟斤拷   		1小时锟斤拷锟斤拷  
+		15000,				//109%锟斤拷频锟斤拷锟斤拷锟斤拷	  	25锟斤拷锟接癸拷锟斤拷
+        6000,				//113%锟斤拷频锟斤拷锟斤拷锟斤拷	  	10锟斤拷锟接癸拷锟斤拷
+        1800,				//117%锟斤拷频锟斤拷锟斤拷锟斤拷	  	3锟斤拷锟接癸拷锟斤拷 
+        600,				//121%锟斤拷频锟斤拷锟斤拷锟斤拷   		1锟斤拷锟接癸拷锟斤拷  
+        300,				//125%锟斤拷频锟斤拷锟斤拷锟斤拷   		30锟斤拷锟斤拷锟�   
+        100,				//129%锟斤拷频锟斤拷锟斤拷锟斤拷   		10锟斤拷锟斤拷锟�    
+        30,					//133%锟斤拷频锟斤拷锟斤拷锟斤拷   		3锟斤拷锟斤拷锟�    
+        10,					//137%锟斤拷频锟斤拷锟斤拷锟斤拷   		1锟斤拷锟斤拷锟�  
+        5,					//141%锟斤拷频锟斤拷锟斤拷锟斤拷   		0.5锟斤拷锟斤拷锟�     锟斤拷锟斤拷一锟斤拷锟斤拷锟街�   2011-10-21-chzq
 };
 #else
-Uint const gInvOverLoadTableForP[9] =       /*������10��������4%������Сֵ:105%�������ֵ:141%*/
+Uint const gInvOverLoadTableForP[9] =       /*锟斤拷锟斤拷锟斤拷10锟斤拷锟斤拷锟斤拷锟斤拷4%锟斤拷锟斤拷锟斤拷小值:105%锟斤拷锟斤拷锟斤拷锟街�:141%*/
 {
-		18000,				//110%��Ƶ������   30.0����
-        6000,				//117%��Ƶ������   10.0����
-        1800,				//124%��Ƶ������   3.0����
-        600,				//131%��Ƶ������   1.0����
-        400,				//138%��Ƶ������   40 ��
-        250,				//145%��Ƶ������   25 ��
-        90,					//152%��Ƶ������   9 ��
-        50,					//159%��Ƶ������   5 ��
-        20					//166%��Ƶ������   2 ��
+		18000,				//110%锟斤拷频锟斤拷锟斤拷锟斤拷   30.0锟斤拷锟斤拷
+        6000,				//117%锟斤拷频锟斤拷锟斤拷锟斤拷   10.0锟斤拷锟斤拷
+        1800,				//124%锟斤拷频锟斤拷锟斤拷锟斤拷   3.0锟斤拷锟斤拷
+        600,				//131%锟斤拷频锟斤拷锟斤拷锟斤拷   1.0锟斤拷锟斤拷
+        400,				//138%锟斤拷频锟斤拷锟斤拷锟斤拷   40 锟斤拷
+        250,				//145%锟斤拷频锟斤拷锟斤拷锟斤拷   25 锟斤拷
+        90,					//152%锟斤拷频锟斤拷锟斤拷锟斤拷   9 锟斤拷
+        50,					//159%锟斤拷频锟斤拷锟斤拷锟斤拷   5 锟斤拷
+        20					//166%锟斤拷频锟斤拷锟斤拷锟斤拷   2 锟斤拷
 };
 #endif
-//��Ƶ�������ۼ���������ϵ��
+//锟斤拷频锟斤拷锟斤拷锟斤拷锟桔硷拷锟斤拷锟斤拷锟斤拷锟斤拷系锟斤拷
 Ulong const gInvOverLoadDecTable[12] =
 {
-        (65536L*60/7),      //0%��Ƶ������    0.7������������
-        (65536L*60/8),		//10%��Ƶ������   0.8������������
-        (65536L*60/9),		//20%��Ƶ������   0.9������������
-        (65536L*60/10),		//30%��Ƶ������   1.0������������
-        (65536L*60/11),		//40%��Ƶ������   1.1������������
-        (65536L*60/13),		//50%��Ƶ������   1.3������������
-        (65536L*60/16),		//60%��Ƶ������   1.6������������
-        (65536L*60/19),		//70%��Ƶ������   1.9������������
-        (65536L*60/24),		//80%��Ƶ������   2.4������������
-        (65536L*60/34),		//90%��Ƶ������   3.4������������
-		(65536L*60/56),		//100%��Ƶ������  5.6������������
+        (65536L*60/7),      //0%锟斤拷频锟斤拷锟斤拷锟斤拷    0.7锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷
+        (65536L*60/8),		//10%锟斤拷频锟斤拷锟斤拷锟斤拷   0.8锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷
+        (65536L*60/9),		//20%锟斤拷频锟斤拷锟斤拷锟斤拷   0.9锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷
+        (65536L*60/10),		//30%锟斤拷频锟斤拷锟斤拷锟斤拷   1.0锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷
+        (65536L*60/11),		//40%锟斤拷频锟斤拷锟斤拷锟斤拷   1.1锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷
+        (65536L*60/13),		//50%锟斤拷频锟斤拷锟斤拷锟斤拷   1.3锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷
+        (65536L*60/16),		//60%锟斤拷频锟斤拷锟斤拷锟斤拷   1.6锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷
+        (65536L*60/19),		//70%锟斤拷频锟斤拷锟斤拷锟斤拷   1.9锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷
+        (65536L*60/24),		//80%锟斤拷频锟斤拷锟斤拷锟斤拷   2.4锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷
+        (65536L*60/34),		//90%锟斤拷频锟斤拷锟斤拷锟斤拷   3.4锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷
+		(65536L*60/56),		//100%锟斤拷频锟斤拷锟斤拷锟斤拷  5.6锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷
 };
 Uint const gInvBreakOverLoadTable[5] = 
 {
-    1,                      // 100% 10S������ 10s������   110%  2s����
-    4,                      // 90% 10S������ 40s������    120%  0.5s����
-    30,                     // 80% 10S������ 300s������
-    200,                    // 70% 10S������ 2000s������
-    2000,                   // 60% 10S������ 20000s������
+    1,                      // 100% 10S锟斤拷锟斤拷锟斤拷 10s锟斤拷锟斤拷锟斤拷   110%  2s锟斤拷锟斤拷
+    4,                      // 90% 10S锟斤拷锟斤拷锟斤拷 40s锟斤拷锟斤拷锟斤拷    120%  0.5s锟斤拷锟斤拷
+    30,                     // 80% 10S锟斤拷锟斤拷锟斤拷 300s锟斤拷锟斤拷锟斤拷
+    200,                    // 70% 10S锟斤拷锟斤拷锟斤拷 2000s锟斤拷锟斤拷锟斤拷
+    2000,                   // 60% 10S锟斤拷锟斤拷锟斤拷 20000s锟斤拷锟斤拷锟斤拷
 };
 /*#if (SOFTSERIES == MD500SOFT)
 Uint const gInvBreakOverLoadTableFor185And22[10] = 
 {
-	1,//0,						//	120%  0.5s����
-	2,//0.2,						//	110%  0.2s����
-    100,//10,                 		// 	100%������ 10s������   
-    500,//50,                 		// 	99%������ 50s������    
-    820,//82,                	 	// 	98%������ 82s������
-    1380,//138,                 	// 	97%������ 138s������
-    2450,//245,                   	// 	96%������ 245s������
-    5000,//500,					// 	95%������ 500s������
+	1,//0,						//	120%  0.5s锟斤拷锟斤拷
+	2,//0.2,						//	110%  0.2s锟斤拷锟斤拷
+    100,//10,                 		// 	100%锟斤拷锟斤拷锟斤拷 10s锟斤拷锟斤拷锟斤拷   
+    500,//50,                 		// 	99%锟斤拷锟斤拷锟斤拷 50s锟斤拷锟斤拷锟斤拷    
+    820,//82,                	 	// 	98%锟斤拷锟斤拷锟斤拷 82s锟斤拷锟斤拷锟斤拷
+    1380,//138,                 	// 	97%锟斤拷锟斤拷锟斤拷 138s锟斤拷锟斤拷锟斤拷
+    2450,//245,                   	// 	96%锟斤拷锟斤拷锟斤拷 245s锟斤拷锟斤拷锟斤拷
+    5000,//500,					// 	95%锟斤拷锟斤拷锟斤拷 500s锟斤拷锟斤拷锟斤拷
     10000,//1000					// 
     10000,//1000					// 
 };
 Uint const gInvBreakOverLoadTableFor30[10] = 
 {
-	13,// 1.3,					//	120%  1.3s����
-	50,// 5,						//	110%  5s����
-    100,// 10,                 	//	100%������ 10s������   
-    160,// 16,                 	// 	98% ������ 16s������    
-    230,//23,                 		// 	96% ������ 23s������
-    300,//30,                 		// 	94% ������ 30s������
-    440,//44,                   	// 	92% ������ 44s������
-    580,//58,					// 	90% ������ 58s������
-    2870,//287					// 	85% ������ 278s������
+	13,// 1.3,					//	120%  1.3s锟斤拷锟斤拷
+	50,// 5,						//	110%  5s锟斤拷锟斤拷
+    100,// 10,                 	//	100%锟斤拷锟斤拷锟斤拷 10s锟斤拷锟斤拷锟斤拷   
+    160,// 16,                 	// 	98% 锟斤拷锟斤拷锟斤拷 16s锟斤拷锟斤拷锟斤拷    
+    230,//23,                 		// 	96% 锟斤拷锟斤拷锟斤拷 23s锟斤拷锟斤拷锟斤拷
+    300,//30,                 		// 	94% 锟斤拷锟斤拷锟斤拷 30s锟斤拷锟斤拷锟斤拷
+    440,//44,                   	// 	92% 锟斤拷锟斤拷锟斤拷 44s锟斤拷锟斤拷锟斤拷
+    580,//58,					// 	90% 锟斤拷锟斤拷锟斤拷 58s锟斤拷锟斤拷锟斤拷
+    2870,//287					// 	85% 锟斤拷锟斤拷锟斤拷 278s锟斤拷锟斤拷锟斤拷
     5000,//500					//   
 };
 Uint const gInvBreakOverLoadTableFor37[10] = 
 {
-	25,// 2.5,					//	120%  2.5s����
-	75,// 7.5,					//	110%  7.5s����
-    100,// 10,                 	// 	100% ������ 10s������   
-    180,// 18,                 	// 	98% ������ 18s������    
-    250,// 25,                 	// 	96% ������ 25s������
-    300,// 30,                 	// 	94% ������ 30s������
-    360,// 36,                   	// 	92% ������ 36������
-	480,// 48,					// 	90% ������ 48s������
-	1000,//	100,					// 	90% ������ 48s������
-	3400,//	340,					// 	90% ������ 48s������
+	25,// 2.5,					//	120%  2.5s锟斤拷锟斤拷
+	75,// 7.5,					//	110%  7.5s锟斤拷锟斤拷
+    100,// 10,                 	// 	100% 锟斤拷锟斤拷锟斤拷 10s锟斤拷锟斤拷锟斤拷   
+    180,// 18,                 	// 	98% 锟斤拷锟斤拷锟斤拷 18s锟斤拷锟斤拷锟斤拷    
+    250,// 25,                 	// 	96% 锟斤拷锟斤拷锟斤拷 25s锟斤拷锟斤拷锟斤拷
+    300,// 30,                 	// 	94% 锟斤拷锟斤拷锟斤拷 30s锟斤拷锟斤拷锟斤拷
+    360,// 36,                   	// 	92% 锟斤拷锟斤拷锟斤拷 36锟斤拷锟斤拷锟斤拷
+	480,// 48,					// 	90% 锟斤拷锟斤拷锟斤拷 48s锟斤拷锟斤拷锟斤拷
+	1000,//	100,					// 	90% 锟斤拷锟斤拷锟斤拷 48s锟斤拷锟斤拷锟斤拷
+	3400,//	340,					// 	90% 锟斤拷锟斤拷锟斤拷 48s锟斤拷锟斤拷锟斤拷
 };
 
 Uint const gInvBreakOverLoadTableFor45And55[10] = 
 {
-	1,//0,						//	120% ������ 0s������  
-	10,// 1,						//	110% ������ 1s������  
-    100,// 10,                 	// 	100% ������ 10s������   
-    290,// 29,                 	// 	98%  ������ 29s������    
-    580,// 58,                 	// 	96%  ������ 58s������
-    900,// 90,                 	// 	94%  ������ 90s������
-    1500,// 150,            		// 	92%  ������ 150s������
+	1,//0,						//	120% 锟斤拷锟斤拷锟斤拷 0s锟斤拷锟斤拷锟斤拷  
+	10,// 1,						//	110% 锟斤拷锟斤拷锟斤拷 1s锟斤拷锟斤拷锟斤拷  
+    100,// 10,                 	// 	100% 锟斤拷锟斤拷锟斤拷 10s锟斤拷锟斤拷锟斤拷   
+    290,// 29,                 	// 	98%  锟斤拷锟斤拷锟斤拷 29s锟斤拷锟斤拷锟斤拷    
+    580,// 58,                 	// 	96%  锟斤拷锟斤拷锟斤拷 58s锟斤拷锟斤拷锟斤拷
+    900,// 90,                 	// 	94%  锟斤拷锟斤拷锟斤拷 90s锟斤拷锟斤拷锟斤拷
+    1500,// 150,            		// 	92%  锟斤拷锟斤拷锟斤拷 150s锟斤拷锟斤拷锟斤拷
     3000,//300					//
     5000,//500					//
     10000,//1000					//
 };
 Uint const gInvBreakOverLoadTableFor75[10] = 
 {
-	5,// 0.5,					//	120% ������ 0.5s����
-	30,// 3,						//	110% ������ 3s����
-    100,// 10,                 	// 	100%	������ 10s������   
-    180,// 18,                 	// 	98% 	������ 18s������    
-    270,// 27,                 	// 	96% 	������ 27s������
-    390,// 39,                 	// 	94% 	������ 39s������
-    530,// 53,                   	// 	92% 	������ 53s������
-	1000,// 100,					// 	90% 	������ 100s������
+	5,// 0.5,					//	120% 锟斤拷锟斤拷锟斤拷 0.5s锟斤拷锟斤拷
+	30,// 3,						//	110% 锟斤拷锟斤拷锟斤拷 3s锟斤拷锟斤拷
+    100,// 10,                 	// 	100%	锟斤拷锟斤拷锟斤拷 10s锟斤拷锟斤拷锟斤拷   
+    180,// 18,                 	// 	98% 	锟斤拷锟斤拷锟斤拷 18s锟斤拷锟斤拷锟斤拷    
+    270,// 27,                 	// 	96% 	锟斤拷锟斤拷锟斤拷 27s锟斤拷锟斤拷锟斤拷
+    390,// 39,                 	// 	94% 	锟斤拷锟斤拷锟斤拷 39s锟斤拷锟斤拷锟斤拷
+    530,// 53,                   	// 	92% 	锟斤拷锟斤拷锟斤拷 53s锟斤拷锟斤拷锟斤拷
+	1000,// 100,					// 	90% 	锟斤拷锟斤拷锟斤拷 100s锟斤拷锟斤拷锟斤拷
 	5000,//500					//
 	10000,//1000					//
 };
@@ -157,63 +157,63 @@ Uint const gInvBreakOverLoadTableFor75[10] =
 #define C_MOTOR_OV_TAB_NUM      14
 Uint const gMotorOverLoadBaseTable[C_MOTOR_OV_TAB_NUM] =
 {
-		480,			//115%�������  1Сʱ20���ӹ���
-		240,			//125%�������  40���ӹ���
-		90,				//135%�������  15���ӹ��� 
-		36,				//145%�������  6���ӹ���
-		24,				//155%�������  4���ӹ���
-		15,				//165%�������  2.5���ӹ���
-		12,				//175%�������  2���ӹ���
+		480,			//115%锟斤拷锟斤拷锟斤拷锟�  1小时20锟斤拷锟接癸拷锟斤拷
+		240,			//125%锟斤拷锟斤拷锟斤拷锟�  40锟斤拷锟接癸拷锟斤拷
+		90,				//135%锟斤拷锟斤拷锟斤拷锟�  15锟斤拷锟接癸拷锟斤拷 
+		36,				//145%锟斤拷锟斤拷锟斤拷锟�  6锟斤拷锟接癸拷锟斤拷
+		24,				//155%锟斤拷锟斤拷锟斤拷锟�  4锟斤拷锟接癸拷锟斤拷
+		15,				//165%锟斤拷锟斤拷锟斤拷锟�  2.5锟斤拷锟接癸拷锟斤拷
+		12,				//175%锟斤拷锟斤拷锟斤拷锟�  2锟斤拷锟接癸拷锟斤拷
 
-		 9,				//185%�������  1.5���ӹ���
-		 6,				//195%�������  1���ӹ���
-		 5,				//205%�������  50S����
-		 4,				//215%�������  40S����
-		 3,				//225%�������  30S����
-		 2,				//235%�������  20S����
-		 1				//245%�������  10S����
+		 9,				//185%锟斤拷锟斤拷锟斤拷锟�  1.5锟斤拷锟接癸拷锟斤拷
+		 6,				//195%锟斤拷锟斤拷锟斤拷锟�  1锟斤拷锟接癸拷锟斤拷
+		 5,				//205%锟斤拷锟斤拷锟斤拷锟�  50S锟斤拷锟斤拷
+		 4,				//215%锟斤拷锟斤拷锟斤拷锟�  40S锟斤拷锟斤拷
+		 3,				//225%锟斤拷锟斤拷锟斤拷锟�  30S锟斤拷锟斤拷
+		 2,				//235%锟斤拷锟斤拷锟斤拷锟�  20S锟斤拷锟斤拷
+		 1				//245%锟斤拷锟斤拷锟斤拷锟�  10S锟斤拷锟斤拷
 };
 Uint gMotorOverLoadTable[C_MOTOR_OV_TAB_NUM] =
 {
-		48000,				//115%�������  1Сʱ20���ӹ���
-		24000,				//125%�������  40���ӹ���
-		9000,				//135%�������  15���ӹ��� 
-		3600,				//145%�������  6���ӹ���
-		2400,				//155%�������  4���ӹ���
-		1500,				//165%�������  2.5���ӹ���
-		1200,				//175%�������  2���ӹ���
+		48000,				//115%锟斤拷锟斤拷锟斤拷锟�  1小时20锟斤拷锟接癸拷锟斤拷
+		24000,				//125%锟斤拷锟斤拷锟斤拷锟�  40锟斤拷锟接癸拷锟斤拷
+		9000,				//135%锟斤拷锟斤拷锟斤拷锟�  15锟斤拷锟接癸拷锟斤拷 
+		3600,				//145%锟斤拷锟斤拷锟斤拷锟�  6锟斤拷锟接癸拷锟斤拷
+		2400,				//155%锟斤拷锟斤拷锟斤拷锟�  4锟斤拷锟接癸拷锟斤拷
+		1500,				//165%锟斤拷锟斤拷锟斤拷锟�  2.5锟斤拷锟接癸拷锟斤拷
+		1200,				//175%锟斤拷锟斤拷锟斤拷锟�  2锟斤拷锟接癸拷锟斤拷
 
-		 900,				//185%�������  1.5���ӹ���
-		 600,				//195%�������  1���ӹ���
-		 500,				//205%�������  50S����
-		 400,				//215%�������  40S����
-		 300,				//225%�������  30S����
-		 200,				//235%�������  20S����
-		 100				//245%�������  10S����
+		 900,				//185%锟斤拷锟斤拷锟斤拷锟�  1.5锟斤拷锟接癸拷锟斤拷
+		 600,				//195%锟斤拷锟斤拷锟斤拷锟�  1锟斤拷锟接癸拷锟斤拷
+		 500,				//205%锟斤拷锟斤拷锟斤拷锟�  50S锟斤拷锟斤拷
+		 400,				//215%锟斤拷锟斤拷锟斤拷锟�  40S锟斤拷锟斤拷
+		 300,				//225%锟斤拷锟斤拷锟斤拷锟�  30S锟斤拷锟斤拷
+		 200,				//235%锟斤拷锟斤拷锟斤拷锟�  20S锟斤拷锟斤拷
+		 100				//245%锟斤拷锟斤拷锟斤拷锟�  10S锟斤拷锟斤拷
 };
 
 #define C_MOTOR_OV_MAX_CUR      2450
 #define C_MOTOR_OV_MIN_CUR      1150
 #define C_MOTOR_OV_STEP_CUR     100
 
-//��������ۼ���������ϵ��
+//锟斤拷锟斤拷锟斤拷锟斤拷奂锟斤拷锟斤拷锟斤拷锟斤拷锟较碉拷锟�
 Ulong const gMotorOverLoadDecTable[12] =
 {
-        (65536L*60/30),     //0%�������    3.0������������
-        (65536L*60/40),		//10%�������   4.0������������
-        (65536L*60/50),		//20%�������   5.0������������
-        (65536L*60/60),		//30%�������   6.0������������
-        (65536L*60/70),		//40%�������   7.0������������
-        (65536L*60/80),		//50%�������   8.0����������?
-        (65536L*60/90),		//60%�������   9.0������������
-        (65536L*60/100),	//70%�������   10.0������������
-        (65536L*60/110),	//80%�������   11.0������������
-        (65536L*60/120),	//90%�������   12.0������������
-		(65536L*60/130),	//100%�������  13.0������������
+        (65536L*60/30),     //0%锟斤拷锟斤拷锟斤拷锟�    3.0锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷
+        (65536L*60/40),		//10%锟斤拷锟斤拷锟斤拷锟�   4.0锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷
+        (65536L*60/50),		//20%锟斤拷锟斤拷锟斤拷锟�   5.0锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷
+        (65536L*60/60),		//30%锟斤拷锟斤拷锟斤拷锟�   6.0锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷
+        (65536L*60/70),		//40%锟斤拷锟斤拷锟斤拷锟�   7.0锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷
+        (65536L*60/80),		//50%锟斤拷锟斤拷锟斤拷锟�   8.0锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷?
+        (65536L*60/90),		//60%锟斤拷锟斤拷锟斤拷锟�   9.0锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷
+        (65536L*60/100),	//70%锟斤拷锟斤拷锟斤拷锟�   10.0锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷
+        (65536L*60/110),	//80%锟斤拷锟斤拷锟斤拷锟�   11.0锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷
+        (65536L*60/120),	//90%锟斤拷锟斤拷锟斤拷锟�   12.0锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷
+		(65536L*60/130),	//100%锟斤拷锟斤拷锟斤拷锟�  13.0锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷
 };
 
 #if (SOFTSERIES == MD500SOFT)
-// //�¶����߱�
+// //锟铰讹拷锟斤拷锟竭憋拷
 Uint const gTempTableBSMXX[37] =
 {
         2488,2441,2388,2328,2261,       //0-4
@@ -237,7 +237,7 @@ Uint const gTempTableWAIZHI[37] =
         265, 239, 215, 195, 176,        //30-34
         160, 146                         //35-36
 };
-//MD500��ͬ���͵Ĺ��µ㲻һ��
+//MD500锟斤拷同锟斤拷锟酵的癸拷锟铰点不一锟斤拷
 Uint const gTempProtectTable[19] =
 {
         95,95,110,100,100,         //16-20
@@ -245,7 +245,7 @@ Uint const gTempProtectTable[19] =
         100, 90, 90,95,90,             //26-30
         93, 97, 103 ,103,             //31-34
 };
-int const gFanSpeedCtrlTempreture[9]=
+s16 const gFanSpeedCtrlTempreture[9]=
 {
         -50,         // 132kw 25
         70,          // 160kw 26
@@ -259,7 +259,7 @@ int const gFanSpeedCtrlTempreture[9]=
 };
 
 #else //MD380
-// //�¶����߱�
+// //锟铰讹拷锟斤拷锟竭憋拷
 Uint const gTempTableP44X[23] =
 {
 		624,614,603,590,576,561,		//6
@@ -298,19 +298,19 @@ Uint const gTempTableWAIZHI[23] =
 #endif
 
 
-// //�ļ��ڲ���������
+// //锟侥硷拷锟节诧拷锟斤拷锟斤拷锟斤拷锟斤拷
 void    SoftWareErrorDeal(void);	
-void	TemperatureCheck(void);					//�¶ȼ��
-void	OutputPhaseLoseDetect(void);			//���ȱ����
+void	TemperatureCheck(void);					//锟铰度硷拷锟�
+void	OutputPhaseLoseDetect(void);			//锟斤拷锟饺憋拷锟斤拷锟�
 void 	OutputLoseReset(void);		
-void	InputPhaseLoseDetect(void);				//����ȱ����
+void	InputPhaseLoseDetect(void);				//锟斤拷锟斤拷缺锟斤拷锟斤拷
 
 #if (SOFT_INPUT_DETECT == STLEN)
 void    SoftInputPhaseLoseUdcCal(void);
 void    SoftInputPhaseLoseDetect(void);
 #endif
-void	ControlFan(void);						//���ȿ���
-void	OverLoadProtect(void);					//���ر���
+void	ControlFan(void);						//锟斤拷锟饺匡拷锟斤拷
+void	OverLoadProtect(void);					//锟斤拷锟截憋拷锟斤拷
 void	CBCLimitCurProtect(void);
 void 	SetCBCEnable(void);
 void 	SetCBCDisable(void);
@@ -329,9 +329,9 @@ __interrupt void ShortGnd_ADC_Over_isr(void);
 interrupt void ShortGnd_ADC_Over_isr(void);
 #endif
 /************************************************************
-	��Ƶ����������
+	锟斤拷频锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷
 ************************************************************/
-//��������������ɺ���
+//锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷珊锟斤拷锟�
 void MotorOverLoadTimeGenerate(void)
 {
 	u16 i;
@@ -341,11 +341,11 @@ void MotorOverLoadTimeGenerate(void)
 	{
 		mMotorOverLoadTime = gMotorOverLoadBaseTable[i]*(u32)gComPar.MotorOvLoad;
 
-		if(mMotorOverLoadTime > 48000)//����80����
+		if(mMotorOverLoadTime > 48000)//锟斤拷锟斤拷80锟斤拷锟斤拷
         {
 			mMotorOverLoadTime = 48000;
 		}
-		else if(mMotorOverLoadTime < 100)//����10S
+		else if(mMotorOverLoadTime < 100)//锟斤拷锟斤拷10S
 		{
         	mMotorOverLoadTime = 100;
 		}
@@ -355,60 +355,60 @@ void MotorOverLoadTimeGenerate(void)
 }
 void InvDeviceControl(void)			
 {
-	SoftWareErrorDeal();				//��������
-	TemperatureCheck();					//�¶ȼ��
-	OutputPhaseLoseDetect();			//���ȱ����
+	SoftWareErrorDeal();				//锟斤拷锟斤拷锟斤拷锟斤拷
+	TemperatureCheck();					//锟铰度硷拷锟�
+	OutputPhaseLoseDetect();			//锟斤拷锟饺憋拷锟斤拷锟�
 #if (SOFTSERIES == MD380SOFT)
-	InputPhaseLoseDetect();				//����ȱ����
+	InputPhaseLoseDetect();				//锟斤拷锟斤拷缺锟斤拷锟斤拷
 #endif
-	ControlFan();						//���ȿ���
+	ControlFan();						//锟斤拷锟饺匡拷锟斤拷
 #if (SOFTSERIES == MD500SOFT)
-	CutDownCurForOverLoad();            //���ؽ����
+	CutDownCurForOverLoad();            //锟斤拷锟截斤拷锟筋处锟斤拷
 	BrakeOverloadProtect();
 #endif
-	OverLoadProtect();					//���ر���
+	OverLoadProtect();					//锟斤拷锟截憋拷锟斤拷
 
-    CBCLimitCurPrepare();					//��������������
-	CBCLimitCurProtect();				//����������µĹ����ж�
+    CBCLimitCurPrepare();					//锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷
+	CBCLimitCurProtect();				//锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷碌墓锟斤拷锟斤拷卸锟�
 
 	BufferResProtect();
 #if (SOFTSERIES == MD380SOFT)
-    BrakeResShortProtect();             //�ƶ������·��������
+    BrakeResShortProtect();             //锟狡讹拷锟斤拷锟斤拷锟铰凤拷锟斤拷锟斤拷锟斤拷锟�
 #endif
     EncodeLineDiscProtect();
 }
 
 /*************************************************************
-	�������ϴ���
-ͣ��״̬Ҳ���ܱ��������ϡ���ѹ����
+	锟斤拷锟斤拷锟斤拷锟较达拷锟斤拷
+停锟斤拷状态也锟斤拷锟杰憋拷锟斤拷锟斤拷锟斤拷锟较★拷锟斤拷压锟斤拷锟斤拷
 *************************************************************/
 void SoftWareErrorDeal(void)					
 {
-// ��ʼ�ж���������
+// 锟斤拷始锟叫讹拷锟斤拷锟斤拷锟斤拷锟斤拷
 #if (SOFTSERIES == MD380SOFT)     
-	if((gUDC.uDCFilter > gInvInfo.InvUpUDC) || //��ѹ�ж�,ʹ�ô��˲���ѹ
+	if((gUDC.uDCFilter > gInvInfo.InvUpUDC) || //锟斤拷压锟叫讹拷,使锟矫达拷锟剿诧拷锟斤拷压
 	    GetOverUdcFlag())
 	{
-	    DisableDrive(); //ͣ��Ҳ��������ѹ�������û������ѹ����
+	    DisableDrive(); //停锟斤拷也锟斤拷锟斤拷锟斤拷锟斤拷压锟斤拷锟斤拷锟斤拷锟矫伙拷锟斤拷锟斤拷锟窖癸拷锟斤拷锟�
 	    gError.ErrorCode.all |= ERROR_OVER_UDC;
         if((gUDC.uDCFilter > gInvInfo.InvUpUDC) && (!GetOverUdcFlag())
             &&(gMainStatus.ErrFlag.bit.OvCurFlag == 0))
         {
-            gError.ErrorInfo[0].bit.Fault2 = 2;//������ѹ
+            gError.ErrorInfo[0].bit.Fault2 = 2;//锟斤拷锟斤拷锟斤拷压
         }
         else
         {
-            gError.ErrorInfo[0].bit.Fault2 = 1; //Ӳ����ѹ
+            gError.ErrorInfo[0].bit.Fault2 = 1; //硬锟斤拷锟斤拷压
         }
 	}
 #else
-	if((gUDC.uDCFilter > gInvInfo.InvUpUDC)||(ADC_UDC > 55125))    //55125��Ӧ860V
+	if((gUDC.uDCFilter > gInvInfo.InvUpUDC)||(ADC_UDC > 55125))    //55125锟斤拷应860V
 	{
-	    DisableDrive(); //ͣ��Ҳ��������ѹ�������û������ѹ����
+	    DisableDrive(); //停锟斤拷也锟斤拷锟斤拷锟斤拷锟斤拷压锟斤拷锟斤拷锟斤拷锟矫伙拷锟斤拷锟斤拷锟窖癸拷锟斤拷锟�
 	    gError.ErrorCode.all |= ERROR_OVER_UDC;
         if(gUDC.uDCFilter > gInvInfo.InvUpUDC)
 		{
-            gError.ErrorInfo[0].bit.Fault2 = 1; //������ѹ
+            gError.ErrorInfo[0].bit.Fault2 = 1; //锟斤拷锟斤拷锟斤拷压
 		}
 		else
 		{
@@ -422,10 +422,10 @@ void SoftWareErrorDeal(void)
 #endif
 	}
 #endif
-	else if(gUDC.uDCBigFilter < gInvInfo.InvLowUDC) //Ƿѹ�ж�,ʹ�ô��˲���ѹ
+	else if(gUDC.uDCBigFilter < gInvInfo.InvLowUDC) //欠压锟叫讹拷,使锟矫达拷锟剿诧拷锟斤拷压
 	{
 	    DisableDrive();
-        if(STATUS_GET_PAR == gMainStatus.RunStep)   //���������ʶ������Ƿѹ���¼Ĵ��������޸ĺ�û�лָ�
+        if(STATUS_GET_PAR == gMainStatus.RunStep)   //锟斤拷锟斤拷锟斤拷锟斤拷锟绞讹拷锟斤拷锟斤拷锟角费癸拷锟斤拷录拇锟斤拷锟斤拷锟斤拷锟斤拷薷暮锟矫伙拷谢指锟�
         {
             EndOfParIdentify();
         }         
@@ -435,18 +435,18 @@ void SoftWareErrorDeal(void)
 		gError.ErrorCode.all |= ERROR_LOW_UDC;
         gMainStatus.StatusWord.bit.LowUDC = 0;
 #if(AIRCOMPRESSOR == 1)
-		if((gMainCmd.RestarCnt <= 3)&&(gMainCmd.Command.bit.Start == 1)&&(gOverLoad.OverLoadPreventEnable == 1))   //���й����б�Ƿѹ���ϴ���־λ
+		if((gMainCmd.RestarCnt <= 3)&&(gMainCmd.Command.bit.Start == 1)&&(gOverLoad.OverLoadPreventEnable == 1))   //锟斤拷锟叫癸拷锟斤拷锟叫憋拷欠压锟斤拷锟较达拷锟斤拷志位
 		{
 		    gMainStatus.StatusWord.bit.OverLoadPreventState = 2;
 		}
 #endif
 	}
 
-	if(//(gMainStatus.RunStep == STATUS_LOW_POWER) ||                         // Ƿѹ
+	if(//(gMainStatus.RunStep == STATUS_LOW_POWER) ||                         // 欠压
 	   (gError.ErrorCode.all & ERROR_SHORT_EARTH) == ERROR_SHORT_EARTH)
 	{
 		gUDC.uDCBigFilter = gUDC.uDCFilter;
-		return;										//Ƿѹ״̬�²��ж���������
+		return;										//欠压状态锟铰诧拷锟叫讹拷锟斤拷锟斤拷锟斤拷锟斤拷
 	}
 	if((STATUS_STOP == gMainStatus.RunStep) &&
         (gError.LastErrorCode != gError.ErrorCode.all) && 
@@ -455,11 +455,11 @@ void SoftWareErrorDeal(void)
 	    gError.LastErrorCode = gError.ErrorCode.all;
         if(0 != gError.ErrorCode.all)
         {
-			gPhase.IMPhase += 0x4000L;				//���ϸ�λ�����нǶȷ����仯
+			gPhase.IMPhase += 0x4000L;				//锟斤拷锟较革拷位锟斤拷锟斤拷锟叫角度凤拷锟斤拷锟戒化
         }
     }
    
-// ��ʼ���ϸ�λ
+// 锟斤拷始锟斤拷锟较革拷位
 	if(gSubCommand.bit.ErrorOK == 1) 			
 	{
 		gError.ErrorCode.all = 0;
@@ -470,7 +470,7 @@ void SoftWareErrorDeal(void)
         gError.ErrorInfo[4].all = 0;
         gBrake.ErrCode = 0;
         gLineCur.ErrorShow = 0;
-        //CBC�жϸ�λ
+        //CBC锟叫断革拷位
         EALLOW;
         EPwm2Regs.TZCLR.bit.CBC = 1;
         EPwm2Regs.TZCLR.bit.INT = 1;
@@ -491,24 +491,24 @@ void SoftWareErrorDeal(void)
 
 }
 
-//	MD500���¶ȼ�⺯��
+//	MD500锟斤拷锟铰度硷拷夂拷锟�
 #if (SOFTSERIES == MD500SOFT)
 void TemperatureCheck(void)
 {
 	Uint    * m_pTable,*m_ErrTempTable;
 	long    m_TempAD,m_IndexLow,m_IndexHigh,m_Index,m_ErrTemp;
 	Uint    m_LimtCnt;
-    int    mType,m_TempMax,m_TempMin;
+    s16    mType,m_TempMax,m_TempMin;
 
     mType = gInvInfo.InvTypeApply;
 
-    if((gInvInfo.InvTypeSet>100) && (gInvInfo.InvTypeSet<200))    //380V����Ϊ220V�����¶����ߴ���
+    if((gInvInfo.InvTypeSet>100) && (gInvInfo.InvTypeSet<200))    //380V锟斤拷锟斤拷为220V锟斤拷锟斤拷锟铰讹拷锟斤拷锟竭达拷锟斤拷
     {
         mType = gInvInfo.InvTypeGaiZhi; 
     }
     m_ErrTempTable = (Uint *)gTempProtectTable;
     
-// �����¶ȵ��ȷ�� 18.5KW-110KW��Ҫ���
+// 锟斤拷锟斤拷锟铰度碉拷锟饺凤拷锟� 18.5KW-110KW锟斤拷要锟斤拷锟�
     if((gInvInfo.InvTypeApply > 15)&&(gInvInfo.InvTypeApply <= 34))
     {
         m_ErrTemp = *(m_ErrTempTable + gInvInfo.InvTypeApply - 16);
@@ -519,8 +519,8 @@ void TemperatureCheck(void)
     }
 	gTemperature.OverTempPoint = m_ErrTemp;
 	
-// �¶����ߵ�ѡ��
-// MD500�Ĺ��ʷ�Χ�ڣ��Ž����¶ȼ��㣬������´���	
+// 锟铰讹拷锟斤拷锟竭碉拷选锟斤拷
+// MD500锟侥癸拷锟绞凤拷围锟节ｏ拷锟脚斤拷锟斤拷锟铰度硷拷锟姐，锟斤拷锟斤拷锟斤拷麓锟斤拷锟�	
 	if((mType <= 34) && (mType >= 16))    // [16, 25]
 	{
 		if(gInvInfo.TempType == 1)
@@ -532,15 +532,15 @@ void TemperatureCheck(void)
 			m_pTable = (Uint *)gTempTableWAIZHI;
 		}
 		
-		// Ӳ���������Լ�������·������
-	    m_TempAD = gTemperature.TempAD>>4;//�¶�AD��߲���Ϊ12λ
+		// 硬锟斤拷锟斤拷锟斤拷锟斤拷锟皆硷拷锟斤拷锟斤拷锟斤拷路锟斤拷锟斤拷锟斤拷
+	    m_TempAD = gTemperature.TempAD>>4;//锟铰讹拷AD锟斤拷卟锟斤拷锟轿�12位
 	
-		// ��ʼ��ѯ�¶ȱ�
+		// 锟斤拷始锟斤拷询锟铰度憋拷
 		m_IndexLow  = 0;
 		m_IndexHigh = 36;
-		m_Index = 18;//�¶ȱ�����ַ����м�ֵ
-	    m_TempMax = 124;//����¶�
-	    m_TempMin = -20;//����¶�
+		m_Index = 18;//锟铰度憋拷锟斤拷锟斤拷址锟斤拷锟斤拷屑锟街�
+	    m_TempMax = 124;//锟斤拷锟斤拷露锟�
+	    m_TempMin = -20;//锟斤拷锟斤拷露锟�
 		if(m_TempAD >= m_pTable[m_IndexLow])
 		{	
 			mType = m_TempMin * 16;
@@ -552,9 +552,9 @@ void TemperatureCheck(void)
 		else
 		{
 			m_LimtCnt = 0;
-			while(m_LimtCnt < 8)//8Ϊ���ַ���ѯ�����Ҫ����
+			while(m_LimtCnt < 8)//8为锟斤拷锟街凤拷锟斤拷询锟斤拷锟斤拷锟揭拷锟斤拷锟�
 			{
-				m_LimtCnt++;					//������ѭ��
+				m_LimtCnt++;					//锟斤拷锟斤拷锟斤拷循锟斤拷
 				if(m_TempAD == m_pTable[m_Index])
 				{
 					mType = (m_Index<<6) + m_TempMin * 16;
@@ -579,7 +579,7 @@ void TemperatureCheck(void)
 				m_Index = (m_IndexLow + m_IndexHigh)>>1;
 			}
 		}
-		if(abs(mType - gTemperature.TempBak) >= 8)			//�¶ȱ仯����0.5�ȲŸ�ֵ
+		if(abs(mType - gTemperature.TempBak) >= 8)			//锟铰度变化锟斤拷锟斤拷0.5锟饺才革拷值
 		{
 			gTemperature.TempBak = mType;
 			gTemperature.Temp = mType>>4;
@@ -591,7 +591,7 @@ void TemperatureCheck(void)
 		gTemperature.TempBak = 2400;
 	}
 	    //gTemperature.Temp = gTestDataReceive.TestData28;
-// ��ʼ���¶��жϺͱ�������
+// 锟斤拷始锟斤拷锟铰讹拷锟叫断和憋拷锟斤拷锟斤拷锟斤拷
 	gTemperature.ErrCnt++;
 	if(gTemperature.Temp < m_ErrTemp)
 	{	
@@ -601,35 +601,35 @@ void TemperatureCheck(void)
 	if(gTemperature.ErrCnt >= 5)
 	{
 		gTemperature.ErrCnt = 0;
-		gError.ErrorCode.all |= ERROR_INV_TEMPERTURE;		//���ȱ���
+		gError.ErrorCode.all |= ERROR_INV_TEMPERTURE;		//锟斤拷锟饺憋拷锟斤拷
 	}
 }
 #else
 /************************************************************
-MD380�¶ȼ��,˵������:
+MD380锟铰度硷拷锟�,说锟斤拷锟斤拷锟斤拷:
 
-1������С�ڵ���10       (2.2Kw ��?
-	�¶�����:	     1		TABLE_P44X
+1锟斤拷锟斤拷锟斤拷小锟节碉拷锟斤拷10       (2.2Kw 锟斤拷?
+	锟铰讹拷锟斤拷锟斤拷:	     1		TABLE_P44X
 				2		TABLE_P8XX
 				3		TABLE_SEMIKON
 				4		TABLE_BSMXX
 
-2�������ڣ�11��18֮�� (11Kw �� 30Kw)
-	�¶�����:	     1		TABLE_BSMXX
+2锟斤拷锟斤拷锟斤拷锟节ｏ拷11锟斤拷18之锟斤拷 (11Kw 锟斤拷 30Kw)
+	锟铰讹拷锟斤拷锟斤拷:	     1		TABLE_BSMXX
 				2		TABLE_P44X
 				3~4		TABLE_SEMIKON
 
-3�������ڣ�19��26֮�䣩 (37Kw �� 200Kw,���Ұ���37, ������200)
-	�¶Ȳ������ã�		TABLE_WAIZHI
+3锟斤拷锟斤拷锟斤拷锟节ｏ拷19锟斤拷26之锟戒） (37Kw 锟斤拷 200Kw,锟斤拷锟揭帮拷锟斤拷37, 锟斤拷锟斤拷锟斤拷200)
+	锟铰度诧拷锟斤拷锟斤拷锟矫ｏ拷		TABLE_WAIZHI
 
-4�����ʹ��ڵ���27		TABLE_BSMXX
+4锟斤拷锟斤拷锟酵达拷锟节碉拷锟斤拷27		TABLE_BSMXX
 
-5�����ʹ��ڵ���27ʱ���¶Ȳ�����·��ͬ����Ҫ����3.3V��3V��ת����
+5锟斤拷锟斤拷锟酵达拷锟节碉拷锟斤拷27时锟斤拷锟铰度诧拷锟斤拷锟斤拷路锟斤拷同锟斤拷锟斤拷要锟斤拷锟斤拷3.3V锟斤拷3V锟斤拷转锟斤拷锟斤拷
 
-6�����ʹ��ڵ���19��85�ȱ�������������95�ȱ�����
+6锟斤拷锟斤拷锟酵达拷锟节碉拷锟斤拷19锟斤拷85锟饺憋拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷95锟饺憋拷锟斤拷锟斤拷
 
-�������з�ʽ��ÿ4����һ�����ݣ���ʼ��ַ����Ϊ12�ȣ�����ֵΪAD����ֵ
-AD����ֵ��AD_RESULT>>6
+锟斤拷锟斤拷锟斤拷锟叫凤拷式锟斤拷每4锟斤拷锟斤拷一锟斤拷锟斤拷锟捷ｏ拷锟斤拷始锟斤拷址锟斤拷锟斤拷为12锟饺ｏ拷锟斤拷锟斤拷值为AD锟斤拷锟斤拷值
+AD锟斤拷锟斤拷值锟斤拷AD_RESULT>>6
 ************************************************************/
 void TemperatureCheck(void)
 {
@@ -638,7 +638,7 @@ void TemperatureCheck(void)
 	Uint    m_LimtCnt;
     Uint    mType;
 
-	//...׼���¶ȱ�,690V���¶Ȳ����ͱ�����380V���ʹ���27��һ��
+	//...准锟斤拷锟铰度憋拷,690V锟斤拷锟铰度诧拷锟斤拷锟酵憋拷锟斤拷锟斤拷380V锟斤拷锟酵达拷锟斤拷27锟斤拷一锟斤拷
 	if(INV_VOLTAGE_690V == gInvInfo.InvVoltageType)
     {
        mType = 28;
@@ -646,22 +646,22 @@ void TemperatureCheck(void)
     else  if(INV_VOLTAGE_1140V == gInvInfo.InvVoltageType)
     {
        
-       mType = 20;  /*1140V ���µ���¶������趨Ϊ�����¶����� 2011.7.26 L1082*/
+       mType = 20;  /*1140V 锟斤拷锟铰碉拷锟斤拷露锟斤拷锟斤拷锟斤拷瓒ㄎ拷锟斤拷锟斤拷露锟斤拷锟斤拷锟� 2011.7.26 L1082*/
     }
     else
     {
         mType = gInvInfo.InvTypeApply;
     }
 
-    if((gInvInfo.InvTypeSet>100) && (gInvInfo.InvTypeSet<200))    //380V����Ϊ220V�����¶����ߴ���
+    if((gInvInfo.InvTypeSet>100) && (gInvInfo.InvTypeSet<200))    //380V锟斤拷锟斤拷为220V锟斤拷锟斤拷锟铰讹拷锟斤拷锟竭达拷锟斤拷
     {
         mType = gInvInfo.InvTypeGaiZhi; 
     }
 
-// �����¶ȵ��ȷ��
+// 锟斤拷锟斤拷锟铰度碉拷锟饺凤拷锟�
       m_ErrTemp = 95;
 
-// �¶����ߵ�ѡ��
+// 锟铰讹拷锟斤拷锟竭碉拷选锟斤拷
 	if(mType <= 10)
 	{
 		if(gInvInfo.TempType == 1)
@@ -719,17 +719,17 @@ void TemperatureCheck(void)
     }
     gTemperature.OverTempPoint = m_ErrTemp;
 
-// Ӳ���������Լ�������·������
+// 硬锟斤拷锟斤拷锟斤拷锟斤拷锟皆硷拷锟斤拷锟斤拷锟斤拷路锟斤拷锟斤拷锟斤拷
     m_TempAD = (gTemperature.TempAD>>6);	
 
 #ifdef  TMS320F2808
-    if(mType >= 27) // 3V��3.3v ������·��ת��
+    if(mType >= 27) // 3V锟斤拷3.3v 锟斤拷锟斤拷锟斤拷路锟斤拷转锟斤拷
     {
         m_TempAD = ((long)gTemperature.TempAD * 465)>>15; 
     }
 #endif
 
-// ��ʼ��ѯ�¶ȱ�
+// 锟斤拷始锟斤拷询锟铰度憋拷
 	m_IndexLow  = 0;
 	m_IndexHigh = 22;
 	m_Index = 11;
@@ -746,7 +746,7 @@ void TemperatureCheck(void)
 		m_LimtCnt = 0;
 		while(m_LimtCnt < 7)
 		{
-			m_LimtCnt++;					//������ѭ��
+			m_LimtCnt++;					//锟斤拷锟斤拷锟斤拷循锟斤拷
 			if(m_TempAD == m_pTable[m_Index])
 			{
 				mType = (m_Index<<6) + (12 * 16);
@@ -771,13 +771,13 @@ void TemperatureCheck(void)
 			m_Index = (m_IndexLow + m_IndexHigh)>>1;
 		}
 	}
-	if(mType - gTemperature.TempBak >= 8)			//�¶ȱ仯����0.5�ȲŸ�ֵ
+	if(mType - gTemperature.TempBak >= 8)			//锟铰度变化锟斤拷锟斤拷0.5锟饺才革拷值
 	{
 		gTemperature.TempBak = mType;
 		gTemperature.Temp = mType>>4;
 	}
 
-// ��ʼ���¶��жϺͱ�������
+// 锟斤拷始锟斤拷锟铰讹拷锟叫断和憋拷锟斤拷锟斤拷锟斤拷
 	gTemperature.ErrCnt++;
 	if(gTemperature.Temp < m_ErrTemp)
 	{	
@@ -787,13 +787,13 @@ void TemperatureCheck(void)
 	if(gTemperature.ErrCnt >= 5)
 	{
 		gTemperature.ErrCnt = 0;
-		gError.ErrorCode.all |= ERROR_INV_TEMPERTURE;		//���ȱ���
+		gError.ErrorCode.all |= ERROR_INV_TEMPERTURE;		//锟斤拷锟饺憋拷锟斤拷
 	}
 
 }
 #endif
 /************************************************************
-	���ȱ����
+	锟斤拷锟饺憋拷锟斤拷锟�
 ************************************************************/
 void OutputPhaseLoseDetect(void)			
 {
@@ -811,18 +811,18 @@ void OutputPhaseLoseDetect(void)
     //gPhaseLose.Cnt ++;
     
 	if((gSubCommand.bit.OutputLost == 0) ||	
-	   (gMainCmd.FreqReal < 80) ||					//0.8Hz���²����
-	   (gMainCmd.FreqReal > 50000)||                //500Hz����Ҳ�����
-	   (gMainCmd.Command.bit.StartDC == 1) ||		//ֱ���ƶ�״̬�²����
+	   (gMainCmd.FreqReal < 80) ||					//0.8Hz锟斤拷锟铰诧拷锟斤拷锟�
+	   (gMainCmd.FreqReal > 50000)||                //500Hz锟斤拷锟斤拷也锟斤拷锟斤拷锟�
+	   (gMainCmd.Command.bit.StartDC == 1) ||		//直锟斤拷锟狡讹拷状态锟铰诧拷锟斤拷锟�
 	   (gMainCmd.Command.bit.StopDC  == 1) ||
-	   ((gMainStatus.RunStep != STATUS_RUN) && 		//�������л����ٶ������׶�
+	   ((gMainStatus.RunStep != STATUS_RUN) && 		//锟斤拷锟斤拷锟斤拷锟叫伙拷锟斤拷锟劫讹拷锟斤拷锟斤拷锟阶讹拷
 	    (gMainStatus.RunStep != STATUS_SPEED_CHECK)))
 	{
 		OutputLoseReset();
 		return;
 	}    
 
-	if((gPhaseLose.Time < 4000000)||(gPhaseLose.Cnt<400))    // 20������������������Ҫ200ms���ж����ȱ�� 
+	if((gPhaseLose.Time < 4000000)||(gPhaseLose.Cnt<400))    // 20锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷要200ms锟斤拷锟叫讹拷锟斤拷锟饺憋拷锟� 
 	{		
 		return;
 	}
@@ -852,7 +852,7 @@ void OutputPhaseLoseDetect(void)
     //gPhaseLose.errMinCur = m_Min;
 	OutputLoseReset();
 }
-void OutputLoseAdd(void)		//���ȱ�����ۼӵ�������
+void OutputLoseAdd(void)		//锟斤拷锟饺憋拷锟斤拷锟斤拷奂拥锟斤拷锟斤拷锟斤拷锟�
 {
 	gPhaseLose.TotalU += abs(gIUVWQ24.U >> 12);
 	gPhaseLose.TotalV += abs(gIUVWQ24.V >> 12);
@@ -862,7 +862,7 @@ void OutputLoseAdd(void)		//���ȱ�����ۼӵ�������
 	gPhaseLose.Cnt ++;
 }
 
-void OutputLoseReset(void)		//���ȱ���⸴λ�Ĵ�������
+void OutputLoseReset(void)		//锟斤拷锟饺憋拷锟斤拷飧次伙拷拇锟斤拷锟斤拷锟斤拷锟�
 {
 	gPhaseLose.Cnt = 0;
 	gPhaseLose.TotalU = 0;
@@ -888,22 +888,22 @@ void OutputPhaseLoseAndShortGndDetect(void)
 		case 1:
 			gBforeRunPhaseLose.Counter	= 0;
 			gBforeRunPhaseLose.OverFlag	= 0;
-		//	gMainStatus.PrgStatus.bit.PWMDisable = 1; // ��ֹ�����жϷ���
+		//	gMainStatus.PrgStatus.bit.PWMDisable = 1; // 锟斤拷止锟斤拷锟斤拷锟叫断凤拷锟斤拷
 			DisableDrive();
-			// ����ǰ�Եض�·��⼰����ǰ���ȱ���������ֵ�ļ���
-			// Ĭ��Ϊ2048(Q12��ʽ)��������С��80%��Ƶ���������С��2����������
-			Data1 = ((Ulong)gInvInfo.InvCurrent*3277)/gMotorInfo.Current;			// 80%��Ƶ�������, Q12
-			Data2 = ((Ulong)gInvInfo.InvCurrent<<12)/gMotorInfo.Current;			// ��Ƶ�������, Q12
-			gBforeRunPhaseLose.CurComperCoff = (Data1 < 2048) ? Data1 : 2048;		// min(50%��ֵ����, 80% ��Ƶ�������)
-            gBforeRunPhaseLose.CurComperCoffLimit = (Data2 < 3277) ? Data2 : 3277;	// min(80%��ֵ����, ��Ƶ�������)
+			// 锟斤拷锟斤拷前锟皆地讹拷路锟斤拷饧帮拷锟斤拷锟角帮拷锟斤拷缺锟斤拷锟斤拷锟斤拷锟斤拷锟街碉拷募锟斤拷锟�
+			// 默锟斤拷为2048(Q12锟斤拷式)锟斤拷锟斤拷锟斤拷锟斤拷小锟斤拷80%锟斤拷频锟斤拷锟筋定锟斤拷锟斤拷锟斤拷小锟斤拷2锟斤拷锟斤拷锟斤拷疃拷锟斤拷锟�
+			Data1 = ((Ulong)gInvInfo.InvCurrent*3277)/gMotorInfo.Current;			// 80%锟斤拷频锟斤拷锟筋定锟斤拷锟斤拷, Q12
+			Data2 = ((Ulong)gInvInfo.InvCurrent<<12)/gMotorInfo.Current;			// 锟斤拷频锟斤拷锟筋定锟斤拷锟斤拷, Q12
+			gBforeRunPhaseLose.CurComperCoff = (Data1 < 2048) ? Data1 : 2048;		// min(50%锟斤拷值锟斤拷锟斤拷, 80% 锟斤拷频锟斤拷锟筋定锟斤拷锟斤拷)
+            gBforeRunPhaseLose.CurComperCoffLimit = (Data2 < 3277) ? Data2 : 3277;	// min(80%锟斤拷值锟斤拷锟斤拷, 锟斤拷频锟斤拷锟筋定锟斤拷锟斤拷)
 			//gBforeRunPhaseLose.CurComperCoff = (gBforeRunPhaseLose.CurComperCoff<Data2)?gBforeRunPhaseLose.CurComperCoff:Data2;
 			EALLOW;
 			#ifdef TARGET_GS32
-			interrupt_register(INT_ADC1, &ShortGnd_ADC_Over_isr);
+			Interrupt_register(INT_ADC1, &ShortGnd_ADC_Over_isr);
 			#else
-			PieVectTable.ADCINT1	= &ShortGnd_ADC_Over_isr; // ����ǰ�Եض�·�����ȱ����AD�ж�  
+			PieVectTable.ADCINT1	= &ShortGnd_ADC_Over_isr; // 锟斤拷锟斤拷前锟皆地讹拷路锟斤拷锟斤拷锟饺憋拷锟斤拷锟紸D锟叫讹拷  
 			#endif
-			EPwm1Regs.TBPRD = 600;	// ADжΪ10us
+			EPwm1Regs.TBPRD = 600;	// AD卸为10us
 			EPwm2Regs.TBPRD = 600;
 			EPwm3Regs.TBPRD = 600;
 			EPwm1Regs.DBCTL.all	= 0x0;
@@ -917,14 +917,14 @@ void OutputPhaseLoseAndShortGndDetect(void)
 			{
 				EnableDrive();
 			}
-			if(gExtendCmd.bit.ShortGndBeforeRun != 1)	// ����ǰ�����Եض�·, ֱ�Ӽ�����ȱ��, PWM�Ĵ�������
+			if(gExtendCmd.bit.ShortGndBeforeRun != 1)	// 锟斤拷锟斤拷前锟斤拷锟斤拷锟皆地讹拷路, 直锟接硷拷锟斤拷锟斤拷缺锟斤拷, PWM锟侥达拷锟斤拷锟斤拷锟斤拷
 			{
 				EPwm1Regs.AQCSFRC.all 	= 0x09;		// A+, B-
 				EPwm2Regs.AQCSFRC.all 	= 0x06;			
 				EPwm3Regs.AQCSFRC.all 	= 0x0A;
 
 			}
-			else // ����ǰ�Եض�·���, ��־λ����, PWM�Ĵ�������
+			else // 锟斤拷锟斤拷前锟皆地讹拷路锟斤拷锟�, 锟斤拷志位锟斤拷锟斤拷, PWM锟侥达拷锟斤拷锟斤拷锟斤拷
 			{
 				gBforeRunPhaseLose.ShortGndDetectFlag = 1;
 				EPwm1Regs.AQCSFRC.all 	= 0x09;		// A+
@@ -940,7 +940,7 @@ void OutputPhaseLoseAndShortGndDetect(void)
 			if((gExtendCmd.bit.ShortGndBeforeRun == 1)&&
 			(gMainStatus.SubStep == 2))
 			{
-				BeforeRunShortGndDetect();	// ����ǰ�Եض�·����ж�, δ��ɼ��ǰ, ѭ��ִ��
+				BeforeRunShortGndDetect();	// 锟斤拷锟斤拷前锟皆地讹拷路锟斤拷锟斤拷卸锟�, 未锟斤拷杉锟斤拷前, 循锟斤拷执锟斤拷
 				gMainStatus.StatusWord.bit.ShortGndOver = 1;
 			}
 			if((gError.ErrorCode.all == 0)&&
@@ -953,7 +953,7 @@ void OutputPhaseLoseAndShortGndDetect(void)
 					EnableDrive();
 				}
 				gBforeRunPhaseLose.Counter++;
-				BeforeRunOutputPhaseLoseDetect(); //	����ǰ���ȱ�����ж�
+				BeforeRunOutputPhaseLoseDetect(); //	锟斤拷锟斤拷前锟斤拷锟饺憋拷锟斤拷锟斤拷卸锟�
 			}
 			else
 			{
@@ -981,16 +981,16 @@ void ResetPhaseLoseDetect(void)
 	gBforeRunPhaseLose.UWPhaseLoseFlag = 0;
 	gBforeRunPhaseLose.ShortGndDetectFlag = 0;
 	gShortGnd.ocFlag = 0;
-//	gMainStatus.PrgStatus.bit.PWMDisable = 0;	// �ָ������жϷ���
+//	gMainStatus.PrgStatus.bit.PWMDisable = 0;	// 锟街革拷锟斤拷锟斤拷锟叫断凤拷锟斤拷
 	gMainStatus.RunStep = STATUS_STOP;
 	EALLOW;
 	#ifdef TARGET_GS32
-    interrupt_register(INT_ADC1, &ADC_Over_isr);
+    Interrupt_register(INT_ADC1, &ADC_Over_isr);
     #else
 	PieVectTable.ADCINT1     = &ADC_Over_isr;
 	#endif
 	EDIS;
-	InitSetPWM();                       //�ָ��޸ĵļĴ�������
+	InitSetPWM();                       //锟街革拷锟睫改的寄达拷锟斤拷锟斤拷锟斤拷
 }
 
 void BeforeRunShortGndDetect(void)
@@ -1000,7 +1000,7 @@ void BeforeRunShortGndDetect(void)
 	if((gShortGnd.ocFlag != 0)||
 	(gBforeRunPhaseLose.OverFlag == 1)||
 //	(gBforeRunPhaseLose.maxIU > (30 * 32))||
-	//(gUDC.uDC > gShortGnd.BaseUDC + 650)|| // ��ʱɾ��ĸ�ߵ�ѹ�ж�����
+	//(gUDC.uDC > gShortGnd.BaseUDC + 650)|| // 锟斤拷时删锟斤拷母锟竭碉拷压锟叫讹拷锟斤拷锟斤拷
 	(gCBCProtect.CBCIntFlag == 1))
 	{
 		EALLOW;
@@ -1013,24 +1013,24 @@ void BeforeRunShortGndDetect(void)
 		if(abs(gShortGnd.ShortCur) > (30 * 32)||
 		(gBforeRunPhaseLose.OverFlag == 1)) 
 		{
-			gError.ErrorInfo[2].bit.Fault4 =3; //�������� 
+			gError.ErrorInfo[2].bit.Fault4 =3; //锟斤拷锟斤拷锟斤拷锟斤拷 
 		}
-		/*if(gUDC.uDC > gShortGnd.BaseUDC + 650)  ��ʱɾ��ĸ�ߵ�ѹ�ж�����
+		/*if(gUDC.uDC > gShortGnd.BaseUDC + 650)  锟斤拷时删锟斤拷母锟竭碉拷压锟叫讹拷锟斤拷锟斤拷
 		{
-			gError.ErrorInfo[2].bit.Fault4 = 4; //������ѹ  
+			gError.ErrorInfo[2].bit.Fault4 = 4; //锟斤拷锟斤拷锟斤拷压  
 		}*/
 		if(1 == gShortGnd.ocFlag) 
 		{
-			gError.ErrorInfo[2].bit.Fault4 = 1; //Ӳ������,Ӳ�����ȼ���
+			gError.ErrorInfo[2].bit.Fault4 = 1; //硬锟斤拷锟斤拷锟斤拷,硬锟斤拷锟斤拷锟饺硷拷锟斤拷
 		}
 		if(2 == gShortGnd.ocFlag) 
 		{
-			gError.ErrorInfo[2].bit.Fault4 = 2; //Ӳ����ѹ
+			gError.ErrorInfo[2].bit.Fault4 = 2; //硬锟斤拷锟斤拷压
 		}
 		gLineCur.ErrorShow = gBforeRunPhaseLose.maxIU;
-		gMainStatus.SubStep = 4;					// ȷ���Եض�·��, ֱ�ӽ�����Ⲣ���и�λ
+		gMainStatus.SubStep = 4;					// 确锟斤拷锟皆地讹拷路锟斤拷, 直锟接斤拷锟斤拷锟斤拷獠拷锟斤拷懈锟轿�
 	}
-	else											// û�жԵض�·, �����ȱ�������üĴ���, ������һ�����
+	else											// 没锟叫对地讹拷路, 锟斤拷锟斤拷锟饺憋拷锟斤拷锟斤拷锟斤拷眉拇锟斤拷锟�, 锟斤拷锟斤拷锟斤拷一锟斤拷锟斤拷锟�
 	{
 		gMainStatus.SubStep++;
 		gBforeRunPhaseLose.maxIU 	= 0;
@@ -1046,7 +1046,7 @@ void BeforeRunShortGndDetect(void)
 }
 void BeforeRunOutputPhaseLoseDetect(void)	
 {
-	if((gBforeRunPhaseLose.OverFlag == 1)&&	// 	��Ƶ������������������������ֵ����Ϊδȱ��
+	if((gBforeRunPhaseLose.OverFlag == 1)&&	// 	锟斤拷频锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷值锟斤拷锟斤拷为未缺锟斤拷
 	(gBforeRunPhaseLose.maxIU > gBforeRunPhaseLose.CurComperCoff))
 	{
 		if(gBforeRunPhaseLose.UWPhaseLoseFlag == 0)
@@ -1084,7 +1084,7 @@ void BeforeRunOutputPhaseLoseDetect(void)
 			gMainStatus.SubStep++;
 			if(gMainStatus.ErrFlag.bit.OvCurFlag == 0)
 			{
-				gError.ErrorCode.all |= ERROR_OUTPUT_LACK_PHASE;//�����ȱ��
+				gError.ErrorCode.all |= ERROR_OUTPUT_LACK_PHASE;//锟斤拷锟斤拷锟饺憋拷锟�
 				gError.ErrorInfo[1].bit.Fault4 = 3;
 				gBforeRunPhaseLose.Counter = 0;
 			}
@@ -1100,7 +1100,7 @@ interrupt void ShortGnd_ADC_Over_isr(void)
 #ifdef TARGET_GS32
     SAVE_IRQ_CSR_CONTEXT();
 #endif
-	EALLOW;             //28035��ΪEALLOW����
+	EALLOW;             //28035锟斤拷为EALLOW锟斤拷锟斤拷
 	ADC_CLEAR_INT_FLAG;
 	EDIS;
 	EINT;
@@ -1126,20 +1126,20 @@ void ShortGnd_PhaseLoseICal(void)
     s32 OverCur;
     				
 	GetCurrentInfo();
-	if(gBforeRunPhaseLose.ShortGndDetectFlag == 1)   // �Եض�·���
+	if(gBforeRunPhaseLose.ShortGndDetectFlag == 1)   // 锟皆地讹拷路锟斤拷锟�
     {
         OverCur = (gIUVWQ24.U >> 12) + (gIUVWQ24.V >> 12);
         OverCur = OverCur + (gIUVWQ24.W >> 12);
-        gBforeRunPhaseLose.CurTotal = abs((s16)OverCur);					// ���������֮��, Q12, pu
+        gBforeRunPhaseLose.CurTotal = abs((s16)OverCur);					// 锟斤拷锟斤拷锟斤拷锟斤拷锟街拷锟�, Q12, pu
         gBforeRunPhaseLose.maxIU    = abs(gIUVWQ24.U >> 12);
     }
-    else		// ���ȱ����
+    else		// 锟斤拷锟饺憋拷锟斤拷锟�
     {
-		gBforeRunPhaseLose.maxIU	= Max(gBforeRunPhaseLose.maxIU,abs(gIUVWQ24.U >> 12));		// U��������
+		gBforeRunPhaseLose.maxIU	= Max(gBforeRunPhaseLose.maxIU,abs(gIUVWQ24.U >> 12));		// U锟斤拷锟斤拷锟斤拷锟斤拷
         gBforeRunPhaseLose.CurTotal = gBforeRunPhaseLose.maxIU;
 	}
-	if((gBforeRunPhaseLose.maxIU > gBforeRunPhaseLose.CurComperCoff)		// ���ڶԵض�·���, U���������50%, ���������֮�ʹ���50%, ��Ϊ�Եض�·
-	 &&(gBforeRunPhaseLose.CurTotal > gBforeRunPhaseLose.CurComperCoff))	// �������ȱ����, U������������50%, 
+	if((gBforeRunPhaseLose.maxIU > gBforeRunPhaseLose.CurComperCoff)		// 锟斤拷锟节对地讹拷路锟斤拷锟�, U锟斤拷锟斤拷锟斤拷锟斤拷锟�50%, 锟斤拷锟斤拷锟斤拷锟斤拷锟街拷痛锟斤拷锟�50%, 锟斤拷为锟皆地讹拷路
+	 &&(gBforeRunPhaseLose.CurTotal > gBforeRunPhaseLose.CurComperCoff))	// 锟斤拷锟斤拷锟斤拷锟饺憋拷锟斤拷锟�, U锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷50%, 
 	{
 		DisableDrive();
 		EALLOW;
@@ -1149,7 +1149,7 @@ void ShortGnd_PhaseLoseICal(void)
 	}
 	else if((gBforeRunPhaseLose.maxIU > gBforeRunPhaseLose.CurComperCoffLimit)
 	&&(gBforeRunPhaseLose.CurTotal < (gBforeRunPhaseLose.CurComperCoffLimit>>1))
-	&&(gBforeRunPhaseLose.ShortGndDetectFlag == 1))             // �Եض�·���, ����⵽U���������80%���������С��40%ʱ���ٷ������
+	&&(gBforeRunPhaseLose.ShortGndDetectFlag == 1))             // 锟皆地讹拷路锟斤拷锟�, 锟斤拷锟斤拷獾経锟斤拷锟斤拷锟斤拷锟斤拷锟�80%锟斤拷锟斤拷锟斤拷锟斤拷锟叫★拷锟�40%时锟斤拷锟劫凤拷锟斤拷锟斤拷锟�
 	{
 	    DisableDrive();
 		EALLOW;
@@ -1159,23 +1159,23 @@ void ShortGnd_PhaseLoseICal(void)
 //	gCpuTime.ADCInt = gCpuTime.ADCIntBase - GetTime();
 }
 /************************************************************
-	����ȱ����
-	�źŵĸߵ͵�ƽ��ָ�������ϵ��źţ����ǵ�DSP���źţ���DSP���źŵ�ƽ�෴
-ȱ����ԭ��1: MD380��
-    �̵��������ź���ȱ���źŸ��ϣ� ������ʱ��һֱΪ�ͣ�
-    ��PLһֱΪ�ߣ���̵���û�����ϣ�
-    ��PLΪ��������ȱ�ࣻ    
+	锟斤拷锟斤拷缺锟斤拷锟斤拷
+	锟脚号的高低碉拷平锟斤拷指锟斤拷锟斤拷锟斤拷锟较碉拷锟脚号ｏ拷锟斤拷锟角碉拷DSP锟斤拷锟脚号ｏ拷锟斤拷DSP锟斤拷锟脚号碉拷平锟洁反
+缺锟斤拷锟斤拷原锟斤拷1: MD380锟斤拷
+    锟教碉拷锟斤拷锟斤拷锟斤拷锟脚猴拷锟斤拷缺锟斤拷锟脚号革拷锟较ｏ拷 锟斤拷锟斤拷锟斤拷时锟斤拷一直为锟酵ｏ拷
+    锟斤拷PL一直为锟竭ｏ拷锟斤拷痰锟斤拷锟矫伙拷锟斤拷锟斤拷希锟�
+    锟斤拷PL为锟斤拷锟斤拷锟斤拷锟斤拷缺锟洁；    
 
-ȱ����ԭ��2��MD500Ӳ���޸ĺ�zzb1812��
-//��Ҫ����0.5ms��ִ��
-// ����ȱ��720Hz ,1sӦ����720�����ڣ�ʵ����ƫ�500Hz
-// ����450�����ھ���Ϊȱ�࣬450Hz
-// ȱ1��ʱ�źŲ������������6ms���ҵĵ͵�ƽ
-// ȱ3��ʱΪ������720Hz�ź�
+缺锟斤拷锟斤拷原锟斤拷2锟斤拷MD500硬锟斤拷锟睫改猴拷zzb1812锟斤拷
+//锟斤拷要锟斤拷锟斤拷0.5ms锟斤拷执锟斤拷
+// 锟斤拷锟斤拷缺锟斤拷720Hz ,1s应锟斤拷锟斤拷720锟斤拷锟斤拷锟节ｏ拷实锟斤拷锟斤拷偏锟筋到500Hz
+// 锟斤拷锟斤拷450锟斤拷锟斤拷锟节撅拷锟斤拷为缺锟洁，450Hz
+// 缺1锟斤拷时锟脚号诧拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟�6ms锟斤拷锟揭的低碉拷平
+// 缺3锟斤拷时为锟斤拷锟斤拷锟斤拷720Hz锟脚猴拷
 
-// �������300Hz��һ��Ƚ�׼ȷ����300������
-// �����ߵ�ƽΪ����������
-18.5kw ���ϲ���ȱ���·
+// 锟斤拷锟斤拷锟斤拷锟�300Hz锟斤拷一锟斤拷冉锟阶既凤拷锟斤拷锟�300锟斤拷锟斤拷锟斤拷
+// 锟斤拷锟斤拷锟竭碉拷平为锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷
+18.5kw 锟斤拷锟较诧拷锟斤拷缺锟斤拷锟铰�
 ************************************************************/
 #if (SOFTSERIES == MD500SOFT)
 //#if (HARD_WARE_INPUT_DETECT == STLEN)
@@ -1189,7 +1189,7 @@ void InputPhaseLoseReset()
 }
 void InputPhaseLoseDetect(void)			
 {
-	if((gMainCmd.Command.bit.Start == 0)              //ͣ��״̬\����״̬\18.5KW���²��������ȱ��
+	if((gMainCmd.Command.bit.Start == 0)              //停锟斤拷状态\锟斤拷锟斤拷状态\18.5KW锟斤拷锟铰诧拷锟斤拷锟斤拷锟斤拷锟饺憋拷锟�
 		 ||(gInvInfo.InvTypeApply < gInLose.ForeInvType)
 		 ||(gError.ErrorCode.all != 0))
 	{
@@ -1208,9 +1208,9 @@ void InputPhaseLoseDetect(void)
 				
 		if(gInLose.HighLevelCnt && gInLose.LowLevelCnt)
 		{					
-			m_Data = (gInLose.HighLevelCnt + gInLose.LowLevelCnt);//0.5ms��ִ��
-			gInLose.PLFreqTotal += m_Data;	//�ۻ�
-			if (gInLose.LowLevelCnt > 8)//4ms���ϵĵ͵�ƽ����
+			m_Data = (gInLose.HighLevelCnt + gInLose.LowLevelCnt);//0.5ms锟斤拷执锟斤拷
+			gInLose.PLFreqTotal += m_Data;	//锟桔伙拷
+			if (gInLose.LowLevelCnt > 8)//4ms锟斤拷锟较的低碉拷平锟斤拷锟斤拷
 			{
 				gInLose.LongLowLevelCnt ++;
 			}
@@ -1218,7 +1218,7 @@ void InputPhaseLoseDetect(void)
 			gInLose.LowLevelCnt  = 0;
 			gInLose.PLFreqCnt++;			
 		}
-		else if((gInLose.HighLevelCnt > 250)&&(gSubCommand.bit.RelayEnalbe == 1))//����0.5s�Ӹߵ�ƽ������Ϊ����������Ϲ���
+		else if((gInLose.HighLevelCnt > 250)&&(gSubCommand.bit.RelayEnalbe == 1))//锟斤拷锟斤拷0.5s锟接高碉拷平锟斤拷锟斤拷锟斤拷为锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷瞎锟斤拷锟�
 		{
 			gError.ErrorCode.all |= ERROR_RESISTANCE_CONTACK;		
 			InputPhaseLoseReset();
@@ -1229,13 +1229,13 @@ void InputPhaseLoseDetect(void)
 	else if(gInLose.HighLevelCnt)
 	{
 		gInLose.LowLevelCnt++;
-		if (gInLose.LowLevelCnt > 6000)//0.5msִ��3s�������ֹ�������ۻ�
+		if (gInLose.LowLevelCnt > 6000)//0.5ms执锟斤拷3s锟斤拷锟斤拷锟斤拷锟街癸拷锟斤拷锟斤拷锟斤拷刍锟�
 		{
 			InputPhaseLoseReset();
 		}
 	}
 	
-	if(gInLose.PLFreqTotal > 2000) //����1s
+	if(gInLose.PLFreqTotal > 2000) //锟斤拷锟斤拷1s
 	{	
 		if(gInLose.PLFreqCnt > 450 || gInLose.LongLowLevelCnt > 20) 					            
 		{
@@ -1252,7 +1252,7 @@ void InputPhaseLoseDetect(void)
 			}
 #endif
 		}
-		// �������300Hz��һ��Ƚ�׼ȷ����150������
+		// 锟斤拷锟斤拷锟斤拷锟�300Hz锟斤拷一锟斤拷冉锟阶既凤拷锟斤拷锟�150锟斤拷锟斤拷锟斤拷
 		else if(gInLose.PLFreqCnt > 200) 
 		{
 			if (gSubCommand.bit.RelayEnalbe == 1)
@@ -1265,7 +1265,7 @@ void InputPhaseLoseDetect(void)
 }
 	#if (SOFT_INPUT_DETECT == STLEN)
 /**********************************************
-��������ȱ����
+锟斤拷锟斤拷锟斤拷锟斤拷缺锟斤拷锟斤拷
 **********************************************/
 void SoftInputPhaseLoseUdcCal(void)
 {
@@ -1283,7 +1283,7 @@ void SoftInputPhaseLoseUdcCal(void)
     gSoftInLose.uDCFilter   = gSoftInLose.uDCAverage;
     
     gSoftInLose.Count_5s++;
-    if(gSoftInLose.Count_5s >= 10000)										// 5s��ʱ
+    if(gSoftInLose.Count_5s >= 10000)										// 5s锟斤拷时
     {
         if(abs(gSoftInLose.MaxUdc_5s - gSoftInLose.MinUdc_5s) >= 300)
         {
@@ -1317,10 +1317,10 @@ void SoftInputPhaseLoseDetect(void)
     static s16  m_DetaCount = 0;
     Uint    m_InLoseTime;
         
-    if((gMainStatus.RunStep != STATUS_RUN) || 		//�������н׶β����
+    if((gMainStatus.RunStep != STATUS_RUN) || 		//锟斤拷锟斤拷锟斤拷锟叫阶段诧拷锟斤拷锟�
        (gSubCommand.bit.InputLost != 1)||
        (gSoftInLose.MaxUdc_100ms - gSoftInLose.MinUdc_100ms <= gSoftInLose.MaxDetaU)||
-       (gPowerTrq.InvPower_si <= ((gSoftInLose.HalfInvPowerPU*200)>>10)))     //||         //��Ƶ������ʵ�50%=2048*1.732
+       (gPowerTrq.InvPower_si <= ((gSoftInLose.HalfInvPowerPU*200)>>10)))     //||         //锟斤拷频锟斤拷锟筋定锟斤拷锟绞碉拷50%=2048*1.732
 	{
 		gSoftInLose.Flag = 0;
         gSoftInLose.time1 = 0; 
@@ -1337,12 +1337,12 @@ void SoftInputPhaseLoseDetect(void)
         if(	gSoftInLose.uDC <= u_dvalve )
         {
             if(gSoftInLose.Flag == 0)
-            {	//	��һ�ε��ڱȽϵ�ѹ
+            {	//	锟斤拷一锟轿碉拷锟节比较碉拷压
                gSoftInLose.time1 = GetTime();
                gSoftInLose.Flag = 1;
             }
             else if(gSoftInLose.Flag ==2) 
-            {	//	�ڶ��ε��ڱȽϵ�ѹ
+            {	//	锟节讹拷锟轿碉拷锟节比较碉拷压
                gSoftInLose.time3 = GetTime();
                gSoftInLose.Flag = 3;
             }       
@@ -1350,15 +1350,15 @@ void SoftInputPhaseLoseDetect(void)
         else if(gSoftInLose.uDC  > u_dvalve)
         {
             if(gSoftInLose.Flag ==1)
-            {	//	��һ�ε͵�ѹ�ָ�
+            {	//	锟斤拷一锟轿低碉拷压锟街革拷
                gSoftInLose.Flag = 2;  
                gSoftInLose.time2 = GetTime();            
-            }	//	�ڶ��ε͵�ѹ�ָ�
+            }	//	锟节讹拷锟轿低碉拷压锟街革拷
             else if(gSoftInLose.Flag ==3)
             {
                 gSoftInLose.time4 = GetTime();   
                 gSoftInLose.Flag = 0;  
-    			//	����г����Ƶ��
+    			//	锟斤拷锟斤拷谐锟斤拷锟斤拷频锟斤拷
                 deta_t1 = ((gSoftInLose.time1 - gSoftInLose.time3)&0xFFFFFFFF)>>1;
                 deta_t2 = ((gSoftInLose.time2 - gSoftInLose.time4)&0xFFFFFFFF)>>1;
                 deta_t = ((deta_t1 + deta_t2)/DSP_CLOCK);
@@ -1366,7 +1366,7 @@ void SoftInputPhaseLoseDetect(void)
                 deta_t = Min(deta_t ,15000);
                 
                 gSoftInLose.wait_r += deta_t;
-    			//	��������ʮ����г��Ƶ�ʵ�ƽ��ֵ
+    			//	锟斤拷锟斤拷锟斤拷锟斤拷十锟斤拷锟斤拷谐锟斤拷频锟绞碉拷平锟斤拷值
                 m_DetaCount ++;
                 if(m_DetaCount < 10)
                 {
@@ -1393,7 +1393,7 @@ void SoftInputPhaseLoseDetect(void)
                         gSoftInLose.InLoseAddTime = 750;   //  400 MS
                     }
                     gSoftInLose.Flose = gSoftInLose.Flose+gSoftInLose.InLoseAddTime;
-                	//	����10�ζ��ڷ�Χ�ڣ���ȱ��
+                	//	锟斤拷锟斤拷10锟轿讹拷锟节凤拷围锟节ｏ拷锟斤拷缺锟斤拷
                     if(gSoftInLose.Flose >= 1500)
                     {
                         gError.ErrorCode.all |= ERROR_INPUT_LACK_PHASE;
@@ -1419,7 +1419,7 @@ void SoftInputPhaseLoseDetect(void)
     
     if(gSoftInLose.FloseLast == gSoftInLose.Flose)
     {
-    // ���������жϱ�־��ȣ�����  20S ����
+    // 锟斤拷锟斤拷锟斤拷锟斤拷锟叫断憋拷志锟斤拷龋锟斤拷锟斤拷锟�  20S 锟斤拷锟斤拷
         if(gSoftInLose.FloseSameTime ++ > 800)           
         {
             if(gSoftInLose.Flose >= 30)
@@ -1452,7 +1452,7 @@ void SoftInputPhaseLoseDetect(void)
 //MD380
 void InputPhaseLoseDetect(void)			
 {
-	if(((STATUS_RUN!=gMainStatus.RunStep)&&(STATUS_SPEED_CHECK!=gMainStatus.RunStep)  //���л�ת�ٸ���״̬�ż��
+	if(((STATUS_RUN!=gMainStatus.RunStep)&&(STATUS_SPEED_CHECK!=gMainStatus.RunStep)  //锟斤拷锟叫伙拷转锟劫革拷锟斤拷状态锟脚硷拷锟�
 	    &&(STATUS_GET_PAR!=gMainStatus.RunStep))||
 	   (gInvInfo.InvTypeApply < gInLose.ForeInvType))
 	{
@@ -1464,18 +1464,18 @@ void InputPhaseLoseDetect(void)
 		return;
 	}
     
-	if(PL_INPUT_HIGH)           // PL�Ǹߵ�ƽ		
+	if(PL_INPUT_HIGH)           // PL锟角高碉拷平		
 	{
 		gInLose.UpCnt ++;
 		gInLose.UpCntRes ++;
 	}
     
-	if(gInLose.UpCntRes != 0)	// ����500ms��PL�͵�ƽ�ж�Ϊ�̵�������
+	if(gInLose.UpCntRes != 0)	// 锟斤拷锟斤拷500ms锟斤拷PL锟酵碉拷平锟叫讹拷为锟教碉拷锟斤拷锟斤拷锟斤拷
 	{
 		gInLose.CntRes++;	
 		if(gInLose.CntRes >= 250)       // 500ms
 		{
-			if((gSubCommand.bit.RelayEnalbe == 1) &&          //F9-12-ʮλ
+			if((gSubCommand.bit.RelayEnalbe == 1) &&          //F9-12-十位
 				(gInLose.UpCntRes >= 249) && (gInvInfo.InvTypeApply >= 19))
 			{
 			    gError.ErrorCode.all |= ERROR_RESISTANCE_CONTACK;
@@ -1486,13 +1486,13 @@ void InputPhaseLoseDetect(void)
 	}
 
 	gInLose.Cnt++;	
-	if(gInLose.Cnt < 500)       //  ȱ����1secһ��ѭ�� 
+	if(gInLose.Cnt < 500)       //  缺锟斤拷锟斤拷1sec一锟斤拷循锟斤拷 
     {
         return;
     }
 
-	if((gSubCommand.bit.InputLost == 1) &&              //F9-12-��λ
-	   (gInLose.UpCnt > 5) && (gInLose.UpCnt < 485))    // 1sec��PL���ڵ͵�ƽ���ȱ�෽�?
+	if((gSubCommand.bit.InputLost == 1) &&              //F9-12-锟斤拷位
+	   (gInLose.UpCnt > 5) && (gInLose.UpCnt < 485))    // 1sec锟斤拷PL锟斤拷锟节低碉拷平锟斤拷锟饺憋拷喾斤拷?
 	{
 		gInLose.ErrCnt++;
 		if(gInLose.ErrCnt >= 2)
@@ -1512,12 +1512,12 @@ void InputPhaseLoseDetect(void)
 #endif
 
 /************************************************************
-	������?
-1��	�ϵ绺��״̬������1�����ڷ��Ȳ����У�
-2��	����״̬���������У�
-3��	ֱ���ƶ��ȴ��ڼ䣬��������
-4��	ģ���¶ȵ���40�ȣ�����ֹͣ���¶ȸ���42�ȷ������У�40��42��֮�䲻�仯��
-5)	��������������10��Źر�
+	锟斤拷锟斤拷锟斤拷?
+1锟斤拷	锟较电缓锟斤拷状态锟斤拷锟斤拷锟斤拷1锟斤拷锟斤拷锟节凤拷锟饺诧拷锟斤拷锟叫ｏ拷
+2锟斤拷	锟斤拷锟斤拷状态锟斤拷锟斤拷锟斤拷锟斤拷锟叫ｏ拷
+3锟斤拷	直锟斤拷锟狡讹拷锟饺达拷锟节间，锟斤拷锟斤拷锟斤拷锟斤拷
+4锟斤拷	模锟斤拷锟铰度碉拷锟斤拷40锟饺ｏ拷锟斤拷锟斤拷停止锟斤拷锟铰度革拷锟斤拷42锟饺凤拷锟斤拷锟斤拷锟叫ｏ拷40锟斤拷42锟斤拷之锟戒不锟戒化锟斤拷
+5)	锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷10锟斤拷殴乇锟�
 ************************************************************/
 #if (SOFTSERIES == MD500SOFT)
 void ControlFan(void)						
@@ -1532,7 +1532,7 @@ void ControlFan(void)
 	gFanCtrl.FanDetaTime = ((gFanCtrl.FanTime - GetTime()) & 0xFFFFFFUL)/DSP_CLOCK;
     gFanCtrl.FanTime = GetTime();    
 
-    if(gFanCtrl.FanDetaTime > 2200)     //ִ�м������2.2ms ��Ϊʱ���޷���֤
+    if(gFanCtrl.FanDetaTime > 2200)     //执锟叫硷拷锟斤拷锟斤拷锟�2.2ms 锟斤拷为时锟斤拷锟睫凤拷锟斤拷证
     {
         gFanCtrl.ErrTimes++;
         if(gFanCtrl.ErrTimes > 10)
@@ -1595,7 +1595,7 @@ void FanSpeedCtrl(void)
 {
     static u16 m_FanFlag = 0;
     static u16 m_FanStatus = 0;
-    int m_AdjSpeedTemp;
+    s16 m_AdjSpeedTemp;
     if((gInvInfo.InvTypeApply >= 25) && (gInvInfo.InvTypeApply <= 34))
     {
         m_AdjSpeedTemp = gFanSpeedCtrlTempreture[gInvInfo.InvTypeApply - 25];
@@ -1681,7 +1681,7 @@ void ControlFan(void)
 }
 #endif
 /************************************************************
-	��Ƶ���͵�����ر���
+	锟斤拷频锟斤拷锟酵碉拷锟斤拷锟斤拷乇锟斤拷锟�
 ************************************************************/
 void OverLoadProtect(void)				
 {
@@ -1721,12 +1721,12 @@ void OverLoadProtect(void)
 		return;
 	}
 
-	/************************��ѹ�����ߺͶ�ת����**********************************/
+	/************************锟斤拷压锟斤拷锟斤拷锟竭和讹拷转锟斤拷锟斤拷**********************************/
     if(gOverLoad.OverLoadPreventEnable != 0)
 	{
 	    if((gOverLoad.InvTotal.half.MSW >= 30000L)&&(gMainStatus.RunStep == STATUS_RUN))
 		{		    
-		    if((gMainCmd.FreqReal < gMainCmd.XiuMianFreq - 200)&&(gMainCmd.XiuMianFreq > 200))  //����Ƶ�ʼ�2Hz
+		    if((gMainCmd.FreqReal < gMainCmd.XiuMianFreq - 200)&&(gMainCmd.XiuMianFreq > 200))  //锟斤拷锟斤拷频锟绞硷拷2Hz
 			{
 				gMainStatus.StatusWord.bit.OverLoadPreventState = 2;
 			}
@@ -1750,44 +1750,44 @@ void OverLoadProtect(void)
 	gOverLoad.Cnt++;
 	if(gOverLoad.Cnt < 5)		
 	{
-        return;		    //ÿ10ms���һ�?
+        return;		    //每10ms锟斤拷锟揭伙拷?
 	}
 	gOverLoad.Cnt = 0;
 
 	////////////////////////////////////////////////////////////////
-	//ѡ���������
+	//选锟斤拷锟斤拷锟斤拷锟斤拷锟�
 
-    if(1 == gInvInfo.GPType)        //G�ͻ��������ߣ���ת�ظ��ػ���
+    if(1 == gInvInfo.GPType)        //G锟酵伙拷锟斤拷锟斤拷锟斤拷锟竭ｏ拷锟斤拷转锟截革拷锟截伙拷锟斤拷
     {
         m_TorCurLine    = (Uint *)gInvOverLoadTable;
-        m_TorCurBottom  = 1150;     //115%��Ƶ������
-        m_TorCurUpper   = 1960;     //���ֵ196%����    // �����������ֵ,2011-10-21-chzq
+        m_TorCurBottom  = 1150;     //115%锟斤拷频锟斤拷锟斤拷锟斤拷
+        m_TorCurUpper   = 1960;     //锟斤拷锟街�196%锟斤拷锟斤拷    // 锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟街�,2011-10-21-chzq
         m_TorCurStep    = 90;
-        m_TorCurData    = 5;        //>=196%,0.5s����
+        m_TorCurData    = 5;        //>=196%,0.5s锟斤拷锟斤拷
     }
 #if(SOFTSERIES == MD380SOFT)
-    else                            //P�ͻ��������ߣ������ˮ���ฺ�ػ���
+    else                            //P锟酵伙拷锟斤拷锟斤拷锟斤拷锟竭ｏ拷锟斤拷锟斤拷锟剿拷锟斤拷喔猴拷鼗锟斤拷锟�
     {       
         m_TorCurLine    = (Uint *)gInvOverLoadTableForP;
         m_TorCurBottom  = 1050;
-        m_TorCurUpper   = 1410;     //���ֵ141%����    // �����������ֵ,2011-10-21-chzq
+        m_TorCurUpper   = 1410;     //锟斤拷锟街�141%锟斤拷锟斤拷    // 锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟街�,2011-10-21-chzq
         m_TorCurStep    = 40;
-        m_TorCurData    = 5;        //>=141%,0.5s����
+        m_TorCurData    = 5;        //>=141%,0.5s锟斤拷锟斤拷
     }
 #else
-    else                            //P�ͻ��������ߣ������ˮ���ฺ�ػ���
+    else                            //P锟酵伙拷锟斤拷锟斤拷锟斤拷锟竭ｏ拷锟斤拷锟斤拷锟剿拷锟斤拷喔猴拷鼗锟斤拷锟�
     {       
         m_TorCurLine    = (Uint *)gInvOverLoadTableForP;
         m_TorCurBottom  = 1100;
-        m_TorCurUpper   = 1660;     //���ֵ166%����   
+        m_TorCurUpper   = 1660;     //锟斤拷锟街�166%锟斤拷锟斤拷   
         m_TorCurStep    = 70;
-        m_TorCurData    = 20;        //>=166%,2.0s����
+        m_TorCurData    = 20;        //>=166%,2.0s锟斤拷锟斤拷
     }
 #endif
 
-    m_MaxCurLimit = 5000;       // 500% ��֤��������
+    m_MaxCurLimit = 5000;       // 500% 锟斤拷证锟斤拷锟斤拷锟斤拷锟斤拷
 	////////////////////////////////////////////////////////////////
-	//��ʼ�жϱ�Ƶ���Ĺ���
+	//锟斤拷始锟叫断憋拷频锟斤拷锟侥癸拷锟斤拷
 	m_Cur = ((Ulong)gOverLoad.FilterInvCur * 1000L) >> 12;
 
 	if(m_Cur < m_TorCurBottom)
@@ -1800,7 +1800,7 @@ void OverLoadProtect(void)
 		{
 			gOverLoad.InvTotal.all -= gInvOverLoadDecTable[0];  
 		}
-		else if(m_Cur < 1000)       /*С�ڱ�Ƶ������������յ�ǰ������С���������ۼ���*/
+		else if(m_Cur < 1000)       /*小锟节憋拷频锟斤拷锟筋定锟斤拷锟斤拷锟斤拷锟斤拷锟秸碉拷前锟斤拷锟斤拷锟斤拷小锟斤拷锟斤拷锟斤拷锟斤拷锟桔硷拷锟斤拷*/
 		{
 			gOverLoad.InvTotal.all -= gInvOverLoadDecTable[m_Cur/100 + 1];
 		}
@@ -1813,7 +1813,7 @@ void OverLoadProtect(void)
 			m_Cur  = (((Ulong)m_Cur)<<15)/m_Data;
             if(gOverLoad.OverLoadPreventEnable != 0)
             {
-                if(gOverLoad.InvTotal.half.MSW > 10800)     //������30%����Ƶ������������170%
+                if(gOverLoad.InvTotal.half.MSW > 10800)     //锟斤拷锟斤拷锟斤拷30%锟斤拷锟斤拷频锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷170%
                 {
                     m_MaxCurLimit = (1700UL * (Ulong)m_Data)>>15;
                 }
@@ -1845,8 +1845,8 @@ void OverLoadProtect(void)
 	}
 	//gOverLoad.InvTotal.half.MSW = gTestDataReceive.TestData28;
 	gOverLoad.TotalPercent = (Ulong)gOverLoad.InvTotal.half.MSW * 100L/36000L;
-    /*****************�����ش���***********************************/
-	if((gOverLoad.OverLoadPreventEnable != 0)&&(gMainStatus.StatusWord.bit.OverLoadPreventState != 2))  //   �����߹��Ϻ����Ƶ���
+    /*****************锟斤拷锟斤拷锟截达拷锟斤拷***********************************/
+	if((gOverLoad.OverLoadPreventEnable != 0)&&(gMainStatus.StatusWord.bit.OverLoadPreventState != 2))  //   锟斤拷锟斤拷锟竭癸拷锟较猴拷锟斤拷锟狡碉拷锟斤拷
 	{
 	    m_OverLoadMargin = 30000L - (long)gOverLoad.InvTotal.half.MSW;
 	    if(m_OverLoadMargin < 720)
@@ -1863,7 +1863,7 @@ void OverLoadProtect(void)
 	        }
 	        m_MaxCurLimit = __IQsat(m_MaxCurLimit,m_Limit,950);
 	    }
-	    //gLineCur.OverLoadMargin = m_OverLoadMargin; //������
+	    //gLineCur.OverLoadMargin = m_OverLoadMargin; //锟斤拷锟斤拷锟斤拷
 	    gLineCur.MaxCurLimit = m_MaxCurLimit;
 	    gLineCur.MaxCurLimit =  __IQsat(gLineCur.MaxCurLimit,1800,250);
 	}
@@ -1872,7 +1872,7 @@ void OverLoadProtect(void)
 	    gLineCur.MaxCurLimit = 1800;
 	}
     /****************************end******************************/
-    //��Ƶ������Ԥ��������
+    //锟斤拷频锟斤拷锟斤拷锟斤拷预锟斤拷锟斤拷锟斤拷锟斤拷
 	if(((gOverLoad.InvTotal.all + m_LDeta * 1000UL)>>16) > 36000)
 	{
 		gMainStatus.StatusWord.bit.PerOvLoadInv = 1;
@@ -1883,9 +1883,9 @@ void OverLoadProtect(void)
 	}
 
 
-	MotorOverLoadTimeGenerate();//��������������ɺ���
+	MotorOverLoadTimeGenerate();//锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷珊锟斤拷锟�
 	////////////////////////////////////////////////////////////////
-	//��ʼ�жϵ���Ĺ���
+	//锟斤拷始锟叫断碉拷锟斤拷墓锟斤拷锟�
 	//if(gMainCmd.SubCmd.bit.MotorOvLoadEnable == 0)
 	if(gSubCommand.bit.MotorOvLoad == 0)
 	{
@@ -1895,8 +1895,8 @@ void OverLoadProtect(void)
 	}
 
 	m_Cur = ((Ulong)gOverLoad.FilterMotorCur * 1000L)>>12;
-	//m_Cur = ((Ulong)m_Cur * 100L)/100;//gComPar.MotorOvLoad;          // ���ݹ��ر���ϵ�����������������
-                                                            	//Ȼ���øñ���������ѯ���ر�������
+	//m_Cur = ((Ulong)m_Cur * 100L)/100;//gComPar.MotorOvLoad;          // 锟斤拷锟捷癸拷锟截憋拷锟斤拷系锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟�
+                                                            	//然锟斤拷锟矫该憋拷锟斤拷锟斤拷锟斤拷锟斤拷询锟斤拷锟截憋拷锟斤拷锟斤拷锟斤拷
 	m_LDeta = (Ulong)m_Cur * (Ulong)gMotorInfo.CurBaseCoff;
 	if(m_LDeta >= (C_MOTOR_OV_MAX_CUR * 256L))
 	{
@@ -1921,7 +1921,7 @@ void OverLoadProtect(void)
 		{
 			gOverLoad.MotorTotal.all -= gMotorOverLoadDecTable[0];  
 		}
-		else if(m_Cur < m_MotorOvLoad*10)                   /*С��100%��������յ��������������*/
+		else if(m_Cur < m_MotorOvLoad*10)                   /*小锟斤拷100%锟筋定锟斤拷锟斤拷锟斤拷锟秸碉拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟�*/
 		{
 			gOverLoad.MotorTotal.all -= gMotorOverLoadDecTable[m_Cur/m_MotorOvLoad + 1];  
 		}
@@ -1950,7 +1950,7 @@ void OverLoadProtect(void)
 			gError.ErrorCode.all |= ERROR_MOTOR_OVER_LOAD;
 		}		
 	}
-    //�������Ԥ������?  
+    //锟斤拷锟斤拷锟斤拷锟皆わ拷锟斤拷锟斤拷锟�?  
 	//if(gOverLoad.MotorTotal.half.MSW > gBasePar.PerMotorOvLoad * 360)
 	if(gOverLoad.MotorTotal.half.MSW > gComPar.PerMotorOvLoad * 360)
 	{
@@ -1964,35 +1964,35 @@ void OverLoadProtect(void)
 
 
 /************************************************************
-	����������״̬�µĹ��ر���
-//���ܳ���������ʱ�䳬��5000ms��������Ӧ2500��2ms
-����ϳ������������������150��������10s�������壬֮ǰӰ�����
+	锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷状态锟铰的癸拷锟截憋拷锟斤拷
+//锟斤拷锟杰筹拷锟斤拷锟斤拷锟斤拷锟斤拷时锟戒超锟斤拷5000ms锟斤拷锟斤拷锟斤拷锟斤拷应2500锟斤拷2ms
+锟斤拷锟斤拷铣锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷150锟斤拷锟斤拷锟斤拷锟斤拷10s锟斤拷锟斤拷锟斤拷锟藉，之前影锟斤拷锟斤拷锟�
 ************************************************************/
 void CBCLimitCurProtect(void)
 {
-	int     m_CurU,m_CurV,m_CurW,m_Coff;
-	int	    m_Max,m_Add,m_Sub;
+	s16     m_CurU,m_CurV,m_CurW,m_Coff;
+	s16	    m_Max,m_Add,m_Sub;
     Uint    m_Limit;
     
-	if((gSubCommand.bit.CBCEnable == 1) && (gMainStatus.RunStep != STATUS_GET_PAR) && (gMainStatus.RunStep != STATUS_IPM_INIT_POS) && (gMainStatus.RunStep != STATUS_FLYING_START))   //DQ���кͳ�ʼλ�ñ�ʶʱ������������
+	if((gSubCommand.bit.CBCEnable == 1) && (gMainStatus.RunStep != STATUS_GET_PAR) && (gMainStatus.RunStep != STATUS_IPM_INIT_POS) && (gMainStatus.RunStep != STATUS_FLYING_START))   //DQ锟斤拷锟叫和筹拷始位锟矫憋拷识时锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷
 	{
-		if(gCBCProtect.EnableFlag == 0) SetCBCEnable();	//��������������
+		if(gCBCProtect.EnableFlag == 0) SetCBCEnable();	//锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷
 	}
 	else
 	{
-		if(gCBCProtect.EnableFlag == 1)  SetCBCDisable();//ȡ������������
+		if(gCBCProtect.EnableFlag == 1)  SetCBCDisable();//取锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷
 	}
 		
-	//��ʼ�ֱ���������������ֵ�Ļ���
+	//锟斤拷始锟街憋拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷值锟侥伙拷锟斤拷
 	m_Coff = (((long)gMotorInfo.Current)<<10) / gInvInfo.InvCurrent;
-	m_CurU = (int)(((long)gIUVWQ12.U * (long)m_Coff)>>10);
+	m_CurU = (s16)(((long)gIUVWQ12.U * (long)m_Coff)>>10);
 	m_CurU = abs(m_CurU);
-	m_CurV = (int)(((long)gIUVWQ12.V * (long)m_Coff)>>10);
+	m_CurV = (s16)(((long)gIUVWQ12.V * (long)m_Coff)>>10);
 	m_CurV = abs(m_CurV);
-	m_CurW = (int)(((long)gIUVWQ12.W * (long)m_Coff)>>10);
+	m_CurW = (s16)(((long)gIUVWQ12.W * (long)m_Coff)>>10);
 	m_CurW = abs(m_CurW);
     
-	//��ʼ�ж��Ƿ���һ��������������5��
+	//锟斤拷始锟叫讹拷锟角凤拷锟斤拷一锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷5锟斤拷
 	if(m_CurU > 9267)	gCBCProtect.CntU++;             // 9267 = 4096 * 1.414 * 1.6
 	else				gCBCProtect.CntU = gCBCProtect.CntU>>1;
 	gCBCProtect.CntU = (gCBCProtect.CntU > 3000)?3000:gCBCProtect.CntU;
@@ -2012,7 +2012,7 @@ void CBCLimitCurProtect(void)
 		gCBCProtect.CntW = 0;
 	}
 
-	if((gCBCProtect.CntU > 2500) || 		//��������������, �κ�һ�����5000ms
+	if((gCBCProtect.CntU > 2500) || 		//锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷, 锟轿猴拷一锟斤拷锟斤拷锟�5000ms
 	   (gCBCProtect.CntV > 2500) || 
 	   (gCBCProtect.CntW > 2500) )
 	{
@@ -2037,19 +2037,19 @@ void CBCLimitCurProtect(void)
         } 
         else
         {
-            m_Limit = 150;  //������������������
+            m_Limit = 150;  //锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷
         }
         
-        if(0 == gCBCProtect.CbcFlag)              // �����������巢��
+        if(0 == gCBCProtect.CbcFlag)              // 锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟藉发锟斤拷
         {
             gCBCProtect.NoCbcTimes++;
-            if(5000 <= gCBCProtect.NoCbcTimes)   //����10��û��������������֮ǰ��Ӱ��������
+            if(5000 <= gCBCProtect.NoCbcTimes)   //锟斤拷锟斤拷10锟斤拷没锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷之前锟斤拷影锟斤拷锟斤拷锟斤拷锟斤拷
             {
                 gCBCProtect.NoCbcTimes = 5000;
                 gCBCProtect.CbcTimes = 0;
             }
         }
-        else                                     // �����������巢��
+        else                                     // 锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟藉发锟斤拷
         {
             gCBCProtect.NoCbcTimes = 0;
             gCBCProtect.CbcFlag = 0;
@@ -2058,7 +2058,7 @@ void CBCLimitCurProtect(void)
         if(m_Limit <= gCBCProtect.CbcTimes) 
         {
             gError.ErrorCode.all |= ERROR_TRIP_ZONE;
-            gCBCProtect.CbcTimes = m_Limit - 1;      //�������������޷���λ
+            gCBCProtect.CbcTimes = m_Limit - 1;      //锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟睫凤拷锟斤拷位
         } 
     }
     else
@@ -2072,43 +2072,43 @@ void CBCLimitCurProtect(void)
             m_Sub = 2;
         }
 
-    	if(gCBCProtect.Flag.bit.CBC_U == 1)   //����U������Ļ���
+    	if(gCBCProtect.Flag.bit.CBC_U == 1)   //锟斤拷锟斤拷U锟斤拷锟斤拷锟斤拷幕锟斤拷锟�
     	{
     		gCBCProtect.TotalU += m_Add;
     	}
-    	else //if(m_CurU < 8688)					//С��1.5����Ƶ����ֵ�������ۼ�ֵ�ݼ� : 4096*1.5*sqrt(2)
+    	else //if(m_CurU < 8688)					//小锟斤拷1.5锟斤拷锟斤拷频锟斤拷锟斤拷值锟斤拷锟斤拷锟斤拷锟桔硷拷值锟捷硷拷 : 4096*1.5*sqrt(2)
     	{
     		gCBCProtect.TotalU -= m_Sub;
     	}
 
-    	if(gCBCProtect.Flag.bit.CBC_V == 1) 	//����V������Ļ���
+    	if(gCBCProtect.Flag.bit.CBC_V == 1) 	//锟斤拷锟斤拷V锟斤拷锟斤拷锟斤拷幕锟斤拷锟�
     	{
     		gCBCProtect.TotalV += m_Add;
     	}
-    	else //if(m_CurV < 8688)					//С��1.5����Ƶ���������ۼ�ֵ�ݼ�
+    	else //if(m_CurV < 8688)					//小锟斤拷1.5锟斤拷锟斤拷频锟斤拷锟斤拷锟斤拷锟斤拷锟桔硷拷值锟捷硷拷
     	{
     		gCBCProtect.TotalV -= m_Sub;
     	}
 
-    	if(gCBCProtect.Flag.bit.CBC_W == 1) 	//����W������Ļ���
+    	if(gCBCProtect.Flag.bit.CBC_W == 1) 	//锟斤拷锟斤拷W锟斤拷锟斤拷锟斤拷幕锟斤拷锟�
     	{
     		gCBCProtect.TotalW += m_Add;
     	}
-    	else //if(m_CurW < 8688)					//��1.5����Ƶ���������ۼ�ֵ�ݼ�
+    	else //if(m_CurW < 8688)					//锟斤拷1.5锟斤拷锟斤拷频锟斤拷锟斤拷锟斤拷锟斤拷锟桔硷拷值锟捷硷拷
     	{
     		gCBCProtect.TotalW -= m_Sub;
     	}
 
     	gCBCProtect.Flag.all = 0;
 
-    	//��������ֵ�޷�
+    	//锟斤拷锟斤拷锟斤拷锟斤拷值锟睫凤拷
     	gCBCProtect.TotalU = __IQsat(gCBCProtect.TotalU, m_Limit, 0);
     	gCBCProtect.TotalV = __IQsat(gCBCProtect.TotalV, m_Limit, 0);
     	gCBCProtect.TotalW = __IQsat(gCBCProtect.TotalW, m_Limit, 0);
 
     	m_Max = (gCBCProtect.TotalU > gCBCProtect.TotalV) ? gCBCProtect.TotalU : gCBCProtect.TotalV;
     	m_Max = (m_Max > gCBCProtect.TotalW) ? m_Max : gCBCProtect.TotalW;
-        if(m_Max >= m_Limit)      //��������40�Ź���
+        if(m_Max >= m_Limit)      //锟斤拷锟斤拷锟斤拷锟斤拷40锟脚癸拷锟斤拷
         {
             gError.ErrorCode.all |= ERROR_TRIP_ZONE;
         }          
@@ -2116,7 +2116,7 @@ void CBCLimitCurProtect(void)
 }
 
 /*************************************************************
-	��������������
+	锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷
 *************************************************************/
 void SetCBCEnable(void)
 {
@@ -2125,7 +2125,7 @@ void SetCBCEnable(void)
     
 #ifdef TMS320F2808	
     EPwm1Regs.TZSEL.bit.CBC2 = TZ_ENABLE;
-	EPwm1Regs.TZSEL.bit.CBC3 = TZ_ENABLE;		// EPWM1��������
+	EPwm1Regs.TZSEL.bit.CBC3 = TZ_ENABLE;		// EPWM1锟斤拷锟斤拷锟斤拷锟斤拷
 	EPwm1Regs.TZSEL.bit.CBC4 = TZ_ENABLE;
         
 	EPwm2Regs.TZSEL.bit.CBC2 = TZ_ENABLE;       // EPWM2
@@ -2144,17 +2144,17 @@ void SetCBCEnable(void)
 	EDIS;
 }
 /*************************************************************
-	�ر�����������
+	锟截憋拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷
 *************************************************************/
 void SetCBCDisable(void)
 {
 	gCBCProtect.EnableFlag = 0;
 
 	EALLOW;
-    EPwm2Regs.TZEINT.all = 0x0000;//��ֹTZ2�жϣ��������ж�
+    EPwm2Regs.TZEINT.all = 0x0000;//锟斤拷止TZ2锟叫断ｏ拷锟斤拷锟斤拷锟斤拷锟叫讹拷
 #ifdef TMS320F2808
     EPwm1Regs.TZSEL.bit.CBC2 = TZ_DISABLE;
-	EPwm1Regs.TZSEL.bit.CBC3 = TZ_DISABLE;		// EPWM1��������
+	EPwm1Regs.TZSEL.bit.CBC3 = TZ_DISABLE;		// EPWM1锟斤拷锟斤拷锟斤拷锟斤拷
 	EPwm1Regs.TZSEL.bit.CBC4 = TZ_DISABLE;
         
 	EPwm2Regs.TZSEL.bit.CBC2 = TZ_DISABLE;       // EPWM2
@@ -2173,13 +2173,13 @@ void SetCBCDisable(void)
 	EDIS;
 }
 /*************************************************************
-	������豣������
+	锟斤拷锟斤拷锟斤拷璞ｏ拷锟斤拷锟斤拷锟�
 	
-�����Ľ���Ƿѹ״̬����Ϊ�ǻ���������
+锟斤拷锟斤拷锟侥斤拷锟斤拷欠压状态锟斤拷锟斤拷为锟角伙拷锟斤拷锟斤拷锟斤拷锟斤拷
 *************************************************************/
 void BufferResProtect(void)
 {
-	if(gBuffResCnt >= 150000L)			//������豣������
+	if(gBuffResCnt >= 150000L)			//锟斤拷锟斤拷锟斤拷璞ｏ拷锟斤拷锟斤拷锟�
 	{
 		gError.ErrorCode.all |= ERROR_RESISTER_HOT;
 	}
@@ -2190,9 +2190,9 @@ void BufferResProtect(void)
 #if (SOFTSERIES == MD500SOFT)	
 
 /*************************************************************
-�ƶ�IGBTֱͨ�жϣ����ж���ִ�У�ÿ�ز�����ִ��һ��
-û�п�ͨ��־ʱ�ж�
-û�п�ͨʱ�������ڶ������37.5%��ֱͨ
+锟狡讹拷IGBT直通锟叫断ｏ拷锟斤拷锟叫讹拷锟斤拷执锟叫ｏ拷每锟截诧拷锟斤拷锟斤拷执锟斤拷一锟斤拷
+没锟叫匡拷通锟斤拷志时锟叫讹拷
+没锟叫匡拷通时锟斤拷锟斤拷锟斤拷锟节额定锟斤拷锟斤拷锟斤拷37.5%锟斤拷直通
 *************************************************************/
 void  BrakeIGBTProtect(void)
 {
@@ -2202,7 +2202,7 @@ void  BrakeIGBTProtect(void)
 		gBrake.IgbtShotTicker = 0;
 		return;
 	}
-	// �ض�ʱ����Ƿ��е���
+	// 锟截讹拷时锟斤拷锟斤拷欠锟斤拷械锟斤拷锟�
 	m_Mincurrent = (gInvInfo.InvBreakCurrent * 3) >> 3;
 	if (gBrake.IBreak > m_Mincurrent)
 	{
@@ -2212,38 +2212,38 @@ void  BrakeIGBTProtect(void)
 	{
 		gBrake.IgbtShotTicker = 0;
 	}
-	// ����2s����
+	// 锟斤拷锟斤拷2s锟斤拷锟斤拷
 	if (gBrake.IgbtShotTicker >= 60000000L) // 2s = 2 * 60 000 000/2 
 	{	
 		gBrake.IgbtShotTicker = 60000000L;
 		gError.ErrorCode.all |= ERROR_IGBT_SHORT_BRAKE;	
         gError.ErrorInfo[4].bit.Fault1 = 2;	
 	}
-	/*�ƶ��ܹ����ж�,��֮ǰ���ƶ��ܹ��ر����������Ƶ��ú�����*/
+	/*锟狡讹拷锟杰癸拷锟斤拷锟叫讹拷,锟斤拷之前锟斤拷锟狡讹拷锟杰癸拷锟截憋拷锟斤拷锟斤拷锟斤拷锟斤拷锟狡碉拷锟矫猴拷锟斤拷锟斤拷*/
 	if (gBrake.IBreak >= (gInvInfo.InvBreakMaxCurrent * 2))
 	{
 		gBrake.FilterTicker ++;			
 	}
-	//���3�����ϱ�����
+	//锟斤拷锟�3锟斤拷锟斤拷锟较憋拷锟斤拷锟斤拷
 	if (gBrake.FilterTicker >= 3)
 	{	
 		gBrake.FilterTicker		= 0;
 		gError.ErrorCode.all |= ERROR_OVER_CURRENT;
-		gError.ErrorInfo[0].bit.Fault1 = 2;//�ƶ��������
+		gError.ErrorInfo[0].bit.Fault1 = 2;//锟狡讹拷锟斤拷锟斤拷锟斤拷锟�
 		gLineCur.ErrorShow		= gLineCur.CurPer;
 	}
 }
 
 /*************************************************************
-1���ƶ�����ѡȡ̫С
-2���ƶ������ϴ�ʱ��ʱ��ϳ�
+1锟斤拷锟狡讹拷锟斤拷锟斤拷选取太小
+2锟斤拷锟狡讹拷锟斤拷锟斤拷锟较达拷时锟斤拷时锟斤拷铣锟�
 
 *************************************************************/
 void  BrakeOverloadProtect(void)
 {
     u16 m_CurrCoff;
 	Ulong	IBreakrsm,Duty;
-	int	m_Index,m_IndexData;
+	s16	m_Index,m_IndexData;
 
 	if(((gBrake.OnCounter == 0)&&(gBrake.TotalCounter > 1))||(gBrake.TotalCounter == 0))
 	{
@@ -2261,7 +2261,7 @@ void  BrakeOverloadProtect(void)
 		Duty = qsqrt(Duty);
 		gBrake.IBreakrsm = IBreakrsm*Duty>>10;
 	}
-	/*�ƶ��ܹ����ж�*/
+	/*锟狡讹拷锟杰癸拷锟斤拷锟叫讹拷*/
 	if (gBrake.IBreakrsm > gInvInfo.InvBreakCurrent)
 	{	
         m_Index = (Ulong)gBrake.IBreakrsm * 100UL/gInvInfo.InvBreakMaxCurrent;
@@ -2275,12 +2275,12 @@ void  BrakeOverloadProtect(void)
             }
             else
             {
-    			m_CurrCoff = 1;//�ۼӵ��ٶ���1000����100ms������
+    			m_CurrCoff = 1;//锟桔加碉拷锟劫讹拷锟斤拷1000锟斤拷锟斤拷100ms锟斤拷锟斤拷锟斤拷
             }
 		}
 		else if (m_Index >= 90)    
 		{
-            m_Index = ((int)m_Index - (int)gBrake.minPercent)/gBrake.OverLoadInterval;
+            m_Index = ((s16)m_Index - (s16)gBrake.minPercent)/gBrake.OverLoadInterval;
             m_Index = __IQsat(m_Index,4,-1);
 			
 			m_Index = (6 - m_Index);
@@ -2294,11 +2294,11 @@ void  BrakeOverloadProtect(void)
             
 			m_CurrCoff = *(gBrake.pBreakOverLoad+(10 - m_Index));
 		}
-		gOverLoad.BreakTotal += (2000000L/m_CurrCoff);//�ۼӵ��ٶ���10����10s������
+		gOverLoad.BreakTotal += (2000000L/m_CurrCoff);//锟桔加碉拷锟劫讹拷锟斤拷10锟斤拷锟斤拷10s锟斤拷锟斤拷锟斤拷
 	}	
-	else if (gOverLoad.BreakTotal > gBrake.OverLoadDegradeCoff)  // ������Сʱ���ؼ���ֵ��С
+	else if (gOverLoad.BreakTotal > gBrake.OverLoadDegradeCoff)  // 锟斤拷锟斤拷锟斤拷小时锟斤拷锟截硷拷锟斤拷值锟斤拷小
 	{
-		gOverLoad.BreakTotal -= gBrake.OverLoadDegradeCoff; //��Сʱ��90s
+		gOverLoad.BreakTotal -= gBrake.OverLoadDegradeCoff; //锟斤拷小时锟斤拷90s
 	}
 	else
 	{
@@ -2315,31 +2315,31 @@ void  BrakeOverloadProtect(void)
 }
 #else
 /*************************************************************
-	�ƶ�������·��������
+	锟狡讹拷锟斤拷锟斤拷锟斤拷路锟斤拷锟斤拷锟斤拷锟斤拷
 	
-�����?
-1��sizeD\SizeE,��7.5KW-30KW�Ž����ƶ������·�������
-2��ͣ��״̬���ƶ���Ԫû�д�Ҳ���
-�ж�ԭ��:
-1)����ΪSizeD��SizeE
-2)��һ�ν�������жϣ�ֻ��¼�������ϵ����ϴ����ϣ���ʱ�ض��ƶ�����ͬʱ����ͣ��״̬
-3)10ms����TZ�ź���ȻΪ�͵�ƽ������Ϊ���ƶ������·������Ϊ��������
-4)�ƶ������·���ϲ������ֶ���λ��ֻ�ܵ��縴λ
+锟斤拷锟斤拷锟�?
+1锟斤拷sizeD\SizeE,锟斤拷7.5KW-30KW锟脚斤拷锟斤拷锟狡讹拷锟斤拷锟斤拷锟铰凤拷锟斤拷锟斤拷锟斤拷
+2锟斤拷停锟斤拷状态锟斤拷锟狡讹拷锟斤拷元没锟叫达拷也锟斤拷锟�
+锟叫讹拷原锟斤拷:
+1)锟斤拷锟斤拷为SizeD锟斤拷SizeE
+2)锟斤拷一锟轿斤拷锟斤拷锟斤拷锟斤拷卸希锟街伙拷锟铰硷拷锟斤拷锟斤拷锟斤拷系锟斤拷锟斤拷洗锟斤拷锟斤拷希锟斤拷锟绞憋拷囟锟斤拷贫锟斤拷锟斤拷锟酵憋拷锟斤拷锟酵ｏ拷锟阶刺�
+3)10ms锟斤拷锟斤拷TZ锟脚猴拷锟斤拷然为锟酵碉拷平锟斤拷锟斤拷锟斤拷为锟斤拷锟狡讹拷锟斤拷锟斤拷锟铰凤拷锟斤拷锟斤拷锟轿拷锟斤拷锟斤拷锟斤拷锟�
+4)锟狡讹拷锟斤拷锟斤拷锟铰凤拷锟斤拷喜锟斤拷锟斤拷锟斤拷侄锟斤拷锟轿伙拷锟街伙拷艿锟斤拷绺次�
 
 *************************************************************/
 void  BrakeResShortProtect(void)
 {
     if((19 > gInvInfo.InvTypeApply)&&(12 < gInvInfo.InvTypeApply))
     {
-        gBrake.BreResShotDetFlag = 1;            //7.5KW-30KW����Ҫ���
+        gBrake.BreResShotDetFlag = 1;            //7.5KW-30KW锟斤拷锟斤拷要锟斤拷锟�
     }
     else
     {
         gBrake.BreResShotDetFlag = 0;
     } 
 
-    if((gBrake.BreResShotDetFlag == 1)&&(gBrake.ErrCode == ERROR_OVER_CURRENT))//ֻ�е�һ��Ϊ��������ʱ��Ҫ�����ƶ������·�����
-    {                                                          //����һ�μ�¼Ϊ��ѹ���ϣ���ֱ�ӱ���ѹ 
+    if((gBrake.BreResShotDetFlag == 1)&&(gBrake.ErrCode == ERROR_OVER_CURRENT))//只锟叫碉拷一锟斤拷为锟斤拷锟斤拷锟斤拷锟斤拷时锟斤拷要锟斤拷锟斤拷锟狡讹拷锟斤拷锟斤拷锟铰凤拷锟斤拷锟斤拷
+    {                                                          //锟斤拷锟斤拷一锟轿硷拷录为锟斤拷压锟斤拷锟较ｏ拷锟斤拷直锟接憋拷锟斤拷压 
         gBrake.WaitTime++;
         if(gBrake.WaitTime < 6)  //10ms
         {
@@ -2351,7 +2351,7 @@ void  BrakeResShortProtect(void)
         {                                              
             if(EPwm1Regs.TZFLG.bit.OST == 1)
             {
-                gError.ErrorCode.all |= ERROR_SHORT_BRAKE; //60 �����ֶ���λ     
+                gError.ErrorCode.all |= ERROR_SHORT_BRAKE; //60 锟斤拷锟斤拷锟街讹拷锟斤拷位     
                 //gError.ErrorInfo[0].bit.Fault1 = 1;
             }
             else

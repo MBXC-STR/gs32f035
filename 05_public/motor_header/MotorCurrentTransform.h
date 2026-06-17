@@ -15,12 +15,12 @@ extern "C" {
 #include "MotorDefine.h"
 
 typedef struct MT_STRUCT_DEF{
-	int  	M;      // Q12
-	int  	T;
+	s16  	M;      // Q12
+	s16  	T;
 }MT_STRUCT;	//MT轴系下的电流、电压结构
 typedef struct DQ_STRUCT_DEF{
-	int  	D;      // Q12
-	int  	Q;
+	s16  	D;      // Q12
+	s16  	Q;
 }DQ_STRUCT;
 typedef struct MT_STRUCT_Q24_DEF{
     long    M;
@@ -35,11 +35,11 @@ typedef struct ADC_STRUCT_DEF{
 	Uint	DelayApply;			//ADC采样延时时间(PWM定时器周期单位)
 	//Uint  	ResetTime;			//ADC已经启动的次数
 	long	ZeroTotal;
-	int		ZeroCnt;
-	int		Comp;
+	s16		ZeroCnt;
+	s16		Comp;
 }ADC_STRUCT;	//定子三相坐标轴电流
 typedef struct UDC_STRUCT_DEF {
-	int		DetaUdc;
+	s16		DetaUdc;
 	Uint	uDCBak;
 	Uint 	uDC;				//母线电压			单位0.1V
 	Uint 	uDCFilter;			//大滤波母线电压	单位0.1V
@@ -63,9 +63,9 @@ typedef struct UVW_STRUCT_DEF_Q24{
 	long  	W;
 }UVW_STRUCT_Q24;	//定子三相坐标轴电流
 typedef struct UVW_STRUCT_DEF{					
-	int  	U;					//Q12格式，以电机额定值为标么值基值
-	int  	V;
-	int  	W;
+	s16  	U;					//Q12格式，以电机额定值为标么值基值
+	s16  	V;
+	s16  	W;
 }UVW_STRUCT;	//定子三相坐标轴电流
 
 typedef struct LINE_CURRENT_STRUCT_DEF{
@@ -73,8 +73,8 @@ typedef struct LINE_CURRENT_STRUCT_DEF{
 	Uint  	CurBaseInv;			//Q12 以变频器电流为基值表示的线电流有效值
 	Ulong  	CurPerFilter;		//Q12 以电机电流为基值表示的线电流有效值
 	Uint  	CurPerShow;			//Q12 以电机电流为基值表示的线电流有效值
-	int    CurTorque;          //Q12 以电机电流为基值表示的转矩电流
-	int    Temp;
+	s16    CurTorque;          //Q12 以电机电流为基值表示的转矩电流
+	s16    Temp;
 	Uint  	ErrorShow;			//过流时刻记录的线电流有效值
 	Uint    Cur_Ft4;
 	Uint    MaxCurLimit;        //最大允许线电流
@@ -88,28 +88,28 @@ typedef struct LINE_CURRENT_STRUCT_DEF{
 #endif
     long    ImTotal;
 	long    ItTotal;
-	int     ImAvr;
-	int     ItAvr;
+	s16     ImAvr;
+	s16     ItAvr;
 	Uint    CurCnt;
 	
 	s16     LimitCurBaseInv;
 }LINE_CURRENT_STRUCT;//计算过程中使用的线电流表示
 typedef struct AMPTHETA_STRUCT_DEF{
 	Uint  	Amp;				//Q12
-	int  	Theta;				//Q15
-	int     ThetaFilter;        //Q15 ----DBcomp
-	int     PowerAngle;         // 功率因素角
-	int     PowerAngle1;         // 功率因素角
-	int     PowerAngle2;         // 功率因素角
+	s16  	Theta;				//Q15
+	s16     ThetaFilter;        //Q15 ----DBcomp
+	s16     PowerAngle;         // 功率因素角
+	s16     PowerAngle1;         // 功率因素角
+	s16     PowerAngle2;         // 功率因素角
 
-    int     CurTmpM;
-    int     CurTmpT;	
-	int  	ThetaOld;				// wg
+    s16     CurTmpM;
+    s16     CurTmpT;	
+	s16  	ThetaOld;				// wg
 }AMPTHETA_STRUCT;//极坐标表示的电流、电压结构
 
 /************************************************************/
 /*******************供外部引用函数声明***********************/
-void AlphBetaToDQ(ALPHABETA_STRUCT* , int , MT_STRUCT_Q24* );
+void AlphBetaToDQ(ALPHABETA_STRUCT* , s16 , MT_STRUCT_Q24* );
 
 
 #ifdef __cplusplus

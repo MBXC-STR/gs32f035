@@ -31,7 +31,7 @@ ADC_ADJ_STRUCT          gADCAdjust;
 ************************************************************/
 void GetCurExcursion(void)
 {
-	int m_ErrIu,m_ErrIv,m_ErrIw;
+	s16 m_ErrIu,m_ErrIv,m_ErrIw;
 	Uint m_ErrIb;
 	
 	if((gMainStatus.RunStep != STATUS_LOW_POWER) && 
@@ -133,7 +133,7 @@ void GetCurExcursion(void)
 ************************************************************/
 void GetCurExcursion(void)
 {
-	int m_ErrIu,m_ErrIv;
+	s16 m_ErrIu,m_ErrIv;
 	
 	if((gMainStatus.RunStep != STATUS_LOW_POWER) && 
 	   (gMainStatus.RunStep != STATUS_STOP))
@@ -189,7 +189,7 @@ void GetCurExcursion(void)
 void GetUDCInfo(void)
 {
 	Uint m_uDC;
-	//int	 m_DetaUdc;
+	//s16	 m_DetaUdc;
 
    	m_uDC = ((Uint32)ADC_UDC * gUDC.Coff)>>16;                  //9
    	gUDC.uDC = (gUDC.uDC + m_uDC)>>1;
@@ -237,7 +237,7 @@ void GetCurrentInfo(void)
 #endif*/
 #endif
 
-	gExcursionInfo.Iu = (int)(ADC_IU - (Uint)32768);		
+	gExcursionInfo.Iu = (s16)(ADC_IU - (Uint)32768);		
 	m_Iu = (long)gExcursionInfo.Iu - (long)gExcursionInfo.ErrIu;	//去除零漂
     gExcursionInfo.IuValue = m_Iu;                                  //用于参数辨识，参数辨识优化后将不再使用该变量                       
 	gShortGnd.ShortCur = Filter32(m_Iu, gShortGnd.ShortCur);
@@ -245,7 +245,7 @@ void GetCurrentInfo(void)
 	m_Iu = __IQsat(m_Iu, C_MAX_PER, -C_MAX_PER);   
 
     
-	gExcursionInfo.Iv = (int)(ADC_IV - (Uint)32768);		
+	gExcursionInfo.Iv = (s16)(ADC_IV - (Uint)32768);		
 	m_Iv = (long)gExcursionInfo.Iv - (long)gExcursionInfo.ErrIv;	//去除零漂
     gExcursionInfo.IvValue = m_Iv;    
 	//m_Iv = (m_Iv * gUVCoff.UDivV) >> 12;						    //纠正增益偏差
@@ -256,7 +256,7 @@ void GetCurrentInfo(void)
     gIUVWQ24.V = m_Iv;
 	
 #if (SOFTSERIES == MD500SOFT)
-	gExcursionInfo.Iw = (int)(ADC_IW - (Uint)32768);		
+	gExcursionInfo.Iw = (s16)(ADC_IW - (Uint)32768);		
 	m_Iw = (long)gExcursionInfo.Iw - (long)gExcursionInfo.ErrIw;	//去除零漂
 	m_Iw = (m_Iw * gCurSamp.Coff) >> 3;
 	m_Iw = __IQsat(m_Iw, C_MAX_PER, -C_MAX_PER); 
@@ -319,11 +319,11 @@ void GetCurrentInfo(void)
 void GetADCAdjustInfo(void)
 {
 	Uint m_Dleta;
-	int m_Offset;
+	s16 m_Offset;
 	Uint m_Slope;
 	Uint m_YL;
 	Uint m_YH;
-    int  m_AdjEn;
+    s16  m_AdjEn;
 	
 	gADCAdjust.XL = 1247;         // 1.25,以0.001V为单位
 	gADCAdjust.XH = 2494;         // 2.5V,以0.001V为单位

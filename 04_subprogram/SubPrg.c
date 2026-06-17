@@ -57,9 +57,9 @@ s16 user_atan(s16 x, s16 y)
 /****************************************************************
 函数说明：反正切函数，该函数输入x，y，求得的反正切角度以及4象限的角度
 ****************************************************************/
-//int atan(int x, int y)
+//s16 atan(s16 x, s16 y)
 //{
-//	int  result;
+//	s16  result;
 //	long m_Input;
 //
 //	if(x == 0)
@@ -220,10 +220,10 @@ void PID32(PID32_STRUCT * pid)
 算法：OutPut = LastOne + (Input - LastOne) * Coff
       Coff是Q15格式的数据，数据必须小于Q15值。
 *****************************************************************/
-int Filter(int LastOne, int Input, int Coff)
+s16 Filter(s16 LastOne, s16 Input, s16 Coff)
 {
 	long   m_Deta;
-    int   m_Add;
+    s16   m_Add;
 	
 	m_Deta = (long)Input - (long)LastOne;
 	if(m_Deta == 0)	
@@ -245,7 +245,7 @@ int Filter(int LastOne, int Input, int Coff)
 *****************************************************************/
 void BurrFilter(BURR_FILTER_STRUCT * filter)
 {
-	int 	m_Deta;
+	s16 	m_Deta;
 
 	m_Deta = abs((filter->Input) - (filter->Output));
 	if(m_Deta > filter->Err)
@@ -269,7 +269,7 @@ void BurrFilter(BURR_FILTER_STRUCT * filter)
 *****************************************************************/
 void SlipFilter(CUR_LINE_STRUCT_DEF * pCur)
 {
-	int  m_Index,m_IndexStart,m_Coff,m_TotalCoff;
+	s16  m_Index,m_IndexStart,m_Coff,m_TotalCoff;
 	long m_Total;
 	CUR_LINE_STRUCT_DEF * m_pCur = pCur;
 
@@ -290,12 +290,12 @@ void SlipFilter(CUR_LINE_STRUCT_DEF * pCur)
 	m_pCur->Output = m_Total/m_TotalCoff;
 }
 
-int Filter_1st(int x, int y0, FILTER_1ST *pFilStr)  
+s16 Filter_1st(s16 x, s16 y0, FILTER_1ST *pFilStr)  
 {
     long g1 ;
     long g2 ;
     long tempL ;
-    int  out ;
+    s16  out ;
 
     g1 = (1L << 15) / (1 + 2* pFilStr->taoVsTs) ;     // Q15
     g2 = ((1L - 2* pFilStr->taoVsTs) << 15) / (1 + 2* pFilStr->taoVsTs) ;   // Q15

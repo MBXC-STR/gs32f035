@@ -20,8 +20,8 @@ char, signed char 	16 bits 	ASCII 				-32768 			32767
 unsigned char 		16 bits		ASCII 				0 				65535
 short 				16 bits 	2s complement 		-32768 			32767
 unsigned short 		16 bits 	Binary 				0 				65535
-int, signed int 	16 bits 	2s complement 		-32768 			32767
-unsigned int 		16 bits 	Binary 				0 				65535
+s16, signed s16 	16 bits 	2s complement 		-32768 			32767
+u16 		16 bits 	Binary 				0 				65535
 long, signed long 	32 bits 	2s complement 		-2147483648 	214783647
 unsigned long 		32 bits 	Binary 				0 				4294967295
 long long, 
@@ -35,18 +35,18 @@ far pointers 		22 bits 	Binary 				0 				0x3FFFFF
 /************************************************************
 	工程使用的新定义变量类型
 ************************************************************/
-typedef	long long 				llong;
-typedef	unsigned int			Uint;
-typedef	unsigned long			Ulong;
-typedef	unsigned long long 		Ullong;
+typedef     int64_t     llong;
+typedef     uint16_t    Uint;
+typedef     uint32_t    Ulong;
+typedef     uint64_t    Ullong;
 
-typedef long long		    s64;
-typedef long                s32;
-typedef int                 s16;
+typedef     int64_t     s64;
+typedef     int32_t     s32;
+typedef     int16_t     s16;
 
-typedef unsigned long long	u64;
-typedef unsigned long       u32;
-typedef unsigned int        u16;
+typedef     uint64_t    u64;
+typedef     uint32_t    u32;
+typedef     uint16_t    u16;
 
 typedef struct BIT32_REG_DEF {
    Uint16  LSW;

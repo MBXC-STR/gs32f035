@@ -100,10 +100,10 @@ struct FAULT_CODE_INFOR_STRUCT_DEF{
 	Uint32                      LastErrorCode;   //上次故障代码，用于输出电压相位切换    
 };
 typedef struct OVER_LOAD_PROTECT_DEF{
-   int		Cnt;
+   s16		Cnt;
    long		FilterRealFreq;
-   int		FilterInvCur;
-   int		FilterMotorCur;
+   s16		FilterInvCur;
+   s16		FilterMotorCur;
    u16      InvShow;
 #if (SOFTSERIES == MD500SOFT)
    Ulong     BreakTotal;
@@ -119,8 +119,8 @@ typedef struct PHASE_LOSE_STRUCT_DEF{
    Ulong	TotalU;
    Ulong	TotalV;
    Ulong	TotalW;
-   int        IMPhaseabs;
-   int		IMPhaseTemper;
+   s16        IMPhaseabs;
+   s16		IMPhaseTemper;
    Uint	IMPeriodFlag;
    Uint	GreThanZeroFlag;
    Uint	LessThanZeroFlag;
@@ -220,17 +220,17 @@ typedef union CBC_FLAG_UNION_DEF {
 }CBC_FLAG_UNION;
 typedef struct CBC_PROTECT_STRUCT_DEF{
    CBC_FLAG_UNION	Flag;	//BIT0/1/2为1分别表示UVW三相处于逐波限流状态
-   int		TotalU;
-   int		TotalV;
-   int     	TotalW;
-   int		EnableFlag;
-   int		CntU;		//电流大于1.6倍峰值电流后的累加
-   int		CntV;
-   int     	CntW;
+   s16		TotalU;
+   s16		TotalV;
+   s16     	TotalW;
+   s16		EnableFlag;
+   s16		CntU;		//电流大于1.6倍峰值电流后的累加
+   s16		CntV;
+   s16     	CntW;
 // 采用脉冲方式的逐波限流变量定义    2011-10-21-chzq
-   int      CbcFlag;      // 逐波限流脉冲标志
-   int      CbcTimes;     // 有逐波限流脉冲次数
-   int      NoCbcTimes;   // 无逐波限流脉冲次数
+   s16      CbcFlag;      // 逐波限流脉冲标志
+   s16      CbcTimes;     // 有逐波限流脉冲次数
+   s16      NoCbcTimes;   // 无逐波限流脉冲次数
 
    Uint     maxCBCTime;     // 60deg温度对应的CBC时间(单管)
    Uint     minCBCTime;     // 40deg温度对应的CBC时间(单管)

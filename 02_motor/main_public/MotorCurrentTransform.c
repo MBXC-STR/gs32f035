@@ -1,5 +1,5 @@
 /****************************************************************
-�ļ����ܣ���������ѹ������任
+�ļ����ܣ���������ѹ�������
 �ļ��汾��
 ���¸��£�
 	
@@ -8,21 +8,21 @@
 #include "MotorInclude.h"
 #include "MotorEncoder.h"
 
-ALPHABETA_STRUCT		gUAlphBeta;	    //���������������ѹ
+ALPHABETA_STRUCT		gUAlphBeta;	    //����������������
 MT_STRUCT_Q24           gUMTQ24; 
 extern PMSM_FLUX_WEAK_STRUCT   gPmFluxWeak;
-int para0;
+s16 para0;
 //extern MT_STRUCT_Q24           gIMTQ24_obs;
 //extern MT_STRUCT_Q24           gIMTQ12_obs;
 /*******************************************************************
     ���ڲ����˱�ôֵϵͳ��Ҫ�����е�����任�����뱣֤��ֵ��ȵı任��
-���ɣ���ôֵϵͳ�£���ֵȷ����ų��任��
+���ɣ���ôֵϵͳ�£���ֵȷ����ų��任��
 ********************************************************************/
 /*******************************************************************
-Date Type Q24(��֤��ֵ���������任)(������ЧֵΪ1���Ҳ�������任��ֵΪ1)
+Date Type Q24(��֤��ֵ���������任)(������ЧֵΪ1���Ҳ�������任��ֵ�1)
 	Alph= U * (1/2)^0.5 
 	Beta= (3^0.5/2) * (U + 2*V)
-	UVW�������Է�ֵ��ʾ�ģ�ALPH BETA��M T�����������Чֵ���
+	UVW�������Է�ֵ��ʾ�ģ�ALPH BETA��M T�����������Чֵ����
 ********************************************************************/
 void inline UVWToAlphBetaAxes(UVW_STRUCT_Q24 * uvw, ALPHABETA_STRUCT * AlphBeta)
 {
@@ -36,9 +36,9 @@ Date Type Q12 ��q�ᳬd��90�ȣ�
 	d= cos(theta)*alph + sin(theta)*beta;
 	q= -sin(theta)*alph + cos(theta)*beta;
 ********************************************************************/
-void AlphBetaToDQ(ALPHABETA_STRUCT * AlphBeta, int angle, MT_STRUCT_Q24 * MT)
+void AlphBetaToDQ(ALPHABETA_STRUCT * AlphBeta, s16 angle, MT_STRUCT_Q24 * MT)
 {
-	int m_sin,m_cos;
+	s16 m_sin,m_cos;
 
 	m_sin  = qsin(angle);
 	m_cos  = qsin(16384 - angle);
@@ -69,10 +69,10 @@ void DQToAmpTheta(MT_STRUCT * MT,AMPTHETA_STRUCT * AmpTheta)
 void ChangeCurrent(void)
 {
   //  Ulong   m_Long;    
-    int temp1,temp2;		// wg
+    s16 temp1,temp2;		// wg
 	Ulong   tmpAmp;
 
-    // ��ȡ�������˲ʱֵ, �������ת��Ϊ���������������µĵ���
+    // ��ȡ�������˲ʱ�, �������ת��Ϊ���������������µĵ���
 	UVWToAlphBetaAxes((UVW_STRUCT_Q24*)&gIUVWQ24,(ALPHABETA_STRUCT*)&gIAlphBeta);
     gIAlphBetaQ12.Alph = gIAlphBeta.Alph>>12;
     gIAlphBetaQ12.Beta = gIAlphBeta.Beta>>12;
@@ -91,8 +91,8 @@ void ChangeCurrent(void)
     gIAmpTheta.Amp = (Uint)qsqrt(tmpAmp);*/
     //...................................�����ߵ���
 
-    //gIAmpTheta.Theta = user_atan(gIMTSetQ12.M, gIMTSetQ12.T);	//����MT��н�
-    gIAmpTheta.Theta = user_atan(gIMTQ12.M, gIMTQ12.T);	//����MT��н�
+    //gIAmpTheta.Theta = user_atan(gIMTSetQ12.M, gIMTSetQ12.T);	//����MT��н�
+    gIAmpTheta.Theta = user_atan(gIMTQ12.M, gIMTQ12.T);	//����MT��н�
     gIAmpTheta.ThetaOld = gIAmpTheta.Theta + gPhase.IMPhaseOld;	// wg
    // temp = gOutVolt.VoltPhaseApply - gIAmpTheta.Theta;
 /*	temp1 = gOutVolt.VoltPhaseApply1 - gIAmpTheta.ThetaOld;		// wg

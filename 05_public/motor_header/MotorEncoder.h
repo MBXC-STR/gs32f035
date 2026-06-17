@@ -78,7 +78,7 @@ typedef struct PG_DATA_STRUCT_DEF {
     Uint    PGErrorFlag;                //辨识得到的编码器错误信息 0-正常;1-未检测到编码器;2-编码器线数设定错误 
 
     Uint    imPgEstTick;                // im 编码器辨识计数器
-    int     imDirAdder;
+    s16     imDirAdder;
     long    imFreqErr;                  // 积分编码器测速误差
     long    imFrqEncoder;               // 
     u16 	PGTypeBak;              /*编码器类型*/
@@ -97,26 +97,26 @@ typedef struct PG_DATA_STRUCT_DEF {
 }PG_DATA_STRUCT;	            //编码器相关参数
 
 typedef struct ROTOR_SPEED_SMOOTH_DEF {
-    int     LastSpeed;
-    int     SpeedMaxErr;
+    s16     LastSpeed;
+    s16     SpeedMaxErr;
 }ROTOR_SPEED_SMOOTH;
 
 typedef struct ROTOR_SPEED_STRUCT_DEF {
-	int 	SpeedApply;			//实际使用转子速度
+	s16 	SpeedApply;			//实际使用转子速度
 	s16     SpeedBigFilter;     // 用于键盘显示计算的速度
-	int 	SpeedEncoder;		// 通过编码器检测到的转子频率, 传动比折算后
+	s16 	SpeedEncoder;		// 通过编码器检测到的转子频率, 传动比折算后
 	Uint    OverSpeedEnable;    //反向超速使能
-	int     SpeedTemp;          // 折算前编码器测速值
-	int		SpeedApplyFilter;
-	int		Flag;
-    int     DetaTimer;
-    int     DetaPhase;
+	s16     SpeedTemp;          // 折算前编码器测速值
+	s16		SpeedApplyFilter;
+	s16		Flag;
+    s16     DetaTimer;
+    s16     DetaPhase;
     Uint    MTZeroCnt;		//
 	//SVC测速变量
-	int		SvcLastFluxPos;
-	int		SvcSynSpeed;
-	int		SvcWs;
-	int		SvcRotorSpeed;
+	s16		SvcLastFluxPos;
+	s16		SvcSynSpeed;
+	s16		SvcWs;
+	s16		SvcRotorSpeed;
 	Uint	SvcSignal;
 	Ulong	SvcLastTime;
 	Ulong	Timer;
@@ -175,35 +175,35 @@ typedef struct IPM_UVW_PG_STRUCT_DEF {
     llong   TotalErr;
     Ulong   UvwCnt;
 
-    int     UvwZIntErr;      // Z中断uvw误差
-    int     UvwZIntErr_deg;
+    s16     UvwZIntErr;      // Z中断uvw误差
+    s16     UvwZIntErr_deg;
     
     Uint    UvwZeroPos;     // uvw的零点位置角度
     Uint    UvwZeroPos_deg;
 
     Uint    UvwEstStep;
-    int     UvwCnt2;        // 机械周期计数器
+    s16     UvwCnt2;        // 机械周期计数器
 	u16     ErrorEnable;    // UVW故障使能
 }IPM_UVW_PG_STRUCT;//永磁同步电机上UVW编码器的数据结构
 
 typedef struct IPM_PG_DIR_STRUCT_DEF {
-	int	    ABAngleBak;
-    int     ABDirCnt;
-    int     ABDir;
-	int	    UVWAngleBak;
-    int     UVWDirCnt;
-    int     UVWDir;
-	int	    CDAngleBak;
-    int     CDDirCnt;
-    int     CDDir;
-    int     CDErr;
-    int     RtPhaseBak;
-    int     RtDirCnt;
+	s16	    ABAngleBak;
+    s16     ABDirCnt;
+    s16     ABDir;
+	s16	    UVWAngleBak;
+    s16     UVWDirCnt;
+    s16     UVWDir;
+	s16	    CDAngleBak;
+    s16     CDDirCnt;
+    s16     CDDir;
+    s16     CDErr;
+    s16     RtPhaseBak;
+    s16     RtDirCnt;
 }IPM_PG_DIR_STRUCT; //永磁同步电机上用于识别编码器接线方向的数据结构
 
 typedef struct ROTOR_TRANS_STRUCT_DEF{
-    int     RealTimeSpeed;
-	int     ConFlag;
+    s16     RealTimeSpeed;
+	s16     ConFlag;
     Uint    SimuZBack;
     Uint    SimuZBack2;
 
@@ -231,7 +231,7 @@ typedef struct ROTOR_TRANS_STRUCT_DEF{
     u16    RtRealPos;          // 旋变的时候角度，加了补偿角度之后
 
     s16    AbsRotPos;          // 旋变绝对位置，0-4096
-	int     PgPos;
+	s16     PgPos;
     Ulong   QepBak; 
     u16    RtError;        // 旋变故障（主要是未接编码器）   
 }ROTOR_TRANS_STRUCT; 	// 旋变数据结构

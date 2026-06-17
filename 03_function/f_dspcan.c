@@ -299,7 +299,7 @@ Uint16 InitdspECan(Uint16 baud)		// Initialize eCAN-A module
 	#endif
     EDIS;
 	#ifdef TARGET_GS32
-	interrupt_enable(INT_CANA0);
+	Interrupt_enable(INT_CANA0);
 	#else
     PieCtrlRegs.PIEIER9.bit.INTx5 = 1;                      // 使锟斤拷ECAN1锟叫讹拷
     #endif

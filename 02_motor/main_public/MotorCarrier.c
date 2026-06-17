@@ -45,7 +45,7 @@ Uint const gTempLowLimitTable[19] =
 // 文件内部函数声明
 void AsynPWMAngleCal(Ulong);
 void SynPWMAngleCal(void);
-int CompOnePhase(int phase, Uint Comp);
+s16 CompOnePhase(s16 phase, Uint Comp);
 
 #if (SOFTSERIES == MD500SOFT)
 /*************************************************************************
@@ -58,7 +58,7 @@ void CalCarrierWaveFreq(void)
 {
     Uint    m_MaxFc;
     Uint    m_MinFc;
-    int	    m_TempLim;
+    s16	    m_TempLim;
 	Uint    m_FcApply,m_LowLimitFc,m_MiddleFc;
     Uint    * m_TempLowLimitTable;
 	static Uint m_VarFcByTem = 0;
@@ -242,7 +242,7 @@ void CalCarrierWaveFreq(void)
 {
     Uint    m_MaxFc;
     Uint    m_MinFc;
-    int	    m_TempLim;
+    s16	    m_TempLim;
 	Uint    m_FcApply,m_LowLimitFc,m_MiddleFc;
 //    Uint    * m_TempLowLimitTable;
 	static Uint m_VarFcByTem = 0;
@@ -864,7 +864,7 @@ void CalOutputPhase(void)
         }
         else if(TUNE_STEP_NOW == PM_EST_WITH_LOAD) 
         {
-            gPhase.IMPhase  = (int)gIPMPos.RotorPos;
+            gPhase.IMPhase  = (s16)gIPMPos.RotorPos;
 			gPhase.IMPhaseApply = ((s32)gPhase.IMPhase << 16);
         }
 		gPhase.OutVoltPhaseCom = 0;    // 防止在参数辨识时由于发波补偿问题造成发波异常
@@ -873,7 +873,7 @@ void CalOutputPhase(void)
     
     if(gCtrMotorType == SYNC_FVC)                       //同步机FVC输出相位计算
 	{
-        gPhase.IMPhase  = (int)gIPMPos.RotorPos;	// 正常运行
+        gPhase.IMPhase  = (s16)gIPMPos.RotorPos;	// 正常运行
 		gPhase.IMPhaseApply = ((s32)gPhase.IMPhase << 16);
     }     
     else
@@ -890,9 +890,9 @@ void CalOutputPhase(void)
 *************************************************************/
 void CalDeadBandComp(void)
 {
-	int   phase,m_Com;
+	s16   phase,m_Com;
 	//u16   m_InvCurFilter;
-	//int	  DetaPhase;
+	//s16	  DetaPhase;
 
 	if(gMainCmd.FreqReal <= 40000)	    // 400.00Hz
 	{
@@ -951,14 +951,14 @@ void CalDeadBandComp(void)
 	这样的线性补偿可以有效避免高载波频率的震荡。
 *************************************************************/
 #define C_LINE_DEAD_TIME_COMP         //是否使用电流过零点线性狼钩?
-int CompOnePhase(int phase, Uint Comp)
+s16 CompOnePhase(s16 phase, Uint Comp)
 {
-	int  m_Comp,m_Phase;
+	s16  m_Comp,m_Phase;
 #ifdef 	C_LINE_DEAD_TIME_COMP
 	Uint m_AbsPhase,m_LimitPhase,m_Shift;
 #endif
 
-	m_Comp = (int)Comp;
+	m_Comp = (s16)Comp;
 	m_Phase = phase;
 
 #ifdef 	C_LINE_DEAD_TIME_COMP
@@ -979,7 +979,7 @@ int CompOnePhase(int phase, Uint Comp)
 	}
 	else
 	{
-		m_AbsPhase = abs((int)(32767 - (Uint)m_Phase));
+		m_AbsPhase = abs((s16)(32767 - (Uint)m_Phase));
 		if(m_AbsPhase < m_LimitPhase)
 		{
 			m_Comp = ((Ulong)Comp * (Ulong)m_AbsPhase)>>m_Shift;

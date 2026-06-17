@@ -1295,8 +1295,8 @@ void ResetUpDownFrq(void)
 int32 GetFrq(void)
 {
     int32 frq;
-//    static int upperFrqBak;
-//    static int lowerFrqBak;
+//    static s16 upperFrqBak;
+//    static s16 lowerFrqBak;
 
     frqMax = upperFrq;         // 最大，默认为 上限频率
     frqMin = -(int32)upperFrq; // 最小，默认为 -上限频率

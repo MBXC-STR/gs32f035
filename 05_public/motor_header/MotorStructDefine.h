@@ -202,18 +202,18 @@ typedef struct RUN_STATUS_STRUCT_DEF {
 typedef struct BASE_COMMAND_STRUCT_DEF {
 	union MAIN_COMMAND_UNION_DEF Command;	            //主命令字结构
 	void    (*pADCIsr)();			/*ADC结束中断的服务程序指针，在不同的场合有不同的中断服务程序*/
-	int 	FreqSet;				                    // 功能传递的设定频率
-//	int     FreqSet0;
-	int     FreqSetApply;                               // 驱动实际使用的设定频率
-//	int		FreqSetBak;				                    //最新的非0给定速度
-	int 	FreqSyn;			                        //实际速度（同步速度）
-    int     FreqSynFilter;                              //实际输出同步频率的滤波值，用于弱磁区计算
-	int     FreqWs;                                   // 矢量时计算的转差
-	int 	FreqDesired;			                    //目标速度
-	int 	VCTorqueLim;			                    //VC转矩限定
-	int     FreqToFunc;                                 //反馈给功能模块的速度，标么值表示
+	s16 	FreqSet;				                    // 功能传递的设定频率
+//	s16     FreqSet0;
+	s16     FreqSetApply;                               // 驱动实际使用的设定频率
+//	s16		FreqSetBak;				                    //最新的非0给定速度
+	s16 	FreqSyn;			                        //实际速度（同步速度）
+    s16     FreqSynFilter;                              //实际输出同步频率的滤波值，用于弱磁区计算
+	s16     FreqWs;                                   // 矢量时计算的转差
+	s16 	FreqDesired;			                    //目标速度
+	s16 	VCTorqueLim;			                    //VC转矩限定
+	s16     FreqToFunc;                                 //反馈给功能模块的速度，标么值表示
 	                                                    // 现在反馈速度分为变频器运行频率和编码器测速
-    int     FreqFeed;
+    s16     FreqFeed;
 	s16     FreqFeedReal;
 	long 	FreqReal;				                    // 实际输出同步频率(非标么值表示),单位0.01Hz
 	long    FreqDesiredReal;                            // 实际目标频率(非标么值表示),单位0.01Hz	
@@ -255,17 +255,17 @@ typedef struct COM_PAR_INFO_STRUCT_DEF {
 
 typedef struct MOTOR_POWER_TORQUE_DEF{
     long    InvPowerPU;                             // 变频器输出功率标么值
-    int     InvPower_si;                            // 变频器输出功率
+    s16     InvPower_si;                            // 变频器输出功率
 	long    InvPower_E;                             // 用于反电动势计算的输出功率     
-    int     TrqOut_pu;                              // 输出转矩 0.1%
-    int     TrqOutHoAndFo_pu;                       // 用于主从控制的转矩电流
+    s16     TrqOut_pu;                              // 输出转矩 0.1%
+    s16     TrqOutHoAndFo_pu;                       // 用于主从控制的转矩电流
 
     Uint    rpItRated;                              // 额定力矩电流的倒数 Q12    
-    int     anglePF;
-	int     angleFilter;                            // 功率因数角滤波
-    int     Cur_Ft4;
+    s16     anglePF;
+	s16     angleFilter;                            // 功率因数角滤波
+    s16     Cur_Ft4;
 	s16     Cur_T;
-	int     Volt_Ft4;
+	s16     Volt_Ft4;
 }MOTOR_POWER_TORQUE;
 
 // // 公共模块使用的数据结构
@@ -294,79 +294,79 @@ typedef struct CPU_TIME_STRUCT_DEF {
 
 // // 驱动部分调试用数据结构
 typedef struct MOTOR_DEBUG_DATA_RECEIVE_STRUCT_DEF{
-    int     TestData0;
-    int     TestData1;
-    int     TestData2;
-    int     TestData3;
-    int     TestData4;
-    int     TestData5;
-    int     TestData6;
-    int     TestData7;
-    int     TestData8;
-    int     TestData9;
-    int     TestData10;
-    int     TestData11;
-    int     TestData12;
-    int     TestData13;
-    int     TestData14;
-    int     TestData15;
-    int     TestData16;
-    int     TestData17;
-    int     TestData18;
-    int     TestData19;
-    int     TestData20;
-    int     TestData21;
-    int     TestData22;
-    int     TestData23;
-    int     TestData24;
-    int     TestData25;
-    int     TestData26;
-    int     TestData27;
-    int     TestData28;
-    int     TestData29;
-    int     TestData30;
-    int     TestData31;
-    int     TestData32;
-    int     TestData33;
-    int     TestData34;
-    int     TestData35;
-    int     TestData36;
-    int     TestData37;
-    int     TestData38;
-    int     TestData39;
+    s16     TestData0;
+    s16     TestData1;
+    s16     TestData2;
+    s16     TestData3;
+    s16     TestData4;
+    s16     TestData5;
+    s16     TestData6;
+    s16     TestData7;
+    s16     TestData8;
+    s16     TestData9;
+    s16     TestData10;
+    s16     TestData11;
+    s16     TestData12;
+    s16     TestData13;
+    s16     TestData14;
+    s16     TestData15;
+    s16     TestData16;
+    s16     TestData17;
+    s16     TestData18;
+    s16     TestData19;
+    s16     TestData20;
+    s16     TestData21;
+    s16     TestData22;
+    s16     TestData23;
+    s16     TestData24;
+    s16     TestData25;
+    s16     TestData26;
+    s16     TestData27;
+    s16     TestData28;
+    s16     TestData29;
+    s16     TestData30;
+    s16     TestData31;
+    s16     TestData32;
+    s16     TestData33;
+    s16     TestData34;
+    s16     TestData35;
+    s16     TestData36;
+    s16     TestData37;
+    s16     TestData38;
+    s16     TestData39;
 }MOTOR_DEBUG_DATA_RECEIVE_STRUCT;   //性能调试数据接收
 
 typedef struct MOTOR_DEBUG_DATA_DISPLAY_STRUCT_DEF{
-    int     DisplayData1;
-    int     DisplayData2;    
-    int     DisplayData3;
-    int     DisplayData4;
-    int     DisplayData5;    
-    int     DisplayData6;
-    int     DisplayData7;
-    int     DisplayData8;    
-    int     DisplayData9;
-    int     DisplayData10;
-    int     DisplayData11;
-    int     DisplayData12;    
-    int     DisplayData13;
-    int     DisplayData14;
-    int     DisplayData15;    
-    int     DisplayData16;
-    int     DisplayData17;
-    int     DisplayData18;    
-    int     DisplayData19;
-    int     DisplayData20; 
-    int     DisplayData21;
-    int     DisplayData22;    
-    int     DisplayData23;
-    int     DisplayData24;
-    int     DisplayData25;    
-    int     DisplayData26;
-    int     DisplayData27;
-    int     DisplayData28;    
-    int     DisplayData29;
-    int     DisplayData30;     
+    s16     DisplayData1;
+    s16     DisplayData2;    
+    s16     DisplayData3;
+    s16     DisplayData4;
+    s16     DisplayData5;    
+    s16     DisplayData6;
+    s16     DisplayData7;
+    s16     DisplayData8;    
+    s16     DisplayData9;
+    s16     DisplayData10;
+    s16     DisplayData11;
+    s16     DisplayData12;    
+    s16     DisplayData13;
+    s16     DisplayData14;
+    s16     DisplayData15;    
+    s16     DisplayData16;
+    s16     DisplayData17;
+    s16     DisplayData18;    
+    s16     DisplayData19;
+    s16     DisplayData20; 
+    s16     DisplayData21;
+    s16     DisplayData22;    
+    s16     DisplayData23;
+    s16     DisplayData24;
+    s16     DisplayData25;    
+    s16     DisplayData26;
+    s16     DisplayData27;
+    s16     DisplayData28;    
+    s16     DisplayData29;
+    s16     DisplayData30;     
 }MOTOR_DEBUG_DATA_DISPLAY_STRUCT;   //性能调试数据显示
 
 // // 结构体定义结束

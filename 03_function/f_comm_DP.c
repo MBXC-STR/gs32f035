@@ -449,8 +449,8 @@ void InitSciaGpioDp(void)
     // ͨѶ����ʹ���жϣ���ʼ��
     EALLOW;
     #ifdef TARGET_GS32
-    interrupt_register(INT_SCIA_RX, &SCI_DP_RXD_isr);
-    interrupt_register(INT_SCIA_TX, &SCI_DP_TXD_isr);
+    Interrupt_register(INT_SCIA_RX, &SCI_DP_RXD_isr);
+    Interrupt_register(INT_SCIA_TX, &SCI_DP_TXD_isr);
     #else
     PieVectTable.SCIRXINTA = SCI_DP_RXD_isr;
 	PieVectTable.SCITXINTA = SCI_DP_TXD_isr;
@@ -458,8 +458,8 @@ void InitSciaGpioDp(void)
     EDIS;
 	// IER |= M_INT9;   	            //  Enable interrupts:
     #ifdef TARGET_GS32
-    interrupt_enable(INT_SCIA_RX);
-    interrupt_enable(INT_SCIA_TX);
+    Interrupt_enable(INT_SCIA_RX);
+    Interrupt_enable(INT_SCIA_TX);
     #else
     PieCtrlRegs.PIEIER9.bit.INTx1 = 1;
 	PieCtrlRegs.PIEIER9.bit.INTx2 = 1;
@@ -482,8 +482,8 @@ void InitScibGpioDp(void)
     // ͨѶ����ʹ���жϣ���ʼ��
     EALLOW;
     #ifdef TARGET_GS32
-    interrupt_register(INT_SCIA_RX, &SCI_DP_RXD_isr);
-    interrupt_register(INT_SCIA_TX, &SCI_DP_TXD_isr);
+    Interrupt_register(INT_SCIA_RX, &SCI_DP_RXD_isr);
+    Interrupt_register(INT_SCIA_TX, &SCI_DP_TXD_isr);
     #else
     PieVectTable.SCIRXINTA = SCI_DP_RXD_isr;
 	PieVectTable.SCITXINTA = SCI_DP_TXD_isr;
@@ -491,8 +491,8 @@ void InitScibGpioDp(void)
     EDIS;
 	// IER |= M_INT9;   	            //  Enable interrupts:
     #ifdef TARGET_GS32
-    interrupt_enable(INT_SCIA_RX);
-    interrupt_enable(INT_SCIA_TX);
+    Interrupt_enable(INT_SCIA_RX);
+    Interrupt_enable(INT_SCIA_TX);
     #else
 	PieCtrlRegs.PIEIER9.bit.INTx1 = 1;
 	PieCtrlRegs.PIEIER9.bit.INTx2 = 1;

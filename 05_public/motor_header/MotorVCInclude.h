@@ -52,27 +52,27 @@ typedef struct VC_INFO_STRUCT_DEF {
 	s32     AsrOut;                 //速度环输出 
 }VC_INFO_STRUCT;	//和矢量控制相关的参数设置数据结构
 typedef struct UDC_LIMIT_IT_STRUCT_DEF {
-    int    UDCLimit;           //由于母线电压上升，限制的转矩上限
-    int    UDCBak;
-    int    UDCBakCnt;
-    int    UDCDeta;
-    int    FirstOvUdcFlag;     //第一次母线电压上升到限制值
+    s16    UDCLimit;           //由于母线电压上升，限制的转矩上限
+    s16    UDCBak;
+    s16    UDCBakCnt;
+    s16    UDCDeta;
+    s16    FirstOvUdcFlag;     //第一次母线电压上升到限制值
     PID_STRUCT  UdcPid;
 }UDC_LIMIT_IT_STRUCT;	//速度环调节数据结构
 typedef struct ASR_STRUCT_DEF {
 	PID_STRUCT	Asr;
     Uint        AsrQpi;             // 按位，个位:Qp；十位:Qi；
     PID_STRUCT  TorqueLimitPid;     // 非转矩控制，最大电流限制pid
-	int  	KPHigh;
-	int  	KPLow;
+	s16  	KPHigh;
+	s16  	KPLow;
 	u16     KPLowCoff;              // 不同编码器下低速Kp系数不同
-	int     KPZero;
-	int  	KIHigh;
-	int  	KILow;
-	int     KIZero;
-	int  	SwitchHigh;
-	int  	SwitchLow;
-	int  	TorqueLimit;
+	s16     KPZero;
+	s16  	KIHigh;
+	s16  	KILow;
+	s16     KIZero;
+	s16  	SwitchHigh;
+	s16  	SwitchLow;
+	s16  	TorqueLimit;
 	s16     NegTorqueLimit;
 	s16     PosTorqueLimit;
 	long    DetaPos;
@@ -110,42 +110,42 @@ typedef struct VC_CSR_PARA_DEF{
 }VC_CSR_PARA;
 
 typedef struct MODIFYWS_STRUCT_DEF{
-	int    Faiq;
+	s16    Faiq;
     Uint   WsMax;   //调节器上限设定值
     Uint   Kp;      
-    int    Amp;
-	int    Wsout; 
-    int    Tmp;
-	int    Delta;
-	int    tc;
- 	int    tmp1;
- 	int 	tmp2;               // SVC 优化开启功能码
+    s16    Amp;
+	s16    Wsout; 
+    s16    Tmp;
+	s16    Delta;
+	s16    tc;
+ 	s16    tmp1;
+ 	s16 	tmp2;               // SVC 优化开启功能码
  	Uint    Theta;  
- 	int    Ea;
- 	int    Eb; 
- 	int    Utheta;  
-	int    Xztotal;
+ 	s16    Ea;
+ 	s16    Eb; 
+ 	s16    Utheta;  
+	s16    Xztotal;
 }MODIFYWS_STRUCT;
 
 typedef struct PMSM_FLUX_WEAK_DEF  //同步机弱磁
 {
     long  VoltCoef;           
     long  CurrCoef;
-    int  IqLpf;
-    int   VoltLpf;
+    s16  IqLpf;
+    s16   VoltLpf;
     long  VoltMax;
     long  Omg;                // 实际角速度，Q10格式  
     Ulong Ld;
     Ulong Lq;
     Ulong Flux;
-	int   FreqMax;
-	int   IdMax;
+	s16   FreqMax;
+	s16   IdMax;
     long  AdId;
 	s16  AdFreq;
 	long  IdForTorq;
     long  AdIdIntg;
 	long  AdFreqIntg;
-	int   DecFluxCoff;
+	s16   DecFluxCoff;
 	Uint  FluxWeakDepth;
     long  AdIq;
     long  AdIqIntg;

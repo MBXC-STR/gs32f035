@@ -1206,7 +1206,7 @@ void I2CStop(void)
 
 void I2CRcvByte(void)
 {
-    int i;
+    s16 i;
     
 // SDAŒ™ ‰»Î    
     SdaIoAsInput();

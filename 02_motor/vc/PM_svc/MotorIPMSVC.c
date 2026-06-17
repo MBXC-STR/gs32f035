@@ -1,8 +1,8 @@
 /***********************************Inovance***********************************
-功能描述（Function Description）:同步机无速度传感器控制
-最后修改日期（Date）：
-修改日志（History）:（以下记录为第一次转测试后，开始记录）
-	作者 		时间 		更改说明
+鍔熻兘鎻忚堪锛團unction Description锛�:鍚屾鏈烘棤閫熷害浼犳劅鍣ㄦ帶鍒�
+鏈�鍚庝慨鏀规棩鏈燂紙Date锛夛細
+淇敼鏃ュ織锛圚istory锛�:锛堜互涓嬭褰曚负绗竴娆¤浆娴嬭瘯鍚庯紝寮�濮嬭褰曪級
+	浣滆�� 		鏃堕棿 		鏇存敼璇存槑
 1 	xx 		xxxxx 		xxxxxxx
 2 	yy 		yyyyy 		yyyyyyy
 ************************************Inovance***********************************/
@@ -18,16 +18,16 @@ extern MT_STRUCT_Q24           gUMTQ24;
 void PrepareParForPmsmSvc(void);
 /* Private functions ---------------------------------------------------------*/
 /*******************************************************************************
-* Function Name  : PmsmSvc参数初始化函数
-* Description    : 初始化同步机SVC需要用到的变量，同时计算参数初始值
+* Function Name  : PmsmSvc鍙傛暟鍒濆鍖栧嚱鏁�
+* Description    : 鍒濆鍖栧悓姝ユ満SVC闇�瑕佺敤鍒扮殑鍙橀噺锛屽悓鏃惰绠楀弬鏁板垵濮嬪��
 * Input          : None
 * Output         : None
 * Return         : None
 *******************************************************************************/
 void ResetParForPmsmSvc(void)
 {       
-    /*复位同步机SVC用到的变量*/
-    gPmsmRotorPosEst.Kc = 768;	        //对应0.75
+    /*澶嶄綅鍚屾鏈篠VC鐢ㄥ埌鐨勫彉閲�*/
+    gPmsmRotorPosEst.Kc = 768;	        //瀵瑰簲0.75
 
 	gPmsmRotorPosEst.IdLast = 0;
 	gPmsmRotorPosEst.IqLast = 0;
@@ -51,7 +51,7 @@ void ResetParForPmsmSvc(void)
 
 	gPmsmRotorPosEst.BmfEstValueLast = 0;
 	gPmsmRotorPosEst.BmfEstValue = 0;	
-   /**********************初始化反电动势相关变量******************/
+   /**********************鍒濆鍖栧弽鐢靛姩鍔跨浉鍏冲彉閲�******************/
     if((gUVCoff.OnlineTuneBemfVoltEnable == 1)&&(INV_VOLTAGE_380V == gInvInfo.InvVoltageType))
 	{
 	    gEstBemf.BemfVoltDisPlay = gEstBemf.BemfVoltFilter;
@@ -59,40 +59,40 @@ void ResetParForPmsmSvc(void)
 		gEstBemf.BemfVoltDisPlayLast = gEstBemf.BemfVoltFilter;		
 	}
 	/***************************END********************************/
-    /*初始化转速估计用到的系数*/
+    /*鍒濆鍖栬浆閫熶及璁＄敤鍒扮殑绯绘暟*/
     PrepareParForPmsmSvc();
 }
 
 /*************************************************************
-    初始化转速和位置估算中需要用到的系数，默认载频2.0K
-    使用的外部参数:
-    ggBasePar.FullFreq01:频率基值，单位0.01HZ
-    gBasePar.FullFreq与gMotorInfo.Frequency小数点位数相同
-    gBasePar.FcSetApply:载波频率，单位100HZ
+    鍒濆鍖栬浆閫熷拰浣嶇疆浼扮畻涓渶瑕佺敤鍒扮殑绯绘暟锛岄粯璁よ浇棰�2.0K
+    浣跨敤鐨勫閮ㄥ弬鏁�:
+    ggBasePar.FullFreq01:棰戠巼鍩哄�硷紝鍗曚綅0.01HZ
+    gBasePar.FullFreq涓巊MotorInfo.Frequency灏忔暟鐐逛綅鏁扮浉鍚�
+    gBasePar.FcSetApply:杞芥尝棰戠巼锛屽崟浣�100HZ
     gMotorExtPer.LQ:Q13
-    gMotorExtInfo.EMF:线反电动势有效值，单位0.1V
+    gMotorExtInfo.EMF:绾垮弽鐢靛姩鍔挎湁鏁堝�硷紝鍗曚綅0.1V
 *************************************************************/
 void PrepareParForPmsmSvc(void)
 {
     s32 m_s32;
 //	static u16 m_Flag = 0;
       
-    //载波频率 
+    //杞芥尝棰戠巼 
     gPmsmRotorPosEst.FcSetPer  = 65189865L/gBasePar.FullFreq01;  
 
-    //计算系数T/L 
+    //璁＄畻绯绘暟T/L 
     m_s32 = 33554432L/gPmsmRotorPosEst.FcSetPer;
 //    gPmsmRotorPosEst.TDivLqCoef = ((m_s32<<8)/gMotorExtPer.LQ);
     gPmsmRotorPosEst.TDivLqCoef = ((m_s32<<8)/gMotorExtPer.LD);
     m_s32 = 33554432L/gPmsmRotorPosEst.FcSetPer;
     gPmsmRotorPosEst.TDivLdCoef = ((m_s32<<8)/gMotorExtPer.LD);
 
-    //计算系数KiForEmf=Ka*L/T 
+    //璁＄畻绯绘暟KiForEmf=Ka*L/T 
 //	m_s32 = (((s32)gMotorExtPer.LQ * (s32)gPmsmRotorPosEst.FcSetPer)>>8);
     m_s32 = (((s32)gMotorExtPer.LD * (s32)gPmsmRotorPosEst.FcSetPer)>>8); 
     gPmsmRotorPosEst.KiForEmf = (((s32)gPmsmRotorPosEst.Ka * m_s32)>>5);
 	  
-    //计算磁通标么值 1/Kf 
+    //璁＄畻纾侀�氭爣涔堝�� 1/Kf 
 	if((gUVCoff.OnlineTuneBemfVoltEnable == 1)&&(INV_VOLTAGE_380V == gInvInfo.InvVoltageType))
 	{
 	    m_s32 = ((s32)gEstBemf.BemfVoltFilter<<10)/gMotorInfo.Votage;
@@ -104,17 +104,17 @@ void PrepareParForPmsmSvc(void)
     m_s32 = (m_s32 * (s32)gBasePar.FullFreq)/((s32)gMotorInfo.Frequency * 10);
 	gPmsmRotorPosEst.InvOfKf = 1048576L/m_s32; 
  
-    //计算系数KiForSpeed=Kb*L/(T*Kf)
+    //璁＄畻绯绘暟KiForSpeed=Kb*L/(T*Kf)
 	m_s32 = ((s32)gMotorExtPer.LD * (s32)gPmsmRotorPosEst.FcSetPer)>>10;
-	gPmsmRotorPosEst.KiForSpeed = ((m_s32 * (s32)gPmsmRotorPosEst.Kb)>>13) * gPmsmRotorPosEst.InvOfKf;  // kb减小一半
+	gPmsmRotorPosEst.KiForSpeed = ((m_s32 * (s32)gPmsmRotorPosEst.Kb)>>13) * gPmsmRotorPosEst.InvOfKf;  // kb鍑忓皬涓�鍗�
 
-    //计算角度变换系数
+    //璁＄畻瑙掑害鍙樻崲绯绘暟
 	gPmsmRotorPosEst.TsPer = ((s32)gBasePar.FullFreq01 * 524L)/200;   
 }
 
 
 /*******************************************************************************
-* Function Name  : 同步机SVC转速和位置估算，在中断程序中执行
+* Function Name  : 鍚屾鏈篠VC杞�熷拰浣嶇疆浼扮畻锛屽湪涓柇绋嬪簭涓墽琛�
 * Description    : 
 * Input          : None
 * Output         : None
@@ -130,7 +130,7 @@ void PmsmSvcCtrl(void)
 
     if((1 == EPwm1Regs.TBSTS.bit.CTRDIR)||(gBasePar.FcSetApply > C_DOUBLE_ACR_MAX_FC))
 	{
-        m_FcSet = 3000000ul / (u32)gPWM.gPWMPrdApplyLast;    //比实际值放大了10倍，所以gPmsmRotorPosEst.FcCoff也变大10倍
+        m_FcSet = 3000000ul / (u32)gPWM.gPWMPrdApplyLast;    //姣斿疄闄呭�兼斁澶т簡10鍊嶏紝鎵�浠PmsmRotorPosEst.FcCoff涔熷彉澶�10鍊�
     }
 	else 
 	{
@@ -147,7 +147,7 @@ void PmsmSvcCtrl(void)
     //m_KiForEmf   = (gPmsmRotorPosEst.KiForEmf * 3000L)/(((s32)gPmsmRotorPosEst.FcCoff * (s32)gPWM.gPWMPrdApplyLast) / 100L);
     m_KiForSpeed = (gPmsmRotorPosEst.KiForSpeed * (s32)m_FcSet)/(s32)gPmsmRotorPosEst.FcCoff;
     //m_KiForSpeed = (gPmsmRotorPosEst.KiForSpeed * 3000L)/(((s32)gPmsmRotorPosEst.FcCoff * (s32)gPWM.gPWMPrdApplyLast) / 100L);
-    //得到当前电流、电压的有效值	
+    //寰楀埌褰撳墠鐢垫祦銆佺數鍘嬬殑鏈夋晥鍊�	
     m_Id = gIMTQ12.M;
     m_Iq = gIMTQ12.T;
 
@@ -157,7 +157,7 @@ void PmsmSvcCtrl(void)
     m_Ud = gPmsmRotorPosEst.Ud;
     m_Uq = gPmsmRotorPosEst.Uq;
 
-    //计算D、Q轴电流估计值
+    //璁＄畻D銆丵杞寸數娴佷及璁″��
     //m_Long  = ((s32)gMotorExtPer.LQ * (s32)gPmsmRotorPosEst.IqLast)>>10;  
     m_Long  = ((s32)gMotorExtPer.LD * (s32)gPmsmRotorPosEst.IqLast)>>10;             
     m_Long  = (m_Long * (s32)gPmsmRotorPosEst.SpeedEstValueLast)>>15;              
@@ -177,7 +177,7 @@ void PmsmSvcCtrl(void)
     m_Long  = (m_Long * (s32)m_TDivLqCoef)>>13;       
     gPmsmRotorPosEst.IqEstValue = m_Long + gPmsmRotorPosEst.IqLast;
 
-    //计算电流偏差和反电动势估计值
+    //璁＄畻鐢垫祦鍋忓樊鍜屽弽鐢靛姩鍔夸及璁″��
     gPmsmRotorPosEst.DetaId = gPmsmRotorPosEst.DetaId + ((gPmsmRotorPosEst.IdEstValue - m_Id)>>3) - (gPmsmRotorPosEst.DetaId>>3);
     gPmsmRotorPosEst.DetaIq = gPmsmRotorPosEst.DetaIq + ((gPmsmRotorPosEst.IqEstValue - m_Iq)>>1)-(gPmsmRotorPosEst.DetaIq>>1);
     gPmsmRotorPosEst.BmfEstValue = gPmsmRotorPosEst.BmfEstValue + ((s32)gPmsmRotorPosEst.DetaIq * (s32)m_KiForEmf>>17);
@@ -199,12 +199,12 @@ void PmsmSvcCtrl(void)
 
     m_Long = (m_Long * gPmsmRotorPosEst.DetaId)>>12;   
 
-    //估计转俸臀恢�
+    //浼拌杞扛鑷�鎭拷
     gPmsmRotorPosEst.SpeedEstValue    = m_Long + (((s32)gPmsmRotorPosEst.InvOfKf * (s32)gPmsmRotorPosEst.BmfEstValue)>>7);
     gPmsmRotorPosEst.SpeedEstValueLpf = gPmsmRotorPosEst.SpeedEstValueLpf + (gPmsmRotorPosEst.SpeedEstValue/gPmsmRotorPosEst.SvcSpeedLpfCoef) 
                                         -(gPmsmRotorPosEst.SpeedEstValueLpf /gPmsmRotorPosEst.SvcSpeedLpfCoef);
     
-    gPmsmRotorPosEst.SvcRotorSpeed = __IQsat(gPmsmRotorPosEst.SpeedEstValueLpf,32767,-32767);      // 对速度上限增加限幅
+    gPmsmRotorPosEst.SvcRotorSpeed = __IQsat(gPmsmRotorPosEst.SpeedEstValueLpf,32767,-32767);      // 瀵归�熷害涓婇檺澧炲姞闄愬箙
     //gPmsmRotorPosEst.SvcRotorSpeed  = gPmsmRotorPosEst.SpeedEstValueLpf;
     
     gPmsmRotorPosEst.SvcRotorPos    = gPmsmRotorPosEst.SvcRotorPos + (((s64)gPmsmRotorPosEst.SpeedEstValue * (s64)m_TsPer)>>3);
@@ -220,8 +220,8 @@ void PmsmSvcCtrl(void)
 
 
 /*******************************************************************************
-* Function Name  : 低速时对载频的处理
-* Description    : 主要用于减小死区的影?
+* Function Name  : 浣庨�熸椂瀵硅浇棰戠殑澶勭悊
+* Description    : 涓昏鐢ㄤ簬鍑忓皬姝诲尯鐨勫奖?
 * Input          : None
 * Output         : None
 * Return         : None
@@ -285,7 +285,7 @@ void PmsmSvcCalFc(void)
 	}
 	else
 	{
-		if(1 == gMainCmd.Command.bit.TorqueCtl)     // 转矩模式下用实际速度判断
+		if(1 == gMainCmd.Command.bit.TorqueCtl)     // 杞煩妯″紡涓嬬敤瀹為檯閫熷害鍒ゆ柇
 		{
 		    m_Freq = abs(gRotorSpeed.SpeedBigFilter);
 		}
@@ -316,8 +316,8 @@ void PmsmSvcCalFc(void)
     gFcCal.FcBak = Min(gFcCal.FcBak,m_FcSetlpf);
 */
     m_Long = ((s32)(gBasePar.FcSetApply * 100) * (s32)gPmsmRotorPosEst.SvcSpeedLpfTs)>>13;
-    m_Long = m_Long * 200 / (s32)gPmsmRotorPosEst.FcCoff;  //考虑一个载波周期调整一次和两次，对滤波时间常数的影响
-	if(m_Freq < (gMotorInfo.FreqPer / 5))   // 低速下增加滤波系数，wyk
+    m_Long = m_Long * 200 / (s32)gPmsmRotorPosEst.FcCoff;  //鑰冭檻涓�涓浇娉㈠懆鏈熻皟鏁翠竴娆″拰涓ゆ锛屽婊ゆ尝鏃堕棿甯告暟鐨勫奖鍝�
+	if(m_Freq < (gMotorInfo.FreqPer / 5))   // 浣庨�熶笅澧炲姞婊ゆ尝绯绘暟锛寃yk
 	{
 	    m_Long = 2*m_Long;
 	}
@@ -327,8 +327,8 @@ void PmsmSvcCalFc(void)
 }
 
 /*******************************************************************************
-* Function Name  : 低速时对励磁电流的处理
-* Description    : 当输出电压较低时，通过注入励磁，增大输出电压，减小死区的影响
+* Function Name  : 浣庨�熸椂瀵瑰姳纾佺數娴佺殑澶勭悊
+* Description    : 褰撹緭鍑虹數鍘嬭緝浣庢椂锛岄�氳繃娉ㄥ叆鍔辩锛屽澶ц緭鍑虹數鍘嬶紝鍑忓皬姝诲尯鐨勫奖鍝�
 * Input          : None
 * Output         : None
 * Return         : None
@@ -355,7 +355,7 @@ void PmsmSvcCalImForLowSpeed()
             m_IdSet = m_Long/(m_FreqHigh - m_FreqLow);
     	}
     }
-    else  //避免额定频率很小时，m_FreqZero和m_FreqLow相等
+    else  //閬垮厤棰濆畾棰戠巼寰堝皬鏃讹紝m_FreqZero鍜宮_FreqLow鐩哥瓑
     {
         m_IdSet =  m_IdMax;
     }

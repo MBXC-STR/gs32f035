@@ -16,24 +16,24 @@ extern "C" {
 typedef struct CUR_EXCURSION_STRUCT_DEF{
 	long	TotalIu;
 	long	TotalIv;
-	int		Iu;                             // 去零漂前
-	int		Iv;
+	s16		Iu;                             // 去零漂前
+	s16		Iv;
     long    IuValue;                        //用于参数辨识
     long    IvValue;                        //用于参数辨识
-	int		ErrIu;				            //U相零漂大小
-	int		ErrIv;				            //V相零漂大小
-	int  	Count;
-	int  	EnableCount;
-	int  	ErrCnt;
+	s16		ErrIu;				            //U相零漂大小
+	s16		ErrIv;				            //V相零漂大小
+	s16  	Count;
+	s16  	EnableCount;
+	s16  	ErrCnt;
 #if (SOFTSERIES == MD500SOFT)
-	int		Iw;
-	int		ErrIw;				            //W相零漂大小
+	s16		Iw;
+	s16		ErrIw;				            //W相零漂大小
 	long	TotalIw;
 	Ulong	TotalIb;
 	Uint    Ib;
 	Uint	ErrIb;
-	int  	IbCount;
-	int		IbOkFlag ;
+	s16  	IbCount;
+	s16		IbOkFlag ;
 	Uint    IbExcursionOkFlag;
 #endif
 
@@ -43,18 +43,18 @@ typedef struct CUR_EXCURSION_STRUCT_DEF{
 #if (SOFTSERIES == MD500SOFT)
 typedef struct TEMPLETURE_STRUCT_DEF{
 	Uint	TempAD;				            //AD获取值，由于温度查表
-	int	    Temp;				            //用度表示的实际温度值
-	int	    TempBak;			            //用度表示的实际温度值
+	s16	    Temp;				            //用度表示的实际温度值
+	s16	    TempBak;			            //用度表示的实际温度值
 	Uint	ErrCnt;
 	Uint    OverTempPoint;                  //变频器过温点
 }TEMPLETURE_STRUCT;                     //和变频器温度相关的数据结构
 #else
 typedef struct TEMPLETURE_STRUCT_DEF{
 	Uint	TempAD;				            //AD获取值，由于温度查表
-	int	Temp;				            //用度表示的实际温度值
-	int	TempBak;			            //用度表示的实际温度值
+	s16	Temp;				            //用度表示的实际温度值
+	s16	TempBak;			            //用度表示的实际温度值
 	Uint	ErrCnt;
-	int OverTempPoint;                  //过温点
+	s16 OverTempPoint;                  //过温点
 }TEMPLETURE_STRUCT;                     //和变频器温度相关的数据结构
 #endif
 
@@ -72,7 +72,7 @@ typedef struct AI_STRUCT_DEF {
     Ulong   ai4Total;
 	Ulong   ai5Total;
 #endif
-    int     aiCounter;
+    s16     aiCounter;
 }AI_STRUCT;	//
 typedef struct ADC_ADJ_STRUCT_DEF{
     Uint XL;
@@ -82,7 +82,7 @@ typedef struct ADC_ADJ_STRUCT_DEF{
     Ulong YLTotal;
     Ulong YHTotal;
     Uint     Slope;
-    int     Offset;
+    s16     Offset;
     Uint     SlopePU;//q14
     Uint     Ticker;
 }ADC_ADJ_STRUCT; // ADC校正结构体

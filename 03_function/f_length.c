@@ -13,11 +13,11 @@ Uint32 qepPulseCalALl;
 Uint32 qepPulsePLC;
 LOCALF Uint16 servoTicker;
 
-unsigned int intervalTime;
-unsigned int rangePer;
-unsigned int bobofrq;
-unsigned int boboreal;
-unsigned int boboerr;
+u16 intervalTime;
+u16 rangePer;
+u16 bobofrq;
+u16 boboreal;
+u16 boboerr;
 Uint16 servoRunStarFlag;
 Uint16 servoControlEnable;
 Uint32 pulseNote1;

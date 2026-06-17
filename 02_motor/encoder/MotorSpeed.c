@@ -110,9 +110,9 @@ void GetFeedRotorSpeed(void)
 	    // 模拟一个Z信号， 用于带载辨识；产生条件是: 连续两拍负角度，当前拍正角度, 同时满足4ms 间隔时间
 	    if(gMainStatus.RunStep == STATUS_GET_PAR)
 	    {        
-	        if(((int)gRotorTrans.RtorBuffer > 0) &&
-	            ((int)gRotorTrans.SimuZBack <= 0) &&
-	            ((int)gRotorTrans.SimuZBack2 <= 0) &&
+	        if(((s16)gRotorTrans.RtorBuffer > 0) &&
+	            ((s16)gRotorTrans.SimuZBack <= 0) &&
+	            ((s16)gRotorTrans.SimuZBack2 <= 0) &&
 	            (gIPMZero.zFilterCnt == 4))
 	        {
 				gIPMPos.ZSigNumSet++;

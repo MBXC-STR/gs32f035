@@ -35,12 +35,12 @@ extern "C" {
 typedef struct PID_STRUCT_DEF {
 	long 	Total;			//积分累加值
 	long 	Out;			//输出值
-	int  	Max;			//最大值限制
-	int  	Min;			//最小值限制
-	int  	Deta;			//偏差值
-	int  	KP;				//KP增益
-	int  	KI;				//KI增益
-	int  	KD;				//KD增益
+	s16  	Max;			//最大值限制
+	s16  	Min;			//最小值限制
+	s16  	Deta;			//偏差值
+	s16  	KP;				//KP增益
+	s16  	KI;				//KI增益
+	s16  	KD;				//KD增益
 	u16     Flag;            //标志位
 	s16     OutFlag;         //饱和标志位
 
@@ -58,7 +58,7 @@ typedef struct PID_STRUCT_LONG_DEF {
 	Uint  	KI;				//KI增益
 	Uint  	KD;				//KD增益
 
-    int     sVoltGain;
+    s16     sVoltGain;
 }PID_STRUCT_LONG;//PID计算用的数据结构(无量纲数据结构)
 
 typedef struct PID32_STRUCT_DEF{
@@ -80,17 +80,17 @@ typedef struct BURR_FILTER_STRUCT_DEF{
 }BURR_FILTER_STRUCT;//去除毛刺滤波处理的数据结构
 
 typedef struct CUR_LINE_STRUCT_DEF{					
-	int		FilterTime;		//滤波级别
-	int 	Input;			//本次输入数据
-	int		Output;			//本次预测数据
-	int		Data[16];		//保留历史数据（最多8ms数据）
+	s16		FilterTime;		//滤波级别
+	s16 	Input;			//本次输入数据
+	s16		Output;			//本次预测数据
+	s16		Data[16];		//保留历史数据（最多8ms数据）
 }CUR_LINE_STRUCT_DEF;//曲线拟合相关的数据结构
 
 typedef struct FILTER_1ST_ORDER_DEF{    
-    int x0;
+    s16 x0;
 
-    int taoVsTs ;       // (tao / Ts)  //越大滤波越强
-    int resFilt ;       // 静差
+    s16 taoVsTs ;       // (tao / Ts)  //越大滤波越强
+    s16 resFilt ;       // 静差
 }FILTER_1ST;
 
 typedef struct VFFILTER1ST_STRUCT_DEF{
@@ -103,21 +103,21 @@ typedef struct VFFILTER1ST_STRUCT_DEF{
 	基本函数定义和引用
 ************************************************************/
 extern Uint swap(Uint);				//
-//extern int 	abs(int);				//
-extern int 	absl(long int);			//r 这个函数存在问题
-extern int 	qsin(int);				//正弦函数
-extern int 	qatan(long int);		//反正切函数
-//extern int  atan(int x, int y);		//四象限反正切函数
+//extern s16 	abs(s16);				//
+extern s16 	absl(long s16);			//r 这个函数存在问题
+extern s16 	qsin(s16);				//正弦函数
+extern s16 	qatan(long s16);		//反正切函数
+//extern s16  atan(s16 x, s16 y);		//四象限反正切函数
 extern s16 user_atan(s16 x, s16 y);
 extern Uint qsqrt(Ulong);			//开方函数
 
 extern Uint GetInvCurrent(Uint);	//根据机型查询变频器额定电流函数
 extern void PID(PID_STRUCT * pid);
 extern void BurrFilter(BURR_FILTER_STRUCT * );
-extern int Filter(int , int , int );
+extern s16 Filter(s16 , s16 , s16 );
 extern s16 VFFilter1st(s16 , VFFILTER1ST_STRUCT *pFilter1st);
 extern void PID32(PID32_STRUCT * pid);
-extern int Filter_1st(int x, int y0, FILTER_1ST *pFilStr);
+extern s16 Filter_1st(s16 x, s16 y0, FILTER_1ST *pFilStr);
 #ifdef __cplusplus
 }
 #endif /* extern "C" */

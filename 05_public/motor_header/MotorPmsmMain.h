@@ -17,8 +17,8 @@ typedef struct IPM_POS_CHECK_STRUCT_DEF {
 	Uint	Cnt;					//计数器
 	long	TotalErr;				//位置偏差累加
 	Ulong	TotalErrAbs;			//位置偏差的绝对值累加
-	int     UvwStopErr;
-    int     UvwStopErr_deg;              // uvw的误差角度
+	s16     UvwStopErr;
+    s16     UvwStopErr_deg;              // uvw的误差角度
     Uint    UvwRevCnt;              // 被UVW信号修正次数计数器
 }IPM_POS_CHECK_STRUCT;         //永磁同步电机上电检测当前绝对位置角的数据结构
 
@@ -46,8 +46,8 @@ typedef struct IPM_POSITION_STRUCT_DEF {
 	long	QepTotal;
     
 	Uint    ZErrCnt;			    //Z信号错误计数器
-	int     AbzErrPos;   
-    int     AbzErrPos_deg;
+	s16     AbzErrPos;   
+    s16     AbzErrPos_deg;
     
     u16     ZSigNumSet;             //Z信号中断响应次数累积
     u16     ZSigNum;                //主循环中， 基准Z信号计数器
@@ -78,36 +78,36 @@ typedef struct IPM_POSITION_STRUCT_DEF {
 
 typedef struct PM_INIT_POSITION_DEF
 {
-	int SubStep;
-	int PeriodCnt;
-	int Section;	
-	int CurFirst;
-	int Cur[12];
-	int Timer;
-	unsigned int PWMTs;
-	unsigned int PWMTGet;
+	s16 SubStep;
+	s16 PeriodCnt;
+	s16 Section;	
+	s16 CurFirst;
+	s16 Cur[12];
+	s16 Timer;
+	u16 PWMTs;
+	u16 PWMTGet;
 }PM_INIT_POSITION;
 
 typedef struct PM_FLUX_WEAK_DEF
 {
     Uint    Mode;              // 弱磁模式选择 0: 不弱磁；1: 弱磁直接计算；2: 弱磁自动调整
-    int     DecoupleMode;      // 解耦模式 0: 不解耦；1: 解耦
-    int     CsrGainMode;        // 电流环参数修正模式 0: 不修正，1: 修正
-    int     CoefFlux;          // 弱磁系数
+    s16     DecoupleMode;      // 解耦模式 0: 不解耦；1: 解耦
+    s16     CsrGainMode;        // 电流环参数修正模式 0: 不修正，1: 修正
+    s16     CoefFlux;          // 弱磁系数
 	long     VoltCoef;          // voltage coefficient (%)
     long    FluxD;             // d轴总磁链 PhiD = PhiSd + FluxRotor
-    int     FluxSd;            // PhiSd = Ld * gIMTQ12.M
+    s16     FluxSd;            // PhiSd = Ld * gIMTQ12.M
 	long     IqLpf;
-    int     VoltLpf;            // 输出电压滤波值
-    int     AbsFrqLpf;
-    int     IdSet;
-    int     IdMax;              // 弱磁d 轴电流限制 1%
-    int     Vd;
-    int     Vq;
-	int     AdjustId;           // 模式2 调整量
-    int     AdjustLimit;        // 模式2 调整量上限
-	int     CoefAdj;            // 模式2 调整系数 
-    int     CoefKI;             // 弱磁时电流环积分增益调整系数
+    s16     VoltLpf;            // 输出电压滤波值
+    s16     AbsFrqLpf;
+    s16     IdSet;
+    s16     IdMax;              // 弱磁d 轴电流限制 1%
+    s16     Vd;
+    s16     Vq;
+	s16     AdjustId;           // 模式2 调整量
+    s16     AdjustLimit;        // 模式2 调整量上限
+	s16     CoefAdj;            // 模式2 调整系数 
+    s16     CoefKI;             // 弱磁时电流环积分增益调整系数
 
     //另外增加的变量
     long    VoltMax;
@@ -119,12 +119,12 @@ typedef struct PM_FLUX_WEAK_DEF
     long    IqLimit;
     long    TorqeCurr;//程序中没有使用
     long    AdjustId1;// 程序中没有使用
-    int     CoefIdComp;// IS300 中gSendToMotorDataBuff1[14]
+    s16     CoefIdComp;// IS300 中gSendToMotorDataBuff1[14]
     long    IqErr;     // Q轴电流偏差，Q12格式表么值
-    int     IqErrAbs;
+    s16     IqErrAbs;
     long    OmgQ15;   // 实际频率的滤波值
-    int     Ratio;   
-    int     VoltOut;
+    s16     Ratio;   
+    s16     VoltOut;
 
 
     long    data0;
@@ -144,62 +144,62 @@ typedef struct PM_FLUX_WEAK_DEF
 }PM_FLUX_WEAK;
 
 typedef struct PM_DECOUPLE_DEF{
-    int Omeg;   // Q15
-    int Isd;    // Q12
-    int Isq;    // Q12
-	int Is;     // Q12
-    int PhiSd;  // Q12      d轴全磁链
-    int PhiSq;  // Q12
-    int RotVd;  // Q12
-    int RotVq;  // Q12
-    int EnableDcp;
+    s16 Omeg;   // Q15
+    s16 Isd;    // Q12
+    s16 Isq;    // Q12
+	s16 Is;     // Q12
+    s16 PhiSd;  // Q12      d轴全磁链
+    s16 PhiSq;  // Q12
+    s16 RotVd;  // Q12
+    s16 RotVq;  // Q12
+    s16 EnableDcp;
 	//Uint Amp;   // Q12      幅值
-	int IsdSet;    // Q12
-    int IsqSet;    // Q12
-    int PhiSdSet;  // Q12      d轴全磁链设定值
-    int PhiSqSet;  // Q12
-    int RotVdSet;  // Q12
-    int RotVqSet;  // Q12
-	int IsqSetMax;
+	s16 IsdSet;    // Q12
+    s16 IsqSet;    // Q12
+    s16 PhiSdSet;  // Q12      d轴全磁链设定值
+    s16 PhiSqSet;  // Q12
+    s16 RotVdSet;  // Q12
+    s16 RotVqSet;  // Q12
+	s16 IsqSetMax;
 	s16 EMF;       //Q12    反电动势前馈量
 	u16 Us;        //Q12    输出电压滤波值
 }PM_DECOUPLE;
 
 typedef struct PM_FW_IN_DEF
 {
-	int  Time;			//弱磁控制时间间隔,0.5MS
-	int  Bemf;			//1mv/(rad/s),反电动势系数的峰值
-	int  Udc;			//0.1V，母线电压
-	int  R;				//1mohm,相电阻
-	int  IsSetMax;      //设定的最大输出相电流有效值，以电机额定电流为基值，Q12
-	int  IsAsrSetMax;	//设定的速度环PI调节最大相电流有效值，以电机额定电流为基值，Q12
-	int  IqSet;			//Q轴设定电流有效值，以电机额定电流为基值，Q12
-	int  IqFeed;		//Q轴反馈电流有效值，以电机额定电流为基值，Q12	
-	int  IdSet;			//Q轴设定电流有效值，以电机额定电流为基值，Q12
-	int  IdFeed;		//Q轴反馈电流有效值，以电机额定电流为基值，Q12
-	int  VolCsrOut;		//电流环PI调节输出的线电压有效，以电机额定线电压为基值，Q12
-	int  UdCsrOut;		//电流环D轴PI调节输出的线电压有效，以电机额定线电压为基值，Q12
-	int  UqCsrOut;		//电流环Q轴PI调节输出的线电压有效，以电机额定线电压为基值，Q12
+	s16  Time;			//弱磁控制时间间隔,0.5MS
+	s16  Bemf;			//1mv/(rad/s),反电动势系数的峰值
+	s16  Udc;			//0.1V，母线电压
+	s16  R;				//1mohm,相电阻
+	s16  IsSetMax;      //设定的最大输出相电流有效值，以电机额定电流为基值，Q12
+	s16  IsAsrSetMax;	//设定的速度环PI调节最大相电流有效值，以电机额定电流为基值，Q12
+	s16  IqSet;			//Q轴设定电流有效值，以电机额定电流为基值，Q12
+	s16  IqFeed;		//Q轴反馈电流有效值，以电机额定电流为基值，Q12	
+	s16  IdSet;			//Q轴设定电流有效值，以电机额定电流为基值，Q12
+	s16  IdFeed;		//Q轴反馈电流有效值，以电机额定电流为基值，Q12
+	s16  VolCsrOut;		//电流环PI调节输出的线电压有效，以电机额定线电压为基值，Q12
+	s16  UdCsrOut;		//电流环D轴PI调节输出的线电压有效，以电机额定线电压为基值，Q12
+	s16  UqCsrOut;		//电流环Q轴PI调节输出的线电压有效，以电机额定线电压为基值，Q12
 
-	int  IsAsrOut;		//速度环PI调节输出的相电流有效值，以电机额定电流为基值，Q12
-	int  MotorPoles;	//电机磁极对数
-	int  FullFreq;		//0.1HZ，电机基准频率
-	int  FreqFeed;		//电机反馈速度，以FullFreq为基值，Q15
-	int  MotorVol;		//1V,电机额定电压
+	s16  IsAsrOut;		//速度环PI调节输出的相电流有效值，以电机额定电流为基值，Q12
+	s16  MotorPoles;	//电机磁极对数
+	s16  FullFreq;		//0.1HZ，电机基准频率
+	s16  FreqFeed;		//电机反馈速度，以FullFreq为基值，Q15
+	s16  MotorVol;		//1V,电机额定电压
 	long MotorCurr;		//0.01A,电机额定电流
 
-	int  MaxSetUdc;		//0.1V,设定的最大输出母线电压，为0时输出直流母线电压
-	int  RatioSet;		//弱磁控制时输出电压设定值，用于确定弱磁电流
+	s16  MaxSetUdc;		//0.1V,设定的最大输出母线电压，为0时输出直流母线电压
+	s16  RatioSet;		//弱磁控制时输出电压设定值，用于确定弱磁电流
 						//以变频器能输出的最大电压为基值，Q12
 						//必须小于4096，推荐值3700（Udc==540V)
 						//母线电压越小该值应该设的越小
 	long KpId;			//弱磁电流调节KP
 
 	long MaxDelId;		//每次最大减小ID给定的数值;
-	int  AdjuMode;		//自整定模式，0：不整定，1：整定最大转矩电流,
+	s16  AdjuMode;		//自整定模式，0：不整定，1：整定最大转矩电流,
 						//2:整定最大弱磁电流，3：整定最大转矩电流、弱磁电流
 
-	int  UdForIqMax;	//弱磁控制时Q轴输出电压设定值,用于确定最大转矩电流
+	s16  UdForIqMax;	//弱磁控制时Q轴输出电压设定值,用于确定最大转矩电流
 						//以变频器能输出的最大电压为基值，Q12
 						//必须大于RatioSet，推荐值3900（Udc==540V)
 						//母线电压越小该值应该设的越小
@@ -207,31 +207,31 @@ typedef struct PM_FW_IN_DEF
 	long KpIqMax;		//最大转矩电流减小调节KP
 	long KpIqMax1;		//最大转矩电流增大调节KP
 							
-	int  UqForIdMax;	//弱磁控制时Q轴输出电压设定值，用于确定最大弱磁电流
+	s16  UqForIdMax;	//弱磁控制时Q轴输出电压设定值，用于确定最大弱磁电流
 						//以变频器能输出的最大电压为基值，Q12
 						//推荐值100（Udc==540V)，母线电压越小该值应该设的越大
 	long KpIdMax;		//最大弱磁电流调节KP
-	int  CsrMaxVolt;	//电流环D、Q轴最大输出电压
+	s16  CsrMaxVolt;	//电流环D、Q轴最大输出电压
 	
 }PM_FW_IN;
 
 typedef struct PM_FW_DEF
 {	
 	
-	int  IdMax;
-	int  IdMax1;
-	int  PhiPerLd;
-	int  UdcLpf;
-	int  UdLpf;
-	int  UqLpf;
-	int  RatioLpf;
-	int  UdForIqMax;
+	s16  IdMax;
+	s16  IdMax1;
+	s16  PhiPerLd;
+	s16  UdcLpf;
+	s16  UdLpf;
+	s16  UqLpf;
+	s16  RatioLpf;
+	s16  UdForIqMax;
 	long  RatioLpf1;
-	int  CurPerLpf;
-	int  TorqPerAmp;
-	int  IqErrLpf;
-	int  IdErrLpf;
-	int  IdForTorq;
+	s16  CurPerLpf;
+	s16  TorqPerAmp;
+	s16  IqErrLpf;
+	s16  IdErrLpf;
+	s16  IdForTorq;
 	
 	long AbsOmgPer;
 	long Omg;
@@ -257,43 +257,43 @@ typedef struct PM_FW_DEF
 	long Ld;
 	long Lq;
 	long Lq1;
-	int  TorqRevi;
-	int  TReviCoef1;
-	int  PosComp;
-	int  MaxPosComp;
-	int  MpcBack;
-	int  MinPosComp;
+	s16  TorqRevi;
+	s16  TReviCoef1;
+	s16  PosComp;
+	s16  MaxPosComp;
+	s16  MpcBack;
+	s16  MinPosComp;
 	long IqSetLpf;
-	int  UqCompStat;
-	int  UqRatio;
-	int  imSet;
-	int  itSet;
-	int  umSet;
-	int  utSet;
-	int  utSetLpf;
+	s16  UqCompStat;
+	s16  UqRatio;
+	s16  imSet;
+	s16  itSet;
+	s16  umSet;
+	s16  utSet;
+	s16  utSetLpf;
 }PM_FW;
 typedef struct PM_FW_OUT_DEF
 {	
 	
-	int  IdSet;			//电流环D轴给定值，以电定电流为基值，Q12
-	int  IqSet;			//电流环Q轴给定值，以电机额定电流为基值，Q12
-	int  IsLimit;	   //速度环PI调节输出限定值，以电机额定电流为基值，Q12
-	int  UqComp;		//Q轴补偿电压，以电机额定电压为基值，Q12
-    int  PosComp;
-	int  ClearKID;
+	s16  IdSet;			//电流环D轴给定值，以电定电流为基值，Q12
+	s16  IqSet;			//电流环Q轴给定值，以电机额定电流为基值，Q12
+	s16  IsLimit;	   //速度环PI调节输出限定值，以电机额定电流为基值，Q12
+	s16  UqComp;		//Q轴补偿电压，以电机额定电压为基值，Q12
+    s16  PosComp;
+	s16  ClearKID;
 }PM_FW_OUT;
 typedef struct PM_POS_EST_STRUCT_DEF
 {
-	int Usr;
-	int Ust;
-    int Urt;
+	s16 Usr;
+	s16 Ust;
+    s16 Urt;
 
-	int Ur;
-	int Us;
-	int Ut;
+	s16 Ur;
+	s16 Us;
+	s16 Ut;
 
-	int Ualfa;
-	int Ubeta;
+	s16 Ualfa;
+	s16 Ubeta;
 	
 	Uint RotorPosEst;     //通过反电动势辨识的转子磁极位置
 	Uint RotorPosEstLast;
@@ -307,10 +307,10 @@ typedef struct PM_POS_EST_STRUCT_DEF
 
 	Uint Cnt;             //零点位置累加计数器
 
-	int JudgeDirFlag;    //旋转方向标志位 1：顺着RST  2：逆着RST
-	int JudgeDirOKFlag;  //旋转方向判断结束标志位
-	int OverFlag;        //零点位置角判断结束标志位
-	int JudgeDirCnt;     //判断旋转方向计数器
+	s16 JudgeDirFlag;    //旋转方向标志位 1：顺着RST  2：逆着RST
+	s16 JudgeDirOKFlag;  //旋转方向判断结束标志位
+	s16 OverFlag;        //零点位置角判断结束标志位
+	s16 JudgeDirCnt;     //判断旋转方向计数器
 
 	Uint IdentifyErrorFlag;//零点位置角未辨识完启动会报错
 	Uint StartErrorFlag; //停机再启动时，低于10Hz启动会报错

@@ -971,7 +971,7 @@ void InitSetSpiForFunc(void)
 // Initialize  SPI
     SpiaRegs.SPICCR.all = 0x000F;   // Reset on, rising edge, 16-bit char bits
     SpiaRegs.SPICTL.all = 0x000E;   // Enable master mode, SPICLK signal delayed by one half-cycle
-                                    // enable talk, and SPI int disabled.
+                                    // enable talk, and SPI s16 disabled.
                                     // 74HC594: SCK变高时，开始移位。要在移位之前把数据传送到74HC594，
                                     // 所以，CLOCK PHASE = 1
 

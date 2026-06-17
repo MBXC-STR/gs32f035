@@ -31,37 +31,37 @@ typedef struct FC_CAL_STRUCT_DEF{
 typedef struct ANGLE_STRUCT_DEF {
 	long 	StepPhase;			//步长角度（计算出来）
 	long 	StepPhaseApply;		//步长角度（实际使用）
-	int 	IMPhase; 			//磁场相位
+	s16 	IMPhase; 			//磁场相位
 	long    IMPhaseApply;
-	int 	OutPhase; 			//PWM角度
-	int  	CompPhase;			//相位延迟补偿角度
+	s16 	OutPhase; 			//PWM角度
+	s16  	CompPhase;			//相位延迟补偿角度
 	s16     OutVoltPhaseCom;    //发波补偿相位
-	int  	RotorPhase;			//转子角度
+	s16  	RotorPhase;			//转子角度
 	s16     IMPhaseBak;         //上一拍磁场相位
-	int	IMPhaseOld;			// wg
+	s16	IMPhaseOld;			// wg
 }ANGLE_STRUCT;
 typedef struct OUT_VOLT_STRUCT_DEF {
-	int  	Volt;				//Q12中间计算过程的输出电压和相位
-	int     MaxOutVolt;         //以电机电压的标么值
-	int     vfSplit;            //si, 1V, VF分离时的输出电压
-	int   	VoltPhase;
-    int     LimitOutVoltPer;    //ligang1940
-//    int     LimitOutVoltPer1;
-	int     LimitOutVolt;
+	s16  	Volt;				//Q12中间计算过程的输出电压和相位
+	s16     MaxOutVolt;         //以电机电压的标么值
+	s16     vfSplit;            //si, 1V, VF分离时的输出电压
+	s16   	VoltPhase;
+    s16     LimitOutVoltPer;    //ligang1940
+//    s16     LimitOutVoltPer1;
+	s16     LimitOutVolt;
 	u16     MaxOutVoltPer;
-	int  	VoltApply;			//Q12计算调制系数使用的输出电压和相位
-	int		VoltApplySVC;			// 用于SVC电压显示, 电压重构计算的输出电压
-	int     VoltDisplay;        //显示输出电压，基值为变频器额定电压
-	int   	VoltPhaseApply;
+	s16  	VoltApply;			//Q12计算调制系数使用的输出电压和相位
+	s16		VoltApplySVC;			// 用于SVC电压显示, 电压重构计算的输出电压
+	s16     VoltDisplay;        //显示输出电压，基值为变频器额定电压
+	s16   	VoltPhaseApply;
 	Uint	VoltSVCCalSignal;
 	Uint	VoltSVCCalSignalB;
 
     Uint    antiVolt;
     int16   detVfVoltUp;
 //	Uint    VoltRebuidFlag;     //电压重构标志位
-    int     VoltFilter;
-	int     VoltPhaseApply1;		// wg
-	int     VoltPhaseApply2;		// wg
+    s16     VoltFilter;
+	s16     VoltPhaseApply1;		// wg
+	s16     VoltPhaseApply2;		// wg
 }OUT_VOLT_STRUCT;
 typedef enum ZERO_LENGTH_PHASE_SELECT_ENUM_DEF{
     ZERO_VECTOR_U,        //DPWM调制时，U相发全脉宽
@@ -83,10 +83,10 @@ typedef struct PWM_OUT_STRUCT_DEF {
 	Uint	PWMModle;		//连续调制模式/离散调制模式选择
 	Uint    SoftPWMTune;
 	Uint    SoftPWMTuneApply;
-	int    	SoftPWMCoff;
+	s16    	SoftPWMCoff;
 
-    int     PwmModeSwitchHF;
-    int     PwmModeSwitchLF;
+    s16     PwmModeSwitchHF;
+    s16     PwmModeSwitchLF;
 	s32		USet;			//U相PWM输出比较值
 	s32		VSet;			//V相PWM输出比较值
 	s32		WSet;			//W相PWM输出比较值
@@ -95,14 +95,14 @@ typedef struct PWM_OUT_STRUCT_DEF {
 }PWM_OUT_STRUCT;	//作为PWM输出的结构
 
 typedef struct DEAD_BAND_STRUCT_DEF{
-   int		DeadBand;			//死区时间
+   s16		DeadBand;			//死区时间
    Uint     DeadTimeSet;       //1140V死区时间调整系数
-   int		Comp;				//补偿时间
+   s16		Comp;				//补偿时间
    Uint     CompCoff;           //死区补偿量校正系数
-   int     	CompU;
-   int     	CompV;
-   int     	CompW;
-   int		MTPhase;
+   s16     	CompU;
+   s16     	CompV;
+   s16     	CompW;
+   s16		MTPhase;
    Uint     InvCurFilter;
 }DEAD_BAND_STRUCT; 	//死区/死区补偿相关变量
 typedef struct SYN_PWM_STRUCT_DEF {

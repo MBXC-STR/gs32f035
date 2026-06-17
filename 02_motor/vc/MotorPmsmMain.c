@@ -1,32 +1,32 @@
 /****************************************************************
-�ļ����ܣ�����ͬ�����ջ�ʸ�����Ʋ��֣����ŵ�
-�ļ��汾��ͬ�����������������
-���¸��£�
+锟侥硷拷锟斤拷锟杰ｏ拷锟斤拷锟斤拷同锟斤拷锟斤拷锟秸伙拷矢锟斤拷锟斤拷锟狡诧拷锟街ｏ拷锟斤拷锟脚碉拷
+锟侥硷拷锟芥本锟斤拷同锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟�
+锟斤拷锟铰革拷锟铰ｏ拷
 
 ****************************************************************/
-//�ļ�����: 
-//    1. ͬ����ͣ��״̬λ�ü�飻
-//    2. ͬ��������ǰ�ĳ�ʼλ��ȷ����
-//    3. ͬ����ABZ�������ż�λ�õ��ۼӼ��?
-//    4. ͬ������м��㣬����������������
-//    5. ͬ���������Ŵ�����
-//    6. ABZ/UVW������z�жϵĴ�����
+//锟侥硷拷锟斤拷锟斤拷: 
+//    1. 同锟斤拷锟斤拷停锟斤拷状态位锟矫硷拷椋�
+//    2. 同锟斤拷锟斤拷锟斤拷锟斤拷前锟侥筹拷始位锟斤拷确锟斤拷锟斤拷
+//    3. 同锟斤拷锟斤拷ABZ锟斤拷锟斤拷锟斤拷锟脚硷拷位锟矫碉拷锟桔加硷拷锟�?
+//    4. 同锟斤拷锟斤拷锟斤拷屑锟斤拷悖拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟�
+//    5. 同锟斤拷锟斤拷锟斤拷锟斤拷锟脚达拷锟斤拷锟斤拷
+//    6. ABZ/UVW锟斤拷锟斤拷锟斤拷z锟叫断的达拷锟斤 拷锟斤拷
 
 #include "MotorVCInclude.h"
 #include "MotorInclude.h"
 #include "MotorIPMSVC.h"
 //************************************************************
-IPM_POSITION_STRUCT		gIPMPos;          //����ͬ�������ת�ӽǶ���صĽṹ
+IPM_POSITION_STRUCT		gIPMPos;          //锟斤拷锟斤拷同锟斤拷锟斤拷锟斤拷锟阶拷咏嵌锟斤拷锟截的结构
 PM_FLUX_WEAK            gFluxWeak;
 PM_INIT_POSITION        gPMInitPos;
-IPM_POS_CHECK_STRUCT	gIPMPosCheck;   //����ͬ������ϵ��⵱ǰ����λ�ýǵ����ݽṹ
+IPM_POS_CHECK_STRUCT	gIPMPosCheck;   //锟斤拷锟斤拷同锟斤拷锟斤拷锟斤拷系锟斤拷獾鼻帮拷锟斤拷锟轿伙拷媒堑锟斤拷锟斤拷萁峁�
 PM_DECOUPLE             gPmDecoup;
 PM_FW_IN	            gPMFwIn;
 PM_FW		            gPMFwCtrl;
 PM_FW_OUT	            gPMFwOut;
 PMSM_FLUX_WEAK_STRUCT   gPmFluxWeak;
 PM_CSR2_DATA            gPmCsr2;
-int gOutVoltVoltPhaseApplyOld;
+s16 gOutVoltVoltPhaseApplyOld;
 
 s16  PmsmMaxTorqCtrl(void);
 //s16  PmsmFwcCalMethod(void);
@@ -39,7 +39,7 @@ extern void TurnToStopStatus(void);
 extern void SetIPMRefPos(Uint Pos);
 extern void PrepareParForRun(void);
 /*************************************************************
-	ͬ�����±������Ļ�׼�жϵ���Ĵ�������(���ó���)
+	同锟斤拷锟斤拷锟铰憋拷锟斤拷锟斤拷锟侥伙拷准锟叫断碉拷锟斤拷拇锟斤拷锟斤拷锟斤拷锟�(锟斤拷锟矫筹拷锟斤拷)
 *************************************************************/
 #ifdef TARGET_GS32
 __interrupt void PG_Zero_isr(void)
@@ -61,7 +61,7 @@ interrupt void PG_Zero_isr(void)
       	PieCtrlRegs.PIEACK.all = PIEACK_GROUP5;	// Acknowledge this interrupt
 #endif
 		EDIS;
-	    if((gIPMZero.zFilterCnt < 4)||(gIPMPos.ZIntFlag == 1))            // Z �źŵ��˲�������Ҫ������Z�������8ms(7500rpm),����������ж����ڼ���λ�ã�������Z�ж�
+	    if((gIPMZero.zFilterCnt < 4)||(gIPMPos.ZIntFlag == 1))            // Z 锟脚号碉拷锟剿诧拷锟斤拷锟斤拷锟斤拷要锟斤拷锟斤拷锟斤拷Z锟斤拷锟斤拷锟斤拷锟�8ms(7500rpm),锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷卸锟斤拷锟斤拷诩锟斤拷锟轿伙拷茫锟斤拷锟斤拷锟斤拷锟絑锟叫讹拷
 		{
 			return;
 		} 
@@ -72,7 +72,7 @@ interrupt void PG_Zero_isr(void)
 	    gIPMPos.QepCntBak       = GetQepCnt();
 	    gIPMPos.QepCntPosCalBak = gIPMPos.QepCntPosCal;
 #if(AIRCOMPRESSOR == 0)
-	    gIPMPos.ZBakUVW         = Get_UVW_PG_U() + Get_UVW_PG_V() + Get_UVW_PG_W();                         /*QEP��Z�ź��жϣ������̣������ж�*/
+	    gIPMPos.ZBakUVW         = Get_UVW_PG_U() + Get_UVW_PG_V() + Get_UVW_PG_W();                         /*QEP锟斤拷Z锟脚猴拷锟叫断ｏ拷锟斤拷锟斤拷锟教ｏ拷锟斤拷锟斤拷锟叫讹拷*/
 #else
         gIPMPos.ZBakUVW         = 0;
 #endif
@@ -82,9 +82,9 @@ interrupt void PG_Zero_isr(void)
 #endif
 }
 /*************************************************************
-����Z�źŷ���ʱ�������һ���жϺ���֮���λ��ƫ��
-���㷽ʽ
-��Z�ź��ж��У���¼���һ�μ���ת��λ��ʹ�õ�QEPCNTֵ����Z�źŷ���ʱ��QEPCNTֵ���������֮���ƫ��
+锟斤拷锟斤拷Z锟脚号凤拷锟斤拷时锟斤拷锟斤拷锟斤拷锟揭伙拷锟斤拷卸虾锟斤拷锟街拷锟斤拷位锟斤拷偏锟斤拷
+锟斤拷锟姐方式
+锟斤拷Z锟脚猴拷锟叫讹拷锟叫ｏ拷锟斤拷录锟斤拷锟揭伙拷渭锟斤拷锟阶拷锟轿伙拷锟绞癸拷玫锟絈EPCNT值锟斤拷锟斤拷Z锟脚号凤拷锟斤拷时锟斤拷QEPCNT值锟斤拷锟斤拷锟斤拷锟斤拷锟街拷锟斤拷偏锟斤拷
 *************************************************************/
 void IPMPosCalZWindage(void)
 {
@@ -96,9 +96,9 @@ void IPMPosCalZWindage(void)
 }
 
 /*************************************************************
-	��׼λ�õ���ʱ��ͬ����������λ�ý�У������(�ٶ���������
-	Z�źŽ�����DSP����������U�źŵ���������ΪZ�ź�)
-	(2ms������ִ�У��ܹ�����30000RPM�����ٸ��ٻᶪʧZ�ź�)
+	锟斤拷准位锟矫碉拷锟斤拷时锟斤拷同锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷位锟矫斤拷校锟斤拷锟斤拷锟斤拷(锟劫讹拷锟斤拷锟斤拷锟斤拷锟斤拷
+	Z锟脚号斤拷锟斤拷锟斤拷DSP锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷U锟脚号碉拷锟斤拷锟斤拷锟斤拷锟斤拷为Z锟脚猴拷)
+	(2ms锟斤拷锟斤拷锟斤拷执锟叫ｏ拷锟杰癸拷锟斤拷锟斤拷30000RPM锟斤拷锟斤拷锟劫革拷锟劫会丢失Z锟脚猴拷)
 *************************************************************/
 void IPMPosAdjustZIndex(void)
 {
@@ -108,31 +108,31 @@ void IPMPosAdjustZIndex(void)
 
     if(gIPMPos.ZSigNum == gIPMPos.ZSigNumSet)
     {        
-        return;                                                 // û��Z�źŵ��ֱ�ӷ���
+        return;                                                 // 没锟斤拷Z锟脚号碉拷锟斤，直锟接凤拷锟斤拷
     }
 
 	if(gPGData.PGType == PG_TYPE_UVW)
 	{
 	    if((gIPMPos.ZBakUVW & 0x03) != 1)
 	    {
-	        return;                                             // UVW������Ҫ��Z�źŵ����ʱ��V�ź���0��W�ź���1��������Ϊ�Ǵ����ź�.
+	        return;                                             // UVW锟斤拷锟斤拷锟斤拷要锟斤拷Z锟脚号碉拷锟斤拷锟绞憋拷锟絍锟脚猴拷锟斤拷0锟斤拷W锟脚猴拷锟斤拷1锟斤拷锟斤拷锟斤拷锟斤拷为锟角达拷锟斤拷锟脚猴拷.
 	    }   
 	}
     gIPMPos.ZSigNum = gIPMPos.ZSigNumSet;
 	
-    // ��ʼ�ж�Z�źŵ����ʱ�򣬼�¼��ת��λ�ú�ϣ����λ��ת��λ���Ƿ��Ǻ�(ƫ���)
+    // 锟斤拷始锟叫讹拷Z锟脚号碉拷锟斤拷锟绞憋拷颍锟铰硷拷锟阶拷锟轿伙拷煤锟较ｏ拷锟斤拷锟轿伙拷锟阶拷锟轿伙拷锟斤拷欠锟斤拷呛锟�(偏锟筋不锟斤拷)
 
     IPMPosCalZWindage();
     
     m_DetaPos = (s16)(gIPMPos.RotorZero - (gIPMPos.ZBakRotorPos + gIPMPos.ZPosWindage));
-    gIPMPos.ZBakDetaPos = m_DetaPos;                            // Z�źŵ���ʱ��ϣ����λ�ĽǶȺ͵�ǰ�ǶȵĲ�ֵ
+    gIPMPos.ZBakDetaPos = m_DetaPos;                            // Z锟脚号碉拷锟斤拷时锟斤拷希锟斤拷锟斤拷位锟侥角度和碉拷前锟角度的诧拷值
 
     m_DetaPosShow = ((s16)gIPMPos.RotorPos - (s16)(gPGData.RefPos >> 8));
-	gIPMPos.DetaPosShow = (s16)(m_DetaPosShow * 1800L >>15);    // ��ABZ������ʱ��������λ�ý�����ʾλ��ƫ�wyk
+	gIPMPos.DetaPosShow = (s16)(m_DetaPosShow * 1800L >>15);    // 锟斤拷ABZ锟斤拷锟斤拷锟斤拷时锟斤拷锟斤拷锟斤拷锟斤拷位锟矫斤拷锟斤拷锟斤拷示位锟斤拷偏锟筋，wyk
 
-    if((gIPMPos.ZResetFlag == C_Z_DONT_RESET_POS)||(gIPMPos.ZSigEnable == 0))   //��ʹ��Z�ź�У��
+    if((gIPMPos.ZResetFlag == C_Z_DONT_RESET_POS)||(gIPMPos.ZSigEnable == 0))   //锟斤拷使锟斤拷Z锟脚猴拷校锟斤拷
     {
-        return;                                                 // Z�źŵ���ʱ�򣬲���Ҫ��λ�Ƕȡ�
+        return;                                                 // Z锟脚号碉拷锟斤拷时锟津，诧拷锟斤拷要锟斤拷位锟角度★拷
     }
   
     if((abs(m_DetaPos) > C_MAX_DETA_POS_Z) && (gIPMPos.ZResetFlag == C_Z_RESET_POS_LIMIT)&&(gMainStatus.RunStep != STATUS_GET_PAR))
@@ -142,7 +142,7 @@ void IPMPosAdjustZIndex(void)
         {
    			m_ZErrCnt = 0;
    			gError.ErrorCode.all |= ERROR_ENCODER;
-            gError.ErrorInfo[4].bit.Fault3 = 6;                      // Z�źŵ���ʱ�̳�����������Ϊ�Ƕ��Ѿ�ƫ�룬�����ϡ�
+            gError.ErrorInfo[4].bit.Fault3 = 6;                      // Z锟脚号碉拷锟斤拷时锟教筹拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷为锟角讹拷锟窖撅拷偏锟诫，锟斤拷锟斤拷锟较★拷
         }
         return;                                               
     }
@@ -155,26 +155,26 @@ void IPMPosAdjustZIndex(void)
     
 
 /***********************************************************************
-    ��¼�ϴε���ʱ��Ϊ��ʼλ��
+    锟斤拷录锟较次碉拷锟斤拷时锟斤拷为锟斤拷始位锟斤拷
 ************************************************************************/
 void IPMCheckInitPos(void)
 {    
-	//�����ϴε���Ƕȣ�����ʶ�𱣴�Ƕ��Ƿ����
-    if(gMainStatus.ParaCalTimes == 0)  //�ϵ�ֻ����һ�εĲ���ת��
+	//锟斤拷锟斤拷锟较次碉拷锟斤拷嵌龋锟斤拷锟斤拷锟绞讹拷鸨４锟角讹拷锟角凤拷锟斤拷锟�
+    if(gMainStatus.ParaCalTimes == 0)  //锟较碉拷只锟斤拷锟斤拷一锟轿的诧拷锟斤拷转锟斤拷
 	{
         gMainStatus.ParaCalTimes = 1;        
         
-	    gIPMPos.PowerOffPosDeg = ((Ulong)gIPMPos.PowerOffPos << 16)/3600;	//ʶ���ʼ�Ƕ�,��ȡ�ϴ��µ�Ƕ�
+	    gIPMPos.PowerOffPosDeg = ((Ulong)gIPMPos.PowerOffPos << 16)/3600;	//识锟斤拷锟绞硷拷嵌锟�,锟斤拷取锟较达拷锟铰碉拷嵌锟�
 	    SetIPMPos((Uint)gIPMPos.PowerOffPosDeg);
 		SetIPMRefPos((Uint)gIPMPos.PowerOffPosDeg);
-//		if(IDC_SVC_CTL == gMainCmd.Command.bit.ControlMode)       //svc�ϵ���¼��һ�δż�λ��
+//		if(IDC_SVC_CTL == gMainCmd.Command.bit.ControlMode)       //svc锟较碉拷锟斤拷录锟斤拷一锟轿磁硷拷位锟斤拷
 	    {
 	        SvcSetRotorPos(gIPMPos.PowerOffPosDeg);
 	    }
     }        
 }
 /************************************************************
-	����ͬ�����ż���ʼλ�ýǼ��׶�
+	锟斤拷锟斤拷同锟斤拷锟斤拷锟脚硷拷锟斤拷始位锟矫角硷拷锟阶讹拷
 ************************************************************/
 void RunCaseIpmInitPos(void)
 {
@@ -184,7 +184,7 @@ void RunCaseIpmInitPos(void)
 		DisableDrive();
         //if(gIPMPos.InitPosMethod == INIT_POS_VOLT_PULSE)
         //{
-	    SynInitPosDetSetPwm(6);		    //ͬ����������ʶ�ָ��Ĵ�������
+	    SynInitPosDetSetPwm(6);		    //同锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷识锟街革拷锟侥达拷锟斤拷锟斤拷锟斤拷
         //}
 		gIPMInitPos.Step = 0;
 		ResetADCEndIsr();
@@ -199,7 +199,7 @@ void RunCaseIpmInitPos(void)
 		    SetADCEndIsr(ADCEndIsrTune_POLSE_POS);
 			if(gIPMInitPos.Step == 0)		
 			{
-       			gIPMInitPos.Step = 1;                       // �þ�̬��ʶ��־
+       			gIPMInitPos.Step = 1;                       // 锟矫撅拷态锟斤拷识锟斤拷志
        			gMainStatus.SubStep ++;
 			}
 			else
@@ -210,7 +210,7 @@ void RunCaseIpmInitPos(void)
             break;
 
         case 2:
-            if(gIPMInitPos.Step == 0)           // �жϱ�ʶ���      
+            if(gIPMInitPos.Step == 0)           // 锟叫断憋拷识锟斤拷锟�      
         	{ 
 				gIPMPos.CompPos = ((Ulong)gIPMPos.CompPosFun << 16) / 3600;
 				gIPMPos.InitPos = gIPMPos.InitPos + gIPMPos.CompPos;
@@ -218,7 +218,7 @@ void RunCaseIpmInitPos(void)
 				SetIPMRefPos((Uint)gIPMPos.InitPos);
                 SvcSetRotorPos(gIPMPos.InitPos);   
 
-        		if(abs((int)(gIPMPos.PowerOffPosDeg - gIPMPos.RotorPos)) < 3641)
+        		if(abs((s16)(gIPMPos.PowerOffPosDeg - gIPMPos.RotorPos)) < 3641)
         		{
         			SetIPMPos((Uint)gIPMPos.PowerOffPosDeg);	    //rt
 				    SetIPMRefPos((Uint)gIPMPos.PowerOffPosDeg);
@@ -233,14 +233,14 @@ void RunCaseIpmInitPos(void)
 //					SynCalLdAndLq(gIPMPos.InitPos);//SynCalLdAndLq(gIPMPos.RotorPos);
 			  	    IPMCalAcrPIDCoff();
 				}
-        		gMainStatus.SubStep ++;             //���Զ��һ�ģ���PWM�ָ����
+        		gMainStatus.SubStep ++;             //锟斤拷锟皆讹拷锟揭伙拷模锟斤拷锟絇WM锟街革拷锟斤拷锟�
         	}   //else waiting interrupt deal
             break;
             
         case 3:
             	InitSetPWM();
    	            InitSetAdc();
-                SetInterruptEnable();	            // �����ʶ��Ŀ��;�˳����ж��п����ǹرյģ����ڴ˴�
+                SetInterruptEnable();	            // 锟斤拷锟斤拷锟绞讹拷锟侥匡拷锟酵撅拷顺锟斤拷锟斤拷卸锟斤拷锌锟斤拷锟斤拷枪乇盏模锟斤拷锟斤拷诖舜锟�
                 gMainStatus.SubStep ++; 
                 break;
                 
@@ -249,7 +249,7 @@ void RunCaseIpmInitPos(void)
             PrepareParForRun();
             gMainStatus.RunStep = STATUS_STOP;
             gMainStatus.SubStep = 0;
-            gMainStatus.PrgStatus.all = 0;		//���п�����Ч
+            gMainStatus.PrgStatus.all = 0;		//锟斤拷锟叫匡拷锟斤拷锟斤拷效
 
             break;
             
@@ -262,14 +262,14 @@ void RunCaseIpmInitPos(void)
 }
 #if 0
 /************************************************************
-	LD��LQ���м��㺯��
+	LD锟斤拷LQ锟斤拷锟叫硷拷锟姐函锟斤拷
 	LAB = A-B*Cos(2*Theta+4*pi/3)	:= gIPMInitPos.LPhase[0]
 	LBC = A-B*Cos(2*Theta)		     := gIPMInitPos.LPhase[1]
 	LCA = A-B*Cos(2*Theta-4*pi/3)	:= gIPMInitPos.LPhase[2]
 ************************************************************/
 void SynCalLdAndLq(Uint m_Pos)
 {
-	int m_Cos1,m_Cos2,m_Cos3;
+	s16 m_Cos1,m_Cos2,m_Cos3;
 	s32 m_CoffA,m_CoffB;
 	Uint m_Angle;
 	s32 m_Deta1,m_Deta2,m_DetaCos;
@@ -277,11 +277,11 @@ void SynCalLdAndLq(Uint m_Pos)
 	u32 m_L1,m_L2;
 
 	m_Angle = ((m_Pos + 32768)<<1);
-	m_Cos1 = qsin(16384 - (int)m_Angle);        // cos(2*theta)
+	m_Cos1 = qsin(16384 - (s16)m_Angle);        // cos(2*theta)
 	m_Angle += 43691;
-	m_Cos2 = qsin(16384 - (int)m_Angle);        // cos(2*theta + 4*pi/3)
+	m_Cos2 = qsin(16384 - (s16)m_Angle);        // cos(2*theta + 4*pi/3)
 	m_Angle = (m_Pos<<1) - 43691;
-    m_Cos3 = qsin(16384 - (int)m_Angle);        // cos(2*theta - 4*pi/3)
+    m_Cos3 = qsin(16384 - (s16)m_Angle);        // cos(2*theta - 4*pi/3)
 
     m_Deta1 = labs((s32)m_Cos3 - (s32)m_Cos1);
 	m_Deta2 = labs((s32)m_Cos2 - (s32)m_Cos1);
@@ -313,7 +313,7 @@ void SynCalLdAndLq(Uint m_Pos)
 }
 #elif 1
 /************************************************************
-	LD��LQ���м��㺯��
+	LD锟斤拷LQ锟斤拷锟叫硷拷锟姐函锟斤拷
 	LAB = A-B*Cos(2*Theta+4*pi/3)	:= gIPMInitPos.LPhase[0]
 	LBC = A-B*Cos(2*Theta)		     := gIPMInitPos.LPhase[1]
 	LCA = A-B*Cos(2*Theta-4*pi/3)	:= gIPMInitPos.LPhase[2]
@@ -330,22 +330,22 @@ void SynCalLdAndLq(void)
 	gIPMInitPos.Ld = (u16)(m_L0 + m_DetaL);
 	gIPMInitPos.Lq = (u16)(m_L0 - m_DetaL);
 
-//	gIPMInitPos.InitPosSrc = user_atan(m_L2,m_L1) / 2;				// ��������ż��Ƕȣ���Ϊ͹�����ֱ���жϼ��ԣ�����������¼���
+//	gIPMInitPos.InitPosSrc = user_atan(m_L2,m_L1) / 2;				// 锟斤拷锟斤拷锟斤拷锟斤拷偶锟斤拷嵌龋锟斤拷锟轿癸拷锟斤拷锟斤拷直锟斤拷锟叫断硷拷锟皆ｏ拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷录锟斤拷锟�
 
     gMotorExtReg.LD = gIPMInitPos.Ld;
     gMotorExtReg.LQ = gIPMInitPos.Lq;
 }
 #endif
 /************************************************************
-	ʸ�����Ƶĵ���������������ת����Ԥ��ת���ò�����
-	ʱ��Ļ�ֵΪ:10/(2*pi*gBasePar.FullFreq), gBasePar.FullFreq01Ϊ0.01Hz��λ��ʱ���ֵ��λ:��
-    �Ȱ���5KHz�ز�Ƶ�ʼ�������������������������ͺ�ʱ��ΪTDelay = 0.75Tc = 150us
-    150us��Ӧ����ֵΪ: (150 * 2 * pi * gBasePar.FullFreq)/(1000000*100) = gBasePar.FullFreq/106100
-    (Ƶ�ʵĻ�ֵΪgBasePar.FullFreq��������С����)
+	矢锟斤拷锟斤拷锟狡的碉拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷转锟斤拷锟斤拷预锟斤拷转锟斤拷锟矫诧拷锟斤拷锟斤拷
+	时锟斤拷幕锟街滴�:10/(2*pi*gBasePar.FullFreq), gBasePar.FullFreq01为0.01Hz锟斤拷位锟斤拷时锟斤拷锟街碉拷锟轿�:锟斤拷
+    锟饺帮拷锟斤拷5KHz锟截诧拷频锟绞硷拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷秃锟绞憋拷锟轿猅Delay = 0.75Tc = 150us
+    150us锟斤拷应锟斤拷锟斤拷值为: (150 * 2 * pi * gBasePar.FullFreq)/(1000000*100) = gBasePar.FullFreq/106100
+    (频锟绞的伙拷值为gBasePar.FullFreq锟斤拷锟斤拷锟斤拷锟斤拷小锟斤拷锟斤拷)
     Kp = Ls / 2 * TDelay
-       = 53050 * Ls/gBasePar.FullFreq        Q12��ʽ
+       = 53050 * Ls/gBasePar.FullFreq        Q12锟斤拷式
        
-    ki = (Rs/2*TDelay)*Tc/2(��ɢ����ÿ�ز����ڵ���2��)
+    ki = (Rs/2*TDelay)*Tc/2(锟斤拷散锟斤拷锟斤拷每锟截诧拷锟斤拷锟节碉拷锟斤拷2锟斤拷)
        = Rs/3; 
 ************************************************************/
 void IPMCalAcrPIDCoff(void)
@@ -354,38 +354,38 @@ void IPMCalAcrPIDCoff(void)
     Uint m_UData,m_BaseL;
 	Ulong m_Ulong;
     
-	//��л�ֵΪ���迹��?2*pi*���Ƶ��
+	//锟斤拷谢锟街滴拷锟斤拷杩癸拷锟�?2*pi*锟斤拷锟狡碉拷锟�
 	m_BaseL = ((Ulong)gMotorInfo.Votage * 3678)/gMotorInfo.Current;
 	m_BaseL = ((Ulong)m_BaseL * 5000)/gBasePar.FullFreq01; 
 
 	m_UData = ((Ulong)gMotorExtReg.RsPm * (Ulong)gMotorInfo.Current)/gMotorInfo.Votage;	
     gMotorExtPer.Rpm = ((Ulong)m_UData * 18597)>>14;
 	m_Ulong = (((Ulong)gMotorExtReg.LD <<15) + m_BaseL) >>1;
-    gMotorExtPer.LD = m_Ulong / m_BaseL / 10;                   // ͬ����d����Q13
+    gMotorExtPer.LD = m_Ulong / m_BaseL / 10;                   // 同锟斤拷锟斤拷d锟斤拷锟斤拷Q13
     m_Ulong = (((Ulong)gMotorExtReg.LQ <<15) + m_BaseL) >>1;
     gMotorExtPer.LQ = m_Ulong / m_BaseL / 10;   
 
-	m_Long = (53050UL * (u32)(gMotorExtPer.LD>>1))/gBasePar.FullFreq01;/*>>��ʾQ��ʽ��Q13ת��ΪQ12��ʽ*/
-    gPmParEst.IdKp  = (u16)Min(m_Long,8000);  // ���ֵ����Ϊ8000,wyk
-    gPmParEst.IqKp  =  gPmParEst.IdKp;      // IqKpʹ��D����
+	m_Long = (53050UL * (u32)(gMotorExtPer.LD>>1))/gBasePar.FullFreq01;/*>>锟斤拷示Q锟斤拷式锟斤拷Q13转锟斤拷为Q12锟斤拷式*/
+    gPmParEst.IdKp  = (u16)Min(m_Long,8000);  // 锟斤拷锟街碉拷锟斤拷锟轿�8000,wyk
+    gPmParEst.IqKp  =  gPmParEst.IdKp;      // IqKp使锟斤拷D锟斤拷锟斤拷
     //m_Long = (53050UL * (u32)(gMotorExtPer.LQ>>1))/gBasePar.FullFreq01;
     //gPmParEst.IqKp  = (u16)Min(m_Long,16383);  // 32768   
 
-    gPmParEst.IdKi  = (gMotorExtPer.Rpm/3);                            /*Q16��ʽ*/
+    gPmParEst.IdKi  = (gMotorExtPer.Rpm/3);                            /*Q16锟斤拷式*/
     gPmParEst.IqKi  = gPmParEst.IdKi; 
 
 	if(gUVCoff.RsTune == 2)
 	{
 		if(gBasePar.FcSetApply > C_DOUBLE_ACR_MAX_FC)
 		{
-	        gImAcrQ24.KP = (long)gPmParEst.IdKp * gBasePar.FcSetApply / 100;         // ��ʶʱ��СKp,һ�η�����СKp��Ki       
+	        gImAcrQ24.KP = (long)gPmParEst.IdKp * gBasePar.FcSetApply / 100;         // 锟斤拷识时锟斤拷小Kp,一锟轿凤拷锟斤拷锟斤拷小Kp锟斤拷Ki       
 	        gItAcrQ24.KP = (long)gPmParEst.IqKp * gBasePar.FcSetApply / 100;
 	        gImAcrQ24.KI = (s32)gPmParEst.IdKi ;
 	        gItAcrQ24.KI = (s32)gPmParEst.IqKi ;
 		}
 		else
 		{
-			gImAcrQ24.KP = (long)gPmParEst.IdKp * gBasePar.FcSetApply / 50;         // ������ʶʱ��СKp��Ki       
+			gImAcrQ24.KP = (long)gPmParEst.IdKp * gBasePar.FcSetApply / 50;         // 锟斤拷锟斤拷锟斤拷识时锟斤拷小Kp锟斤拷Ki       
 	        gItAcrQ24.KP = (long)gPmParEst.IqKp * gBasePar.FcSetApply / 50;
 	        gImAcrQ24.KI = (s32)gPmParEst.IdKi ;
 	        gItAcrQ24.KI = (s32)gPmParEst.IqKi ;
@@ -397,10 +397,10 @@ void PrepPmsmCsrPrar()
 {     
     long    ImKp, ImKi, ItKp, ItKi;
     long    m_Long,m_Long1;
-   // int     sGain;  // ���ֵ�������
+   // s16     sGain;  // 锟斤拷锟街碉拷锟斤拷锟斤拷锟斤拷
     
-// ͬ���������ز���������������
-    if(gBasePar.FcSetApply > C_DOUBLE_ACR_MAX_FC)    // һ�η�����Ҫ����PI
+// 同锟斤拷锟斤拷锟斤拷锟斤拷锟截诧拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷
+    if(gBasePar.FcSetApply > C_DOUBLE_ACR_MAX_FC)    // 一锟轿凤拷锟斤拷锟斤拷要锟斤拷锟斤拷PI
 	{
 		ImKp = (long)gVCPar.AcrImKp * gBasePar.FcSetApply  / 100L;   		      	    
 	    ItKp = (long)gVCPar.AcrItKp * gBasePar.FcSetApply  / 100L;
@@ -452,7 +452,7 @@ void PrepPmsmCsrPrar()
 	}
 	gPmCsr2.Ki = m_Long1;
 }
-// ͬ����������㣬����������ת�綯��
+// 同锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷悖拷锟斤拷锟斤拷锟斤拷锟斤拷锟阶拷缍拷锟�
 void PmDecoupleDeal()
 {
     long temp;
@@ -481,7 +481,7 @@ void PmDecoupleDeal()
     gPmDecoup.RotVdSet = - (long)gPmDecoup.Omeg * gPmDecoup.PhiSqSet >> 15;      // Q12
 }
 /*************************************************************
-    ��ͬ�����������õĳ������������г�ʼ���������п�ʼʱִ��һ��
+    锟斤拷同锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟矫的筹拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟叫筹拷始锟斤拷锟斤拷锟斤拷锟斤拷锟叫匡拷始时执锟斤拷一锟斤拷
 *************************************************************/
 void ResetParForPmsmFwc(void)
 {
@@ -489,14 +489,14 @@ void ResetParForPmsmFwc(void)
 
     gPmFluxWeak.IqLpf    = 0;
 
-    //���������ű�����ʼ��
+    //锟斤拷锟斤拷锟斤拷锟斤拷锟脚憋拷锟斤拷锟斤拷始锟斤拷
     gPmFluxWeak.AdId     = 0;			
 	gPmFluxWeak.AdIdIntg = 0;
     gPmFluxWeak.IdMixAdjFlag = 0;
 	gPmFluxWeak.AdFreq   = 0;
 	gPmFluxWeak.AdFreqIntg = 0;
     
-    m_Current = (((u32)gMotorExtPer.FluxRotor << 13) / gMotorExtPer.LD) - 1000;  // ��һ��������		
+    m_Current = (((u32)gMotorExtPer.FluxRotor << 13) / gMotorExtPer.LD) - 1000;  // 锟斤拷一锟斤拷锟斤拷锟斤拷锟斤拷		
     m_Current = ((m_Current > 4500UL)?4500UL : m_Current);	
 	if( gMotorInfo.Current > gInvInfo.InvCurrent)                 
     {
@@ -506,10 +506,10 @@ void ResetParForPmsmFwc(void)
 
 	gPmFluxWeak.FreqMax = (s16)(gMotorInfo.FreqPer / 2);
 
-    gPmFluxWeak.SalientRate = ((u32)gMotorExtInfo.LQ * 10UL)/gMotorExtInfo.LD; //������͹����
+    gPmFluxWeak.SalientRate = ((u32)gMotorExtInfo.LQ * 10UL)/gMotorExtInfo.LD; //锟斤拷锟斤拷锟斤拷凸锟斤拷锟斤拷
 }
 /*************************************************************
-    ͬ�����Զ�������ʽ���ſ���
+    同锟斤拷锟斤拷锟皆讹拷锟斤拷锟斤拷锟斤拷式锟斤拷锟脚匡拷锟斤拷
 *************************************************************/
 s32 PmsmFwcAdjMethod(void)
 {
@@ -517,14 +517,14 @@ s32 PmsmFwcAdjMethod(void)
     s16 m_Deta;
     u16 m_DetaAbs,m_Ki;
 
-	//gPmFluxWeak.VoltLpf = Filter16(gUAmpTheta.Amp,gPmFluxWeak.VoltLpf);  //�����ѹ�˨�?Q12
+	//gPmFluxWeak.VoltLpf = Filter16(gUAmpTheta.Amp,gPmFluxWeak.VoltLpf);  //锟斤拷锟斤拷锟窖癸拷栓锟�?Q12
     
     if(gFluxWeak.CoefFlux != 0)
     {
     	m_Deta = gOutVolt.LimitOutVoltPer - gPmFluxWeak.VoltLpf;
         m_Deta = __IQsat(m_Deta,200,-1000);
         m_DetaAbs = abs(m_Deta);
-        m_Ki =  gFluxWeak.CoefFlux * m_DetaAbs;                       //��ߵ���������
+        m_Ki =  gFluxWeak.CoefFlux * m_DetaAbs;                       //锟斤拷叩锟斤拷锟斤拷锟斤拷锟斤拷锟�
         m_Ki = (m_Ki > 20000)?20000:m_Ki;
         m_s32 = gPmFluxWeak.AdIdIntg + (((s32)m_Ki * (s32)m_Deta));
         m_s32 = (m_s32 > 0)?0:m_s32;
@@ -546,7 +546,7 @@ s32 PmsmFwcAdjMethod(void)
     return(m_s32<<12);
 }
 /************************************************************
-    ͬ�����Զ��������е�?
+    同锟斤拷锟斤拷锟皆讹拷锟斤拷锟斤拷锟斤拷锟叫碉拷?
 *************************************************************/
 s16 PmsmFreqAdjMethod(void)
 {
@@ -554,14 +554,14 @@ s16 PmsmFreqAdjMethod(void)
     s16 m_Deta;
     u16 m_DetaAbs,m_Ki;
 
-	//gPmFluxWeak.VoltLpf = Filter16(gUAmpTheta.Amp,gPmFluxWeak.VoltLpf);  //�����ѹ�˲�ֵ Q12
+	//gPmFluxWeak.VoltLpf = Filter16(gUAmpTheta.Amp,gPmFluxWeak.VoltLpf);  //锟斤拷锟斤拷锟窖癸拷瞬锟街� Q12
     
     if(gFluxWeak.CoefFlux != 0)
     {
     	m_Deta = gOutVolt.LimitOutVoltPer - gPmFluxWeak.VoltLpf;
         m_Deta = __IQsat(m_Deta,200,-1000);
         m_DetaAbs = abs(m_Deta);
-        m_Ki = gFluxWeak.CoefFlux * m_DetaAbs;                       //��ߵ���������
+        m_Ki = gFluxWeak.CoefFlux * m_DetaAbs;                       //锟斤拷叩锟斤拷锟斤拷锟斤拷锟斤拷锟�
         m_Ki = (m_Ki > 20000)?20000:m_Ki;
         m_s32 = gPmFluxWeak.AdFreqIntg + (((s32)m_Ki * (s32)m_Deta));
         m_s32 = (m_s32 > 0)?0:m_s32;
@@ -577,18 +577,18 @@ s16 PmsmFreqAdjMethod(void)
     return(gPmFluxWeak.AdFreq);
 }
 /*************************************************************
-    ����͹����������ת�ص����ȿ��Ƴ���͹���ʴ���1.5ʱ�Ž�
-    �����ת�ص����ȿ��?
+    锟斤拷锟斤拷凸锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷转锟截碉拷锟斤拷锟饺匡拷锟狡筹拷锟斤拷凸锟斤拷锟绞达拷锟斤拷1.5时锟脚斤拷
+    锟斤拷锟斤拷锟阶拷氐锟斤拷锟斤拷瓤锟斤拷?
 *************************************************************/
 s16 PmsmMaxTorqCtrl(void)
 {
     s16 m_Id;
     s32 m_Current,m_s32;   
     
-    m_s32 = gIMTSetApply.T >> 12;	                                            //T���������ֵ��Q12
+    m_s32 = gIMTSetApply.T >> 12;	                                            //T锟斤拷锟斤拷锟斤拷锟斤拷锟街碉拷锟絈12
 	gPmFluxWeak.IqLpf = Filter16(m_s32,gPmFluxWeak.IqLpf); 
 
-    if((gPmFluxWeak.SalientRate > 15)&&(gPmFluxWeak.PmsmMaxTorqCtrlEnable == 1)&&(gCtrMotorType == SYNC_FVC))                 // ͹����1.5���������ת�ص�������
+    if((gPmFluxWeak.SalientRate > 15)&&(gPmFluxWeak.PmsmMaxTorqCtrlEnable == 1)&&(gCtrMotorType == SYNC_FVC))                 // 凸锟斤拷锟斤拷1.5锟斤拷锟斤拷锟斤拷锟斤拷锟阶拷氐锟斤拷锟斤拷锟斤拷锟�
     { 
         m_Current = ((s32)gMotorExtPer.FluxRotor << 12)/((s32)(gMotorExtPer.LQ - gMotorExtPer.LD));       //Q12                                 
         m_Current = (m_Current * gPmFluxWeak.SalientRateCoff)/100;
@@ -604,7 +604,7 @@ s16 PmsmMaxTorqCtrl(void)
 }
 
 /*************************************************************
-    ͬ�������ſ���--���㷽���������ŵ�������
+    同锟斤拷锟斤拷锟斤拷锟脚匡拷锟斤拷--锟斤拷锟姐方锟斤拷锟斤拷锟斤拷锟斤拷锟脚碉拷锟斤拷锟斤拷锟斤拷
 *************************************************************/
 /*s16 PmsmFwcCalMethod(void)
 {    
@@ -615,10 +615,10 @@ s16 PmsmMaxTorqCtrl(void)
     //m_s32 = gIMTSetApply.T>>12;	
 	//gPmFluxWeak.IqLpf = Filter16(m_s32,gPmFluxWeak.IqLpf);
 
-    //��ת�������ŵ��� 
-    m_Id = PmsmMaxTorqCtrl();                                                   // ���ת�ص����ȿ���
+    //锟斤拷转锟斤拷锟斤拷锟斤拷锟脚碉拷锟斤拷 
+    m_Id = PmsmMaxTorqCtrl();                                                   // 锟斤拷锟阶拷氐锟斤拷锟斤拷瓤锟斤拷锟�
 
-    //�㹦�������ŵ��� 
+    //锟姐功锟斤拷锟斤拷锟斤拷锟脚碉拷锟斤拷 
     m_Freq = abs(gRotorSpeed.SpeedApply);
 	m_Freq = Max(m_Freq,1000);
     m_s32 = ((s32)gMotorExtPer.LQ * gPmFluxWeak.IqLpf)>>13;
@@ -630,7 +630,7 @@ s16 PmsmMaxTorqCtrl(void)
 	m_s32 = (m_Uq << 15)/(s32)m_Freq - (s32)gMotorExtPer.FluxRotor;
     m_s32 = (m_s32<<13)/gMotorExtPer.LD;
     //m_Id1 = (m_s32 * gPmFluxWeak.CalImAdjGain)/100;     
-    m_Id1 = m_s32;             // ȡ��������wyk
+    m_Id1 = m_s32;             // 取锟斤拷锟斤拷锟斤拷锟斤拷wyk
 
     if(m_Id1 < m_Id)
     {
@@ -646,7 +646,7 @@ s16 PmsmMaxTorqCtrl(void)
     return(m_Id1);    
 }*/
 /*************************************************************
-    ǰ��+�����Ŀ��Ʒ�ʽ:�����������Ϊ��ʱ��Ϊ���㷽ʽ
+    前锟斤拷+锟斤拷锟斤拷锟侥匡拷锟狡凤拷式:锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟轿拷锟绞憋拷锟轿拷锟斤拷惴绞�
 *************************************************************/
 /*s32 PmsmFwcMixMethod(void)
 {
@@ -655,7 +655,7 @@ s16 PmsmMaxTorqCtrl(void)
 
     m_IdCal = PmsmFwcCalMethod();
     	
-	//gPmFluxWeak.VoltLpf = Filter16(gUAmpTheta.Amp,gPmFluxWeak.VoltLpf);  //�����ѹ�˲�ֵ Q12
+	//gPmFluxWeak.VoltLpf = Filter16(gUAmpTheta.Amp,gPmFluxWeak.VoltLpf);  //锟斤拷锟斤拷锟窖癸拷瞬锟街� Q12
     if((gFluxWeak.CoefFlux != 0) && (gPmFluxWeak.IdMixAdjFlag == 1))
     {
     	m_Deta = gOutVolt.LimitOutVoltPer - gPmFluxWeak.VoltLpf;
@@ -678,8 +678,8 @@ s16 PmsmMaxTorqCtrl(void)
     return(m_s32);
 }*/
 /*************************************************************
-	(�ϵ绺����ɺ�ִ��)ͣ������£�ͬ����������λ�ý�У������
-	�Ծ���λ��ȡ16��ƽ��ֵ�������жϣ���֤�ɿ���
+	(锟较电缓锟斤拷锟斤拷珊锟街达拷锟�)停锟斤拷锟斤拷锟斤拷拢锟酵拷锟斤拷锟斤拷锟斤拷锟斤拷锟轿伙拷媒锟叫ｏ拷锟斤拷锟斤拷锟�
+	锟皆撅拷锟斤拷位锟斤拷取16锟斤拷平锟斤拷值锟斤拷锟斤拷锟斤拷锟叫断ｏ拷锟斤拷证锟缴匡拷锟斤拷
 *************************************************************/
 s16 IPMPosAdjustStop(void)
 {
@@ -693,7 +693,7 @@ s16 IPMPosAdjustStop(void)
     {
         m_Cnt = 101;
         return 1;
-    }// ȷ����������ϵ��ִֻ��һ�Σ����ٶ��ִ��
+    }// 确锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷系锟斤拷只执锟斤拷一锟轿ｏ拷锟斤拷锟劫讹拷锟街达拷锟�
     
     m_AbsPosTemp = IPMCalAbsPos();
     if(m_Cnt == 0)
@@ -711,11 +711,11 @@ s16 IPMPosAdjustStop(void)
         if(abs(m_AbsPos - gIPMPos.RotorPos) > C_MAX_DETA_POS_ABS)
         {
             SetIPMPos(m_AbsPos);
-        }// ͨ��UVW����CD�źż���λ�ýǺ͵�ǰλ�ý�ƫ�����У���Ƕ�
+        }// 通锟斤拷UVW锟斤拷锟斤拷CD锟脚号硷拷锟斤拷位锟矫角和碉拷前位锟矫斤拷偏锟斤拷锟斤拷锟叫ｏ拷锟斤拷嵌锟�
         if(abs(m_AbsPos - (u16)(gPGData.RefPos>>8)) > C_MAX_DETA_POS_ABS)
         {
             SetIPMRefPos(m_AbsPos);
-        }// ͨ��UVW����CD�źż���λ�ýǺ͵�ǰλ�ý�ƫ�����У���Ƕ�  
+        }// 通锟斤拷UVW锟斤拷锟斤拷CD锟脚号硷拷锟斤拷位锟矫角和碉拷前位锟矫斤拷偏锟斤拷锟斤拷锟叫ｏ拷锟斤拷嵌锟�  
         m_Return = 1;
     }
     m_Cnt++;
@@ -866,7 +866,7 @@ void IMFluxWeak2(void)
 }
 
 
-void CalUVWVoltSet(int Phase)
+void CalUVWVoltSet(s16 Phase)
 {
     s32  m_U,m_V,m_W;
     s32  m_Coff;

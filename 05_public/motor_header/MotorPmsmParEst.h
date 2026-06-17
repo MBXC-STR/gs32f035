@@ -25,8 +25,8 @@ typedef struct IPM_ZERO_POS_STRUCT_DEF {
 	Uint	Cnt;
 	//Uint	ABAngleBak;
 	long	QepBak;
-	int		DetectCnt;
-    //int     UvwCnt;
+	s16		DetectCnt;
+    //s16     UvwCnt;
 	long	TotalErr;				//上次下电时候的角度
 
     Uint    CurLimit;
@@ -55,8 +55,8 @@ typedef struct IPM_INITPOS_PULSE_STRUCT_DEF {
 	Uint	CurLimitBig;
 	u16     CurLimitAdjSmall;            // 初始位置角检测电流系数
 	u16     CurLimitAdjBig;            // 初始位置角检测电流系数
-	int		Cur[12];
-    int     PhsChkStep;             // 同步机缺相检测步骤
+	s16		Cur[12];
+    s16     PhsChkStep;             // 同步机缺相检测步骤
     Uint    InitTestFlag;           // 启动前是否需要磁极位置检测 0-检测，1-不检测,2-上电第一次检测
     u16     ErrorIintPosEnable;
     s16     CurBase;
@@ -65,8 +65,8 @@ typedef struct IPM_INITPOS_PULSE_STRUCT_DEF {
     s16     CurIV;
 	s16     CurIW;
 	Uint	WidthFlag;
-	int		InitPosSrc;
-	int		CurRem[24];
+	s16		InitPosSrc;
+	s16		CurRem[24];
 }IPM_INITPOS_PULSE_STR;        //永磁同步电机上电初始位置检测的数据结构(电压脉冲法)
 
 typedef struct PMSM_EST_PARAM_DEF
@@ -98,13 +98,13 @@ typedef struct PMSM_EST_BEMF_DEF
     Ulong   TotalVq1;           // 积分第一点电压值
     Ulong   TotalVq2;           // 积分第二点电压值
 
-    int     IdSet;              // M 轴电流设定
-    int     IdSetFilt;
-    int     IqSet;
-    int     TuneFreqSet;        // 实时的速度给定
-    int     TuneFreqAim;
+    s16     IdSet;              // M 轴电流设定
+    s16     IdSetFilt;
+    s16     IqSet;
+    s16     TuneFreqSet;        // 实时的速度给定
+    s16     TuneFreqAim;
     Ulong   AccDecTick;         // 加减速时间, 2ms Ticker个数
-    int     FreqStep;
+    s16     FreqStep;
     long    FreqRem;
     
     Uint    BemfVolt;           // 反电动势， 标么化即为转子磁链

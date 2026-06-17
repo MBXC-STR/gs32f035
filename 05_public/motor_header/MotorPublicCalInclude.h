@@ -25,7 +25,7 @@ typedef struct SHORT_GND_STRUCT_DEF {
 	Uint 	Comper;
 	Uint 	BaseUDC;
 	Uint	ocFlag;				// 对地短路检测子故障标志, 1为过流, 2为过压
-	int		ShortCur;
+	s16		ShortCur;
 }SHORT_GND_STRUCT;	//上电对地短路检测数据结构
 typedef struct BRAKE_CONTROL_STRUCT_DEF{
 	Uint	Flag;				//当前开通/关断状态: 
@@ -57,7 +57,7 @@ typedef struct BRAKE_CONTROL_STRUCT_DEF{
 #endif
 }BRAKE_CONTROL_STRUCT;//制动电阻控制模块使用的数据结构
 typedef struct DC_BRAKE_STRUCT_DEF{
-	int			Time;			//计数用
+	s16			Time;			//计数用
 	PID_STRUCT	PID;			//制动电压
 }DC_BRAKE_STRUCT;//直流制动模块使用的数据结构
 typedef struct JUDGE_POWER_LOW_DEF {

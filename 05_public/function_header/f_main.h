@@ -93,7 +93,7 @@
 
 #define DoNothing()                 // 空处理
 
-#define  GetTime() 	(CpuTimer1.RegsAddr->TIM.all)
+//#define  GetTime() 	(CpuTimer1.RegsAddr->TIM.all)
 
 #define MAX_UINT32  0xFFFFFFFF      // 32bit的无符号最大值
 #define MAX_UINT16  0xFFFF          // 16bit的无符号最大值

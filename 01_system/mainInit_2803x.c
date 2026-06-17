@@ -15,12 +15,17 @@
 #include "MotorDefine.h"
 #include "MotorInclude.h"
 
+#ifdef TARGET_GS32
 
+#else
 /**修改FLASH寄存器的程序需要搬移到FLASH中执行**/
 #pragma CODE_SECTION(InitFlash, "ramfuncs");
 extern COPY_TABLE prginRAM;
 
 void 	copy_prg(COPY_TABLE *tp);
+
+#endif
+
 void   	DisableDog(void);   
 void 	InitPll(Uint val);
 void	InitFlash(void);
@@ -43,6 +48,10 @@ extern interrupt void SCI_TXD_isr(void);
 ************************************************************/
 void InitSysCtrl()
 {   
+#ifdef TARGET_GS32
+	DisableDog();			// Disable the watchdog
+	Device_init();
+#else
     DisableDog();			// Disable the watchdog
 
     // *IMPORTANT*
@@ -70,6 +79,7 @@ void InitSysCtrl()
     InitFlash();				// Initializes the Flash Control registers
 
     InitPeripheralClocks();	// Initialize the peripheral clocks
+#endif
 }
 
 /************************************************************
@@ -121,6 +131,32 @@ void SetInterruptEnable()
    PieCtrlRegs.PIEIER2.bit.INTx2 = 1;
    #endif
 }
+
+
+void InitCpuTimers(void)
+{
+	CPUTimer_setPreScaler(CPUTIMER0_BASE, 0);
+	CPUTimer_setPreScaler(CPUTIMER1_BASE, 0);
+
+	CPUTimer_setTimerSize(CPUTIMER0_BASE, CPUTIMER_TIMERSIZE_32BIT);
+	CPUTimer_setTimerSize(CPUTIMER1_BASE, CPUTIMER_TIMERSIZE_32BIT);
+
+	CPUTimer_setTimerMode(CPUTIMER0_BASE, CPUTIMER_TIMERMODE_PERIODIC);
+	CPUTimer_setTimerMode(CPUTIMER1_BASE, CPUTIMER_TIMERMODE_PERIODIC);
+
+	CPUTimer_setPeriod(CPUTIMER0_BASE, 0xFFFFFFFF);
+	CPUTimer_setPeriod(CPUTIMER1_BASE, 0xFFFFFFFF);
+
+	CPUTimer_stopTimer(CPUTIMER0_BASE);
+	CPUTimer_stopTimer(CPUTIMER1_BASE);
+
+	CPUTimer_reloadTimerCounter(CPUTIMER0_BASE);
+	CPUTimer_reloadTimerCounter(CPUTIMER1_BASE);
+
+	CPUTimer_clearOverflowFlag(CPUTIMER0_BASE);
+	CPUTimer_clearOverflowFlag(CPUTIMER1_BASE);
+}
+
 
 /************************************************************
 初始化DSP的所有外设，为电机控制和接口做准备
@@ -189,8 +225,7 @@ void InitFlash(void)
 void KickDog(void)
 {
     EALLOW;
-    SysCtrlRegs.WDKEY = 0x0055;
-    SysCtrlRegs.WDKEY = 0x00AA;
+    SysCtl_serviceWatchdog(WD1_BASE);
     EDIS;
 }
 
@@ -200,8 +235,8 @@ void KickDog(void)
 void DisableDog(void)
 {
     EALLOW;
-    SysCtrlRegs.WDCR= 0x0068;//WDDIS位位1，禁止看门狗模块；WDCHK位只要写就一定的写101，写入其它值会复位单片机
-    EDIS;                                        //WDPS  看门狗预分频，相对于OSCCLK/512
+    SysCtl_disableWatchdog(WD1_BASE);
+    EDIS;
 }
 
 //---------------------------------------------------------------------------
@@ -210,7 +245,11 @@ void DisableDog(void)
 void EnableDog(void)
 {
     EALLOW;
-    SysCtrlRegs.WDCR= 0x002A;//使能看门狗，WDCLK = OSCCLK/512/2
+    SysCtl_disableWatchdog(WD1_BASE);
+    SysCtl_initWatchdog(WD1_BASE, 0xFF);
+    SysCtl_setWatchdogMode(WD1_BASE, WD_MODE_RESET);
+    SysCtl_enableWatchdogDebugMode(WD1_BASE);
+    SysCtl_enableWatchdog(WD1_BASE);
     EDIS;
 }
 
@@ -472,64 +511,124 @@ void InitSetAdc(void)
     s16 waite;
     
     EALLOW;
-    AdcRegs.ADCCTL1.bit.ADCBGPWD  = 1;      // Power ADC BG
-    AdcRegs.ADCCTL1.bit.ADCREFPWD = 1;      // Power reference
-    AdcRegs.ADCCTL1.bit.ADCPWDN   = 1;      // Power ADC
-    AdcRegs.ADCCTL1.bit.ADCENABLE = 1;      // Enable ADC
-    AdcRegs.ADCCTL1.bit.ADCREFSEL = 0;      // Select interal BG
+//    AdcRegs.ADCCTL1.bit.ADCBGPWD  = 1;      // Power ADC BG
+//    AdcRegs.ADCCTL1.bit.ADCREFPWD = 1;      // Power reference
+//    AdcRegs.ADCCTL1.bit.ADCPWDN   = 1;      // Power ADC
+//    AdcRegs.ADCCTL1.bit.ADCENABLE = 1;      // Enable ADC
+//    AdcRegs.ADCCTL1.bit.ADCREFSEL = 0;      // Select interal BG
+    ADC_setVREF((uint32_t)ADCA_BASE, ADC_REFERENCE_EXTERNAL, ADC_REFERENCE_3_3V);
+	ADC_setPrescaler((uint32_t)ADCA_BASE, ADC_CLK_DIV_4_0);
+	ADC_setINLTrim((uint32_t)ADCA_BASE);
+
+	ADC_setVREF((uint32_t)ADCC_BASE, ADC_REFERENCE_EXTERNAL, ADC_REFERENCE_3_3V);
+	ADC_setPrescaler((uint32_t)ADCC_BASE, ADC_CLK_DIV_4_0);
+	ADC_setINLTrim((uint32_t)ADCC_BASE);
+
+	ADC_enableConverter(ADCA_BASE);
+	ADC_enableConverter(ADCC_BASE);
 	EDIS;
     
+
     for(waite = 0;waite<5000;waite++)
     {
-        asm(" RPT #1 || NOP");
+//        asm(" RPT #1 || NOP");
+    	NOP;
     }  //延时1s
     
 	//以下开始设置ADC的控制寄存器、转换通道选择寄存器等
-    EALLOW;    
-	AdcRegs.ADCOFFTRIM.all = 0;
-#if (SOFTSERIES == MD380SOFT)
-    AdcRegs.INTSEL1N2.all = 0x002C;     //通道12转换完成产生中断ADCINT1
-#else
-    AdcRegs.INTSEL1N2.all = 0x0025;     
-#endif
-    AdcRegs.ADCSAMPLEMODE.all = 0;          // 采样模式为0: 顺序采样(非同时采样)
-	AdcRegs.ADCCTL1.bit.INTPULSEPOS	= 1;	//ADCINT1 trips after AdcResults latch   
+//    EALLOW;
+//	AdcRegs.ADCOFFTRIM.all = 0;
+//#if (SOFTSERIES == MD380SOFT)
+////    AdcRegs.INTSEL1N2.all = 0x002C;     //通道12转换完成产生中断ADCINT1
+//	ADC_setInterruptSOCTrigger(ADCC_BASE, ADC_SOC_NUMBER12, ADC_INT_NUMBER1); // SOC12→INT1
+//#else
+////    AdcRegs.INTSEL1N2.all = 0x0025;
+//    ADC_setInterruptSOCTrigger(ADCA_BASE, ADC_SOC_NUMBER5,  ADC_INT_NUMBER1); // SOC5→INT1
+//#endif
+//    AdcRegs.ADCSAMPLEMODE.all = 0;          // 采样模式为0: 顺序采样(非同时采样)
+//	AdcRegs.ADCCTL1.bit.INTPULSEPOS	= 1;	//ADCINT1 trips after AdcResults latch
+    ADC_clearInterruptStatus(ADCA_BASE, ADC_INT_NUMBER1);
+	ADC_setInterruptSource(ADCA_BASE, ADC_INT_NUMBER1, ADC_INT_TRIGGER_EOC5);
+	ADC_enableContinuousMode(ADCA_BASE);
+	ADC_enableInterrupt(ADCA_BASE);
+
+	ADC_setInterruptPulseMode(ADCA_BASE, ADC_PULSE_END_OF_CONV);
+	ADC_setInterruptPulseMode(ADCC_BASE, ADC_PULSE_END_OF_CONV);
+
+	volatile uint32_t sampleWindow = 16;
 
 #if (SOFTSERIES == MD380SOFT)
-    AdcRegs.ADCSOC0CTL.all  = 0x2BC8;    //ePWM1 ADCSOCA触发，转换ADCINB7-GND，采样间隔8个周期
-    AdcRegs.ADCSOC1CTL.all  = 0x2808;    //ADCINA0-IU
-    AdcRegs.ADCSOC2CTL.all  = 0x28C8;    //ADCINA3-IW
-    AdcRegs.ADCSOC3CTL.all  = 0x2948;    //ADCINA5-UDC
-    AdcRegs.ADCSOC4CTL.all  = 0x2A48;    //ADCINB1-TEMP
-    AdcRegs.ADCSOC5CTL.all  = 0x2A08;    //ADCINB0-IV
-    AdcRegs.ADCSOC6CTL.all  = 0x2B48;    //ADCINB5-AI1
-    AdcRegs.ADCSOC7CTL.all  = 0x29C8;    //ADCINA7-AI2
-    AdcRegs.ADCSOC8CTL.all  = 0x2848;    //ADCINA1-AI3
-    AdcRegs.ADCSOC9CTL.all  = 0x2988;    //ADCINA6-UU4      //uvw-U
-    AdcRegs.ADCSOC10CTL.all = 0x2A88;    //ADCINB2-UU5      //uvw-V
-    AdcRegs.ADCSOC11CTL.all = 0x2B08;    //ADCINB4-UU6      //uvw-W
-    AdcRegs.ADCSOC12CTL.all = 0x2B88;    //ADCINB6-UU7 
-    AdcRegs.ADCSOC13CTL.all = 0x2AC8;    //ADCINB3-PL   //用数字端口实现
-    ADC_CLEAR_INT_FLAG;
+//    AdcRegs.ADCSOC0CTL.all  = 0x2BC8;    //ePWM1 ADCSOCA触发，转换ADCINB7-GND，采样间隔8个周期
+//    AdcRegs.ADCSOC1CTL.all  = 0x2808;    //ADCINA0-IU
+//    AdcRegs.ADCSOC2CTL.all  = 0x28C8;    //ADCINA3-IW
+//    AdcRegs.ADCSOC3CTL.all  = 0x2948;    //ADCINA5-UDC
+//    AdcRegs.ADCSOC4CTL.all  = 0x2A48;    //ADCINB1-TEMP
+//    AdcRegs.ADCSOC5CTL.all  = 0x2A08;    //ADCINB0-IV
+//    AdcRegs.ADCSOC6CTL.all  = 0x2B48;    //ADCINB5-AI1
+//    AdcRegs.ADCSOC7CTL.all  = 0x29C8;    //ADCINA7-AI2
+//    AdcRegs.ADCSOC8CTL.all  = 0x2848;    //ADCINA1-AI3
+//    AdcRegs.ADCSOC9CTL.all  = 0x2988;    //ADCINA6-UU4      //uvw-U
+//    AdcRegs.ADCSOC10CTL.all = 0x2A88;    //ADCINB2-UU5      //uvw-V
+//    AdcRegs.ADCSOC11CTL.all = 0x2B08;    //ADCINB4-UU6      //uvw-W
+//    AdcRegs.ADCSOC12CTL.all = 0x2B88;    //ADCINB6-UU7
+//    AdcRegs.ADCSOC13CTL.all = 0x2AC8;    //ADCINB3-PL   //用数字端口实现
+//    ADC_CLEAR_INT_FLAG;
+	ADC_setupSOC(ADCC_BASE, ADC_SOC_NUMBER0,  ADC_TRIGGER_EPWM1_SOCA, ADC_CH_ADCIN7, sampleWindow); // ADCINB7-GND
+	ADC_setupSOC(ADCA_BASE, ADC_SOC_NUMBER1,  ADC_TRIGGER_EPWM1_SOCA, ADC_CH_ADCIN0, sampleWindow); // ADCINA0-IU
+	ADC_setupSOC(ADCA_BASE, ADC_SOC_NUMBER2,  ADC_TRIGGER_EPWM1_SOCA, ADC_CH_ADCIN3, sampleWindow); // ADCINA3-IW
+	ADC_setupSOC(ADCA_BASE, ADC_SOC_NUMBER3,  ADC_TRIGGER_EPWM1_SOCA, ADC_CH_ADCIN5, sampleWindow); // ADCINA5-UDC
+	ADC_setupSOC(ADCC_BASE, ADC_SOC_NUMBER4,  ADC_TRIGGER_EPWM1_SOCA, ADC_CH_ADCIN1, sampleWindow); // ADCINB1-TEMP
+	ADC_setupSOC(ADCC_BASE, ADC_SOC_NUMBER5,  ADC_TRIGGER_EPWM1_SOCA, ADC_CH_ADCIN0, sampleWindow); // ADCINB0-IV
+	ADC_setupSOC(ADCC_BASE, ADC_SOC_NUMBER6,  ADC_TRIGGER_EPWM1_SOCA, ADC_CH_ADCIN5, sampleWindow); // ADCINB5-AI1
+	ADC_setupSOC(ADCA_BASE, ADC_SOC_NUMBER7,  ADC_TRIGGER_EPWM1_SOCA, ADC_CH_ADCIN7, sampleWindow); // ADCINA7-AI2
+	ADC_setupSOC(ADCA_BASE, ADC_SOC_NUMBER8,  ADC_TRIGGER_EPWM1_SOCA, ADC_CH_ADCIN1, sampleWindow); // ADCINA1-AI3
+	ADC_setupSOC(ADCA_BASE, ADC_SOC_NUMBER9,  ADC_TRIGGER_EPWM1_SOCA, ADC_CH_ADCIN6, sampleWindow); // ADCINA6-UU4(uvw-U)
+	ADC_setupSOC(ADCC_BASE, ADC_SOC_NUMBER10, ADC_TRIGGER_EPWM1_SOCA, ADC_CH_ADCIN2, sampleWindow); // ADCINB2-UU5(uvw-V)
+	ADC_setupSOC(ADCC_BASE, ADC_SOC_NUMBER11, ADC_TRIGGER_EPWM1_SOCA, ADC_CH_ADCIN4, sampleWindow); // ADCINB4-UU6(uvw-W)
+	ADC_setupSOC(ADCC_BASE, ADC_SOC_NUMBER12, ADC_TRIGGER_EPWM1_SOCA, ADC_CH_ADCIN6, sampleWindow); // ADCINB6-UU7
+	ADC_setupSOC(ADCC_BASE, ADC_SOC_NUMBER13, ADC_TRIGGER_EPWM1_SOCA, ADC_CH_ADCIN3, sampleWindow); // ADCINB3-PL
+
+	ADC_clearInterruptStatus(ADCA_BASE, ADC_INT_NUMBER1);
+	ADC_clearInterruptStatus(ADCC_BASE, ADC_INT_NUMBER1);
 	EDIS;
 #else
-    AdcRegs.ADCSOC0CTL.all  = 0x2888;    //ADCINA2-IB	//	第一个通道不能用
-    AdcRegs.ADCSOC1CTL.all  = 0x2808;    //ADCINA0-IU
-    AdcRegs.ADCSOC2CTL.all  = 0x28C8;    //ADCINA3-IW
-    AdcRegs.ADCSOC3CTL.all  = 0x2948;    //ADCINA5-UDC
-    AdcRegs.ADCSOC4CTL.all  = 0x2A08;    //ADCINB0-IV
-    AdcRegs.ADCSOC5CTL.all  = 0x2888;    //ADCINA2-IB
-    AdcRegs.ADCSOC6CTL.all  = 0x2B48;    //ADCINB5-AI1
-    AdcRegs.ADCSOC7CTL.all  = 0x29C8;    //ADCINA7-AI2
-    AdcRegs.ADCSOC8CTL.all  = 0x2848;    //ADCINA1-AI3
-    AdcRegs.ADCSOC9CTL.all  = 0x2988;    //ADCINA6-UU4      //uvw-U
-    AdcRegs.ADCSOC10CTL.all = 0x2A88;    //ADCINB2-UU5      //uvw-V
-    AdcRegs.ADCSOC11CTL.all = 0x2B08;    //ADCINB4-UU6      //uvw-W
-    AdcRegs.ADCSOC12CTL.all = 0x2B88;    //ADCINB6-UU7 
-    AdcRegs.ADCSOC13CTL.all = 0x2AC8;    //ADCINB3-PL   //用数字端口实现
-    AdcRegs.ADCSOC14CTL.all = 0x2BC8;    //ADCINB7     -1.25V，采样间隔8个周期
-    AdcRegs.ADCSOC15CTL.all = 0x2A48;    //ADCINB1-TEMP
-    ADC_CLEAR_INT_FLAG;
+//    AdcRegs.ADCSOC0CTL.all  = 0x2888;    //ADCINA2-IB	//	第一个通道不能用
+//    AdcRegs.ADCSOC1CTL.all  = 0x2808;    //ADCINA0-IU
+//    AdcRegs.ADCSOC2CTL.all  = 0x28C8;    //ADCINA3-IW
+//    AdcRegs.ADCSOC3CTL.all  = 0x2948;    //ADCINA5-UDC
+//    AdcRegs.ADCSOC4CTL.all  = 0x2A08;    //ADCINB0-IV
+//    AdcRegs.ADCSOC5CTL.all  = 0x2888;    //ADCINA2-IB
+//    AdcRegs.ADCSOC6CTL.all  = 0x2B48;    //ADCINB5-AI1
+//    AdcRegs.ADCSOC7CTL.all  = 0x29C8;    //ADCINA7-AI2
+//    AdcRegs.ADCSOC8CTL.all  = 0x2848;    //ADCINA1-AI3
+//    AdcRegs.ADCSOC9CTL.all  = 0x2988;    //ADCINA6-UU4      //uvw-U
+//    AdcRegs.ADCSOC10CTL.all = 0x2A88;    //ADCINB2-UU5      //uvw-V
+//    AdcRegs.ADCSOC11CTL.all = 0x2B08;    //ADCINB4-UU6      //uvw-W
+//    AdcRegs.ADCSOC12CTL.all = 0x2B88;    //ADCINB6-UU7
+//    AdcRegs.ADCSOC13CTL.all = 0x2AC8;    //ADCINB3-PL   //用数字端口实现
+//    AdcRegs.ADCSOC14CTL.all = 0x2BC8;    //ADCINB7     -1.25V，采样间隔8个周期
+//    AdcRegs.ADCSOC15CTL.all = 0x2A48;    //ADCINB1-TEMP
+//    ADC_CLEAR_INT_FLAG;
+	ADC_setupSOC(ADCA_BASE, ADC_SOC_NUMBER0,  ADC_TRIGGER_EPWM1_SOCA, ADC_CH_ADCIN2,  sampleWindow); // ADCINA2-IB
+	ADC_setupSOC(ADCA_BASE, ADC_SOC_NUMBER1,  ADC_TRIGGER_EPWM1_SOCA, ADC_CH_ADCIN0,  sampleWindow); // ADCINA0-IU
+	ADC_setupSOC(ADCA_BASE, ADC_SOC_NUMBER2,  ADC_TRIGGER_EPWM1_SOCA, ADC_CH_ADCIN3,  sampleWindow); // ADCINA3-IW
+	ADC_setupSOC(ADCA_BASE, ADC_SOC_NUMBER3,  ADC_TRIGGER_EPWM1_SOCA, ADC_CH_ADCIN5,  sampleWindow); // ADCINA5-UDC
+	ADC_setupSOC(ADCC_BASE, ADC_SOC_NUMBER0,  ADC_TRIGGER_EPWM1_SOCA, ADC_CH_ADCIN0,  sampleWindow); // ADCINB0-IV
+	ADC_setupSOC(ADCA_BASE, ADC_SOC_NUMBER4,  ADC_TRIGGER_EPWM1_SOCA, ADC_CH_ADCIN2,  sampleWindow); // ADCINA2-IB
+	ADC_setupSOC(ADCC_BASE, ADC_SOC_NUMBER1,  ADC_TRIGGER_EPWM1_SOCA, ADC_CH_ADCIN5,  sampleWindow); // ADCINB5-AI1
+	ADC_setupSOC(ADCA_BASE, ADC_SOC_NUMBER5,  ADC_TRIGGER_EPWM1_SOCA, ADC_CH_ADCIN7,  sampleWindow); // ADCINA7-AI2
+	ADC_setupSOC(ADCA_BASE, ADC_SOC_NUMBER6,  ADC_TRIGGER_EPWM1_SOCA, ADC_CH_ADCIN1,  sampleWindow); // ADCINA1-AI3
+	ADC_setupSOC(ADCA_BASE, ADC_SOC_NUMBER7,  ADC_TRIGGER_EPWM1_SOCA, ADC_CH_ADCIN6,  sampleWindow); // ADCINA6-UU4(uvw-U)
+	ADC_setupSOC(ADCC_BASE, ADC_SOC_NUMBER2,  ADC_TRIGGER_EPWM1_SOCA, ADC_CH_ADCIN2,  sampleWindow); // ADCINB2-UU5(uvw-V)
+	ADC_setupSOC(ADCC_BASE, ADC_SOC_NUMBER3,  ADC_TRIGGER_EPWM1_SOCA, ADC_CH_ADCIN4,  sampleWindow); // ADCINB4-UU6(uvw-W)
+	ADC_setupSOC(ADCC_BASE, ADC_SOC_NUMBER4,  ADC_TRIGGER_EPWM1_SOCA, ADC_CH_ADCIN6,  sampleWindow); // ADCINB6-UU7
+	ADC_setupSOC(ADCC_BASE, ADC_SOC_NUMBER5,  ADC_TRIGGER_EPWM1_SOCA, ADC_CH_ADCIN3,  sampleWindow); // ADCINB3-PL
+	ADC_setupSOC(ADCC_BASE, ADC_SOC_NUMBER6,  ADC_TRIGGER_EPWM1_SOCA, ADC_CH_ADCIN7,  sampleWindow); // ADCINB7 -1.25V
+	ADC_setupSOC(ADCC_BASE, ADC_SOC_NUMBER7,  ADC_TRIGGER_EPWM1_SOCA, ADC_CH_ADCIN1,  sampleWindow); // ADCINB1-TEMP
+
+	ADC_clearInterruptStatus(ADCA_BASE, ADC_INT_NUMBER1);
+	ADC_clearInterruptStatus(ADCC_BASE, ADC_INT_NUMBER1);
+
 	EDIS;
 #endif
 }	

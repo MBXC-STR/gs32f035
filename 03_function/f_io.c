@@ -2289,7 +2289,7 @@ void PulseInSample(void)
 
 #if DSP_2803X
 #define HDO_PRD     (EPwm5Regs.TBPRD)
-#define HDO_CMP     (EPwm5Regs.CMPB)
+#define HDO_CMP     (EPwm5Regs.CMPB.bit.CMPB)
 #define HDO_CTR     (EPwm5Regs.TBCTR)
 #endif
 //=====================================================================
@@ -2943,7 +2943,8 @@ void InitSetEPWM4(void)
     EPwm4Regs.TBCTL.bit.CTRMODE = TB_COUNT_UP;  // UP_Count Mode
     EPwm4Regs.TBCTL.bit.PHSEN = TB_DISABLE;     // Phase loading disabled
     EPwm4Regs.TBCTL.bit.PRDLD = TB_SHADOW;
-    EPwm4Regs.TBCTL.bit.SYNCOSEL = TB_SYNC_DISABLE;
+//    EPwm4Regs.TBCTL.bit.SYNCOSEL = TB_SYNC_DISABLE;
+    EPWM_disableSyncOutPulseSource(EPWM4_BASE, EPWM_SYNC_OUT_PULSE_ON_ALL);
     EPwm4Regs.TBCTL.bit.HSPCLKDIV = TB_DIV1;    // TBCLK = SYSCLK
     EPwm4Regs.TBCTL.bit.CLKDIV = TB_DIV1;
     EPwm4Regs.CMPCTL.bit.SHDWAMODE = CC_SHADOW;
@@ -2970,7 +2971,7 @@ void InitSetEPWM5(void)
  #if DSP_2803X
     EALLOW;
     EPwm5Regs.TBPRD = 0;                   // Period = 601 TBCLK counts
-    EPwm5Regs.CMPB = 0;                    // Compare B = 200 TBCLK counts
+    EPwm5Regs.CMPB.bit.CMPB = 0;                    // Compare B = 200 TBCLK counts
     EPwm5Regs.TBPHS.all = 0;               // Set Phase register to zero
     EPwm5Regs.TBCTR = 0;                   // clear TB counter
     
@@ -2979,7 +2980,8 @@ void InitSetEPWM5(void)
     EPwm5Regs.TBCTL.bit.CTRMODE = TB_COUNT_UP;  // UP_Count Mode
     EPwm5Regs.TBCTL.bit.PHSEN = TB_DISABLE;     // Phase loading disabled
     EPwm5Regs.TBCTL.bit.PRDLD = TB_IMMEDIATE;
-    EPwm5Regs.TBCTL.bit.SYNCOSEL = TB_SYNC_DISABLE;
+//    EPwm5Regs.TBCTL.bit.SYNCOSEL = TB_SYNC_DISABLE;
+    EPWM_disableSyncOutPulseSource(EPWM5_BASE, EPWM_SYNC_OUT_PULSE_ON_ALL);
     EPwm5Regs.TBCTL.bit.HSPCLKDIV = TB_DIV1;    // TBCLK = SYSCLK
     EPwm5Regs.TBCTL.bit.CLKDIV = TB_DIV1;
     EPwm5Regs.CMPCTL.bit.SHDWAMODE = CC_IMMEDIATE;
@@ -3013,7 +3015,8 @@ void InitSetEPWM6(void)
     EPwm6Regs.TBCTL.bit.CTRMODE = TB_COUNT_UP;  // UP_Count Mode
     EPwm6Regs.TBCTL.bit.PHSEN = TB_DISABLE;     // Phase loading disabled
     EPwm6Regs.TBCTL.bit.PRDLD = TB_SHADOW;
-    EPwm6Regs.TBCTL.bit.SYNCOSEL = TB_SYNC_DISABLE;
+//    EPwm6Regs.TBCTL.bit.SYNCOSEL = TB_SYNC_DISABLE;
+    EPWM_disableSyncOutPulseSource(EPWM6_BASE, EPWM_SYNC_OUT_PULSE_ON_ALL);
     EPwm6Regs.TBCTL.bit.HSPCLKDIV = TB_DIV1;    // TBCLK = SYSCLK
     EPwm6Regs.TBCTL.bit.CLKDIV = TB_DIV1;
     EPwm6Regs.CMPCTL.bit.SHDWAMODE = CC_SHADOW;

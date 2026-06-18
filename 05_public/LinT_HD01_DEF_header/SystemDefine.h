@@ -150,10 +150,10 @@ extern "C" {
 
 // // 与芯片相关的寄存器定义
 //#define PIE_VECTTABLE_ADCINT    PieVectTable.ADCINT1                    //ADC中断向量
-//#define ADC_CLEAR_INT_FLAG      AdcRegs.ADCINTFLGCLR.bit.ADCINT1 = 1    //清除ADC模块的中断标志
-//#define ADC_RESET_SEQUENCE      AdcRegs.SOCPRICTL.bit.RRPOINTER = 0x20  //reset the sequence
+#define ADC_CLEAR_INT_FLAG      AdcaRegs.ADCINTFLGCLR.bit.ADCINT1 = 1    //清除ADC模块的中断标志
+#define ADC_RESET_SEQUENCE      AdcaRegs.ADCSOCPRICTL.bit.RRPOINTER = 0x10
 //#define ADC_START_CONVERSION    AdcRegs.ADCSOCFRC1.all = 0xFFFF         //软件启动AD
-//#define ADC_END_CONVERSIN       AdcRegs.ADCINTFLG.bit.ADCINT1           //AD转换完成标志
+#define ADC_END_CONVERSIN       AdcaRegs.ADCINTFLG.bit.ADCINT1           //AD转换完成标志
 
 #define  ADC_VOLTAGE_08         ( 8L*65535/33)  // AD输入0.8V对应的采样�??   28035AD范围�?0-3.3V
 #define  ADC_VOLTAGE_10         (10L*65535/33)  // AD输入1.0V对应的采样�??

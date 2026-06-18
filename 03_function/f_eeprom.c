@@ -179,9 +179,9 @@ LOCALF Uint16 RwI2cBus(Uint16 mode)
 
 // Setup slave address
 #if (EEPROM_TYPE == EEPROM_24LC32)
-    I2caRegs.I2CSAR = I2C_SLAVE_ADDR;
+    I2caRegs.I2CSAR.bit.SAR = I2C_SLAVE_ADDR;
 #elif 1
-    I2caRegs.I2CSAR = (I2C_SLAVE_ADDR | (I2cMsg.highAddr >> 8)) & 0xff;
+    I2caRegs.I2CSAR.bit.SAR = (I2C_SLAVE_ADDR | (I2cMsg.highAddr >> 8)) & 0xff;
 #endif    
 
     if (mode == RW_I2C_BUS_WRITE)
@@ -189,9 +189,9 @@ LOCALF Uint16 RwI2cBus(Uint16 mode)
         // Setup number of bytes to send
         // buffer + Address
 #if (EEPROM_TYPE == EEPROM_24LC32)
-        I2caRegs.I2CCNT = I2cMsg.bytes + 2;
+        I2caRegs.I2CCNT.all = I2cMsg.bytes + 2;
 #elif 1
-        I2caRegs.I2CCNT = I2cMsg.bytes + 1;
+        I2caRegs.I2CCNT.all = I2cMsg.bytes + 1;
 #endif
 
         I2caRegs.I2CDXR = I2cMsg.highAddr; // Setup data to send
@@ -208,7 +208,7 @@ LOCALF Uint16 RwI2cBus(Uint16 mode)
     }
     else if ((mode == RW_I2C_BUS_READ) && (I2C_MSG_STATUS_RESTART == I2cMsg.status))
     {
-        I2caRegs.I2CCNT = I2cMsg.bytes; // Setup how many bytes to expect
+        I2caRegs.I2CCNT.all = I2cMsg.bytes; // Setup how many bytes to expect
         
         I2caRegs.I2CMDR.all = 0x6C20;   // Send restart as master receiver
                                         // S.A.D.P
@@ -216,11 +216,11 @@ LOCALF Uint16 RwI2cBus(Uint16 mode)
     else                                // ACK, or start read
     {
 #if (EEPROM_TYPE == EEPROM_24LC32)
-        I2caRegs.I2CCNT = 2;
+        I2caRegs.I2CCNT.all = 2;
         I2caRegs.I2CDXR = I2cMsg.highAddr;
         I2caRegs.I2CDXR = I2cMsg.lowAddr;
 #elif 1
-        I2caRegs.I2CCNT = 1;
+        I2caRegs.I2CCNT.all = 1;
         I2caRegs.I2CDXR = I2cMsg.highAddr;
 #endif
         
@@ -1070,9 +1070,9 @@ void InitSetI2ca(void)
     I2caRegs.I2CMDR.all = 0x4000;    // reset I2C
 
 #if (DSP_CLOCK == 100)      // DSP运行频率100MHz
-    I2caRegs.I2CPSC.all = 9;        // Prescaler - need 7-12 Mhz on module clk, I2C module clock = 10MHz
+    I2caRegs.I2CPSC = 9;        // Prescaler - need 7-12 Mhz on module clk, I2C module clock = 10MHz
 #elif (DSP_CLOCK == 60)      // DSP运行频率60MHz
-    I2caRegs.I2CPSC.all = 5;        // Prescaler - need 7-12 Mhz on module clk, I2C module clock = 10MHz
+    I2caRegs.I2CPSC = 5;        // Prescaler - need 7-12 Mhz on module clk, I2C module clock = 10MHz
 #endif
 
 #if 0
@@ -1206,7 +1206,7 @@ void I2CStop(void)
 
 void I2CRcvByte(void)
 {
-    s16 i;
+    int16_t i;
     
 // SDA为输入    
     SdaIoAsInput();

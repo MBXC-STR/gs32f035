@@ -15,7 +15,7 @@
 #if F_DEBUG_RAM                     // 锟斤拷锟斤拷锟皆癸拷锟杰ｏ拷锟斤拷CCS锟斤拷build option锟叫讹拷锟斤拷暮锟�
 #define DEBUG_F_MODBUS          0   // 锟角凤拷使锟斤拷通讯锟斤拷锟斤拷
 #elif 1
-#define DEBUG_F_MODBUS          1
+#define DEBUG_F_MODBUS          0
 #endif
 
 enum COMM_STATUS commStatus;    // 锟斤拷锟节筹拷始锟斤拷为锟饺达拷锟斤拷锟斤拷状态

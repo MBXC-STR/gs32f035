@@ -32,12 +32,14 @@ Uint 	iTrig3_Dpwm[12] = {2,0,1,2,0,1,2,0,1,2,0,1};
 ************************************************************/
 void InitSetPWM(void)
 {
+	SysCtl_disablePeripheral(SYSCTL_PERIPH_CLK_TBCLKSYNC);
+
     gCBCProtect.EnableFlag = 1;				//默认启动,防止参数辨识再次开启逐波限流使关闭无效zbz1812
 	EALLOW;
 	/////////////PWM1//////////////
 //Set the Time-Base (TB) Module
 	EPwm1Regs.TBPRD = C_INIT_PRD; 
-	EPwm1Regs.CMPB = EPwm1Regs.TBPRD - gADC.DelayApply;
+	EPwm1Regs.CMPB.bit.CMPB = EPwm1Regs.TBPRD - gADC.DelayApply;
 	EPwm1Regs.TBPHS.all = 0;
 	EPwm1Regs.TBCTL.all = 0xE012;
     //EPwm1Regs.TBCTL.bit.FREE_SOFT = 3;
@@ -64,8 +66,8 @@ void InitSetPWM(void)
 	EPwm1Regs.DBCTL.all = 0x0007;
 	//EPwm1Regs.DBCTL.bit.OUT_MODE = DB_FULL_ENABLE;
 	//EPwm1Regs.DBCTL.bit.POLSEL = DB_ACTV_HIC; 
-	EPwm1Regs.DBFED = gDeadBand.DeadBand;//C_MAX_DB;
-	EPwm1Regs.DBRED = gDeadBand.DeadBand;//C_MAX_DB;
+	EPwm1Regs.DBFED.bit.DBFED = gDeadBand.DeadBand;//C_MAX_DB;
+	EPwm1Regs.DBRED.bit.DBRED = gDeadBand.DeadBand;//C_MAX_DB;
 //Set the PWM-chopper (PC) Module
 //Set the Trip-zone (TZ) Module
 #ifdef TMS320F2808
@@ -204,6 +206,13 @@ void InitSetPWM(void)
 //Set the Event-trigger (ET) Module	
 	EDIS;
 	gCBCProtect.EnableFlag = 1;  //避免参数辨识后，CBC设置与功能码配置不符
+
+	EPwm1Regs.EPWMSYNCINSEL.bit.SEL = 0x0;
+	EPwm1Regs.EPWMSYNCOUTEN.bit.ZEROEN = 0x1;
+	EPwm2Regs.EPWMSYNCINSEL.bit.SEL = 0x1;
+	EPwm3Regs.EPWMSYNCINSEL.bit.SEL = 0x1;
+
+	SysCtl_enablePeripheral(SYSCTL_PERIPH_CLK_TBCLKSYNC);
  
 }
 

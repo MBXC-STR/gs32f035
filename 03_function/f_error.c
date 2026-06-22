@@ -365,7 +365,7 @@ void getMotorError(void)
     // 存在性能传递的故障
     if (errorsCodeFromMotor[0] || errorsCodeFromMotor[1])
     {
-        for (i = 0; i < sizeof(errorCodeFromMotorList); i++)
+        for (i = 0; i < sizeof(errorCodeFromMotorList)/2; i++)
         {
             // 0~15个故障存放于数组1
             if ( i < 16)
@@ -773,7 +773,7 @@ void ErrorReset(void)
                 {
                     funcCodeRwModeTmp = FUNCCODE_RW_MODE_WRITE_SERIES;
                     startIndexWriteSeries = GetCodeIndex(funcCode.code.errorLatest1);     // 第一个故障记录
-                    endIndexWriteSeries = GetCodeIndex(funcCode.code.errorScene1.all[sizeof(struct ERROR_SCENE_STRUCT) - 1]);     // 最后一个故障记录
+                    endIndexWriteSeries = GetCodeIndex(funcCode.code.errorScene1.all[sizeof(struct ERROR_SCENE_STRUCT)/2 - 1]);     // 最后一个故障记录
 
                     //SaveOneFuncCode(GetCodeIndex(funcCode.code.errorFrqUnit));  // 保存 故障频率的小数点
 

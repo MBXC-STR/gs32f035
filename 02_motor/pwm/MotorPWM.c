@@ -129,8 +129,8 @@ void InitSetPWM(void)
 	EPwm2Regs.DBCTL.all = 0x0007;
 	//EPwm2Regs.DBCTL.bit.OUT_MODE = DB_FULL_ENABLE;
 	//EPwm2Regs.DBCTL.bit.POLSEL = DB_ACTV_HIC; 
-	EPwm2Regs.DBFED = gDeadBand.DeadBand;//C_MAX_DB;
-	EPwm2Regs.DBRED = gDeadBand.DeadBand;//C_MAX_DB;
+	EPwm2Regs.DBFED.bit.DBFED = gDeadBand.DeadBand;//C_MAX_DB;
+	EPwm2Regs.DBRED.bit.DBRED = gDeadBand.DeadBand;//C_MAX_DB;
 //Set the PWM-chopper (PC) Module
 //Set the Trip-zone (TZ) Module
 #ifdef TMS320F2808
@@ -183,8 +183,8 @@ void InitSetPWM(void)
 	EPwm3Regs.DBCTL.all = 0x0007;
 	//EPwm3Regs.DBCTL.bit.OUT_MODE = DB_FULL_ENABLE;
 	//EPwm3Regs.DBCTL.bit.POLSEL = DB_ACTV_HIC; 
-	EPwm3Regs.DBFED = gDeadBand.DeadBand;//C_MAX_DB;
-	EPwm3Regs.DBRED = gDeadBand.DeadBand;//C_MAX_DB;
+	EPwm3Regs.DBFED.bit.DBFED = gDeadBand.DeadBand;//C_MAX_DB;
+	EPwm3Regs.DBRED.bit.DBRED = gDeadBand.DeadBand;//C_MAX_DB;
 //Set the PWM-chopper (PC) Module
 //Set the Trip-zone (TZ) Module
 #ifdef TMS320F2808

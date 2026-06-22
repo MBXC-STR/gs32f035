@@ -210,6 +210,7 @@ void UpdateSciFormat(void);
 void SciDeal(void);
 Uint16 CommRead(Uint16 addr, Uint16 data);
 Uint16 CommWrite(Uint16, Uint16);
+void InitSciaGpio(void);
     
 // 通讯波特率对应的的寄存器值
 typedef struct

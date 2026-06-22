@@ -1931,8 +1931,9 @@ void InitSetScia(void){}
 void InitSciaGpio(void){}
 void SciDeal(void){}
 void UpdateSciFormat(void){}
-interrupt void SCI_RXD_isr(void){}
-interrupt void SCI_TXD_isr(void){}
+
+__interrupt void SCI_RXD_isr(void){}
+__interrupt void SCI_TXD_isr(void){}
 Uint16 CommWrite(Uint16 addr, Uint16 data){}
 Uint16 CommRead(Uint16 addr, Uint16 data){}
 #endif

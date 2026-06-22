@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<list key="installedFeatures">
+		<item value="com.googlecode.cppcheclipse.feature:1.2.0"/>
+		<item value="org.eclipse.cdt.debug.ui.memory:11.5.0.202402230238"/>
+		<item value="org.eclipse.cdt.gdb:11.5.0.202402230238"/>
+		<item value="org.eclipse.cdt.gnu.build:11.5.0.202402230238"/>
+		<item value="org.eclipse.cdt.gnu.debug:11.5.0.202402230238"/>
+		<item value="org.eclipse.egit.gitflow.feature:6.8.0.202311291450-r"/>
+		<item value="org.eclipse.egit:6.8.0.202311291450-r"/>
+		<item value="org.eclipse.embedcdt:6.7.0.202602251544"/>
+		<item value="org.eclipse.emf.common:2.30.0.v20230916-0637"/>
+		<item value="org.eclipse.emf.ecore:2.36.0.v20231002-1156"/>
+		<item value="org.eclipse.help:2.3.1600.v20231201-0110"/>
+		<item value="org.eclipse.jgit.gpg.bc:6.8.0.202311291450-r"/>
+		<item value="org.eclipse.jgit.http.apache:6.8.0.202311291450-r"/>
+		<item value="org.eclipse.jgit.ssh.apache:6.8.0.202311291450-r"/>
+		<item value="org.eclipse.jgit:6.8.0.202311291450-r"/>
+		<item value="org.eclipse.justj.openjdk.hotspot.jre.minimal:17.0.11.v20240426-1830"/>
+		<item value="org.eclipse.platform:4.30.0.v20231201-0512"/>
+		<item value="org.eclipse.rcp:4.30.0.v20231201-0512"/>
+	</list>
+</section>

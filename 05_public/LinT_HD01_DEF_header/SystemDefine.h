@@ -152,7 +152,7 @@ extern "C" {
 //#define PIE_VECTTABLE_ADCINT    PieVectTable.ADCINT1                    //ADC中断向量
 #define ADC_CLEAR_INT_FLAG      AdcaRegs.ADCINTFLGCLR.bit.ADCINT1 = 1    //清除ADC模块的中断标志
 #define ADC_RESET_SEQUENCE      AdcaRegs.ADCSOCPRICTL.bit.RRPOINTER = 0x10
-//#define ADC_START_CONVERSION    AdcRegs.ADCSOCFRC1.all = 0xFFFF         //软件启动AD
+#define ADC_START_CONVERSION    AdcaRegs.ADCSOCFRC1.all = 0xFFFF         //软件启动AD
 #define ADC_END_CONVERSIN       AdcaRegs.ADCINTFLG.bit.ADCINT1           //AD转换完成标志
 
 #define  ADC_VOLTAGE_08         ( 8L*65535/33)  // AD输入0.8V对应的采样�??   28035AD范围�?0-3.3V
@@ -163,7 +163,7 @@ extern "C" {
 #define PL_INPUT_HIGH           (PL_VOE_PROTECT < ADC_VOLTAGE_08)       //输入缺相信号电平判断
 
 #define PHASE_LOSE_CNT           20                             // 输出缺相累计计算的电流周期数
-#define Encode_DisConnect       ((AdcResult.ADCRESULT9<<4) < ADC_VOLTAGE_20)             //编码器断线检�?
+#define Encode_DisConnect       ((AdcaResultRegs.ADCRESULT9<<4) < ADC_VOLTAGE_20)             //编码器断线检�?
 
 #define DisConnectRelay()       GpioDataRegs.GPASET.bit.GPIO11   = 1
 #define ConnectRelay()          GpioDataRegs.GPACLEAR.bit.GPIO11 = 1    //上电缓冲继电器控�?

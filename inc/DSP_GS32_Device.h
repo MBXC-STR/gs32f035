@@ -9,12 +9,15 @@
 #define DSP_GS32_DEVICE_H_
 
 #include "device.h"
+#include "IQMathLib.h"
+#include "gs32_math.h"
 
 #define     DSP_CLOCK           60                      //60MHz ±÷”
 
 #define                StartCpuTimer1()                CPUTimer_startTimer(CPUTIMER1_BASE)
 #define                GetTime()                	   CPUTimer_getTimerCount(CPUTIMER1_BASE)
 
+#define				   __IQsat						   _IQsat
 
 //--------------------------------------------
 // Defines

@@ -61,9 +61,9 @@ void UpdateMotorPara(void)
     // 更新电机参数
     if (MOTOR_SN_1 == motorSn)  // 第1电机
     {
-        memcpy(&motorFc.motorPara, &funcCode.code.motorParaM1, sizeof(struct MOTOR_PARA_STRUCT));  // 电机参数
-        memcpy(&motorFc.pgPara,    &funcCode.code.pgParaM1, sizeof(struct PG_PARA_STRUCT));        // PG卡参数  
-        memcpy(&motorFc.vcPara, &funcCode.code.vcParaM1, sizeof(struct VC_PARA));                  // 矢量控制参数
+        memcpy(&motorFc.motorPara, &funcCode.code.motorParaM1, sizeof(struct MOTOR_PARA_STRUCT) * 2);  // 电机参数
+        memcpy(&motorFc.pgPara,    &funcCode.code.pgParaM1, sizeof(struct PG_PARA_STRUCT) * 2);        // PG卡参数
+        memcpy(&motorFc.vcPara, &funcCode.code.vcParaM1, sizeof(struct VC_PARA) * 2);                  // 矢量控制参数
         motorFc.motorCtrlMode = funcCode.code.motorCtrlMode;             // 电机控制方式
         motorFc.accDecTimeMotor = 0;                                     // 电机加减速时间(第1电机的加减速时间由端子改变)
         motorFc.torqueBoost = funcCode.code.torqueBoost;                 // 转矩提升               
@@ -72,7 +72,7 @@ void UpdateMotorPara(void)
     }
     else    // 第2电机
     {
-		 memcpy(&motorFc, &funcCode.all[GetCodeIndex(funcCode.code.motorFcM2.motorPara.elem.motorType)], sizeof(struct MOTOR_FC));  
+		 memcpy(&motorFc, &funcCode.all[GetCodeIndex(funcCode.code.motorFcM2.motorPara.elem.motorType)], sizeof(struct MOTOR_FC));
     }
 
     // 强制VF运行

@@ -859,13 +859,13 @@ void SaveTuneData(void)
     // 同步机Rs, Ld, Lq
     // UV两相增益偏差
     // UVW信号方向 UVW信号零点位置角
-    for (i = sizeof(motor1ParaIndex)-1; i >= 2; i--)
+    for (i = sizeof(motor1ParaIndex)/2-1; i >= 2; i--)
     {
         Uint16 index;               // 需要保存的参数index
         Uint16 index4motorTune;     // 对应电机传递的index
         Uint16 add = motorSnIndexIncToMotor1[motorSn];
 
-        if (i == (sizeof(motor1ParaIndex)-3))    // UV两相增益偏差
+        if (i == (sizeof(motor1ParaIndex)/2-3))    // UV两相增益偏差
         {
             add = 0;    // 所有电机使用同一个功能码
         }

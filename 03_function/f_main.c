@@ -317,12 +317,18 @@ void InitDspFunc(void)
 {
     EALLOW;
 #if DSP_2803X       // 2803x还是2808平台
-    SysCtrlRegs.PCLKCR0.bit.ECANAENCLK = 1;    // eCAN-A
-    SysCtrlRegs.PCLKCR1.bit.EPWM4ENCLK = 1;    // ePWM4
-    SysCtrlRegs.PCLKCR1.bit.EPWM5ENCLK = 1;    // ePWM5
-    SysCtrlRegs.PCLKCR1.bit.EPWM6ENCLK = 1;    // ePWM5
-    SysCtrlRegs.PCLKCR1.bit.ECAP1ENCLK = 1;    // eCAP1
-    SysCtrlRegs.PCLKCR0.bit.LINAENCLK = 1;     // LIN-A
+//    SysCtrlRegs.PCLKCR0.bit.ECANAENCLK = 1;    // eCAN-A
+//    SysCtrlRegs.PCLKCR1.bit.EPWM4ENCLK = 1;    // ePWM4
+//    SysCtrlRegs.PCLKCR1.bit.EPWM5ENCLK = 1;    // ePWM5
+//    SysCtrlRegs.PCLKCR1.bit.EPWM6ENCLK = 1;    // ePWM5
+//    SysCtrlRegs.PCLKCR1.bit.ECAP1ENCLK = 1;    // eCAP1
+//    SysCtrlRegs.PCLKCR0.bit.LINAENCLK = 1;     // LIN-A
+    SysCtl_enablePeripheral(SYSCTL_PERIPH_CLK_CANA);
+    SysCtl_enablePeripheral(SYSCTL_PERIPH_CLK_EPWM4);
+    SysCtl_enablePeripheral(SYSCTL_PERIPH_CLK_EPWM5);
+    SysCtl_enablePeripheral(SYSCTL_PERIPH_CLK_EPWM6);
+    SysCtl_enablePeripheral(SYSCTL_PERIPH_CLK_ECAP1);
+    SysCtl_enablePeripheral(SYSCTL_PERIPH_CLK_LINA);
 #else
     SysCtrlRegs.PCLKCR1.bit.ECAP3ENCLK = 1;     // eCAP3
     SysCtrlRegs.PCLKCR1.bit.ECAP4ENCLK = 1;     // eCAP4
@@ -1375,15 +1381,15 @@ void CheckEeprom2Fc(void);
 void ValidateFuncCode(void)
 {
     // 判断 FUNCCODE_GROUP 和 FUNCCODE_CODE 是否一致
-    sizeOfGroup = sizeof(struct FUNCCODE_GROUP);
-    sizeOfGrade = sizeof(struct FUNCCODE_CODE);
+    sizeOfGroup = sizeof(struct FUNCCODE_GROUP)/2;
+    sizeOfGrade = sizeof(struct FUNCCODE_CODE)/2;
     if (sizeOfGroup != sizeOfGrade)
     {
         asm(" ESTOP0");
     }
 
     // 判断 FUNCCODE_ALL 与 FUNCCODE_CODE 是否一致
-    sizeOfAll = sizeof(FUNCCODE_ALL);
+    sizeOfAll = sizeof(FUNCCODE_ALL)/2;
     if (sizeOfAll != sizeOfGrade)
     {
         asm(" ESTOP0");
@@ -1405,21 +1411,21 @@ void ValidateFuncCode(void)
     
 #if 0
     // 判断U0组显示属性个数是否一致
-    if (sizeof(dispAttributeU0) != U0NUM)
+    if (sizeof(dispAttributeU0)/2 != U0NUM)
     {
         asm(" nop");
         asm(" ESTOP0");
     }
 
     // 判断U2组显示属性个数是否一致
-    if (sizeof(dispAttributeU2) != U2NUM)
+    if (sizeof(dispAttributeU2)/2 != U2NUM)
     {
         asm(" nop");
         asm(" ESTOP0");
     }
 
     // 判断U3组显示属性个数是否一致
-    if (sizeof(dispAttributeU3) != U3NUM)
+    if (sizeof(dispAttributeU3)/2 != U3NUM)
     {
         asm(" nop");
         asm(" ESTOP0");

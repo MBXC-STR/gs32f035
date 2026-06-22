@@ -1137,7 +1137,7 @@ LOCALF void Menu3OnUpDown(Uint16 flag)
             Uint16 group;
             Uint16 funcCodeGrade[FUNCCODE_GROUP_NUM];   // 堆栈够用
             
-            memcpy(funcCodeGrade, funcCodeGradeAll, (FUNCCODE_GROUP_NUM));          
+            memcpy(funcCodeGrade, funcCodeGradeAll, (FUNCCODE_GROUP_NUM) * 2);
             funcCodeGrade[FC_GROUP_FACTORY] = 0;   // 用户定制菜单不可设置FF组
             funcCodeGrade[USER_MENU_GROUP] = 0;  // 用户定制菜单不可设置CC组
 
@@ -2348,11 +2348,11 @@ Uint16 ModifyFunccodeUpDown(Uint16 index, Uint16 *data, int16 delta)
 //--------------------------------------------------------
 // NoSameDeal()
         // 主频率源X和辅频率源Y的设定值不能一样
-        for (i = sizeof(frqSrcFuncIndex) - 1; i >= 0; i--)
+        for (i = sizeof(frqSrcFuncIndex)/2 - 1; i >= 0; i--)
         {
             if (frqSrcFuncIndex[i] == index)
             {
-                *data = NoSameDeal(index, frqSrcFuncIndex, sizeof(frqSrcFuncIndex), *data, upper, lower, delta);
+                *data = NoSameDeal(index, frqSrcFuncIndex, sizeof(frqSrcFuncIndex)/2, *data, upper, lower, delta);
                 flag1 = 1;
             }
 
@@ -2361,11 +2361,11 @@ Uint16 ModifyFunccodeUpDown(Uint16 index, Uint16 *data, int16 delta)
         }
 
         // DI(DI, VDI, AiAsDi)端子的功能，不能重复
-        for (i = sizeof(diFuncIndex) - 1; i >= 0; i--)
+        for (i = sizeof(diFuncIndex)/2 - 1; i >= 0; i--)
         {
             if (diFuncIndex[i] == index)
             {
-                *data = NoSameDeal(index, diFuncIndex, sizeof(diFuncIndex), *data, upper, lower, delta);
+                *data = NoSameDeal(index, diFuncIndex, sizeof(diFuncIndex)/2, *data, upper, lower, delta);
                 flag1 = 1;
             }
 
@@ -3134,7 +3134,7 @@ void UpdataFuncCodeGrade(Uint16 funcCodeGrade[])
     int16 i;
     Uint16 digit[5];
 
-    memcpy(funcCodeGrade, funcCodeGradeAll, FUNCCODE_GROUP_NUM);
+    memcpy(funcCodeGrade, funcCodeGradeAll, FUNCCODE_GROUP_NUM * 2);
     
     GetNumberDigit(digit, funcCode.code.funcParaView, DECIMAL);  // 得到每位的值，0 or 1
 

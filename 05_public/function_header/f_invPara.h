@@ -102,7 +102,7 @@ struct INV_TYPE_RELATED_PARA_STRUCT
 };
 typedef union
 {
-    Uint16 all[sizeof(struct INV_TYPE_RELATED_PARA_STRUCT)];
+    Uint16 all[sizeof(struct INV_TYPE_RELATED_PARA_STRUCT)/2];
 
     struct INV_TYPE_RELATED_PARA_STRUCT elem;
 } INV_TYPE_RELATED_PARA;

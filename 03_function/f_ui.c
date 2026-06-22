@@ -979,10 +979,10 @@ void InitSetSpiForFunc(void)
 // 320和280F都是使用IO口模拟SPI。
 // 320的显示没有使用SPI，键盘使用了SPI，波特率约为118KHz
 // 280F的波特率约为143KHz
-#if (DSP_CLOCK == 100)              // DSP运行频率100MHz
-    SpiaRegs.SPIBRR = 0x007F;       // 100/4 * 10^6 / (127+1) = 195312.5
-#elif (DSP_CLOCK == 60)             // DSP运行频率60MHz
-    SpiaRegs.SPIBRR = 0x004C;       // 60/4 * 10^6 / (76+1) = 194805.2
+#if (DSP_CLOCK == 100)
+    SPI_setBaudRate((uint32_t)&SpiaRegs, DEVICE_APBCLK_FREQ, 100 * 1000);
+#elif (DSP_CLOCK == 60)
+    SPI_setBaudRate((uint32_t)&SpiaRegs, DEVICE_APBCLK_FREQ, 200 * 1000);
 #endif
 
     SpiaRegs.SPICCR.bit.SPISWRESET = 1; // Relinquish SPI from Reset

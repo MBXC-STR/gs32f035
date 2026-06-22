@@ -250,7 +250,7 @@ void EndOfParIdentify(void)
         
         EALLOW;  						                //�����û��������?
         #ifdef TARGET_GS32
-        Interrupt_register(INT_ADC1, &ADC_Over_isr);
+        Interrupt_register(INT_ADCA1, &ADC_Over_isr);
         #else
         PIE_VECTTABLE_ADCINT = &ADC_Over_isr;		    //ADC�����ж�--INT1
         #endif
@@ -261,7 +261,7 @@ void EndOfParIdentify(void)
         #endif
         //PieVectTable.EPWM1_INT 	= &EPWM1_zero_isr;		//�����ж�--INT3
         #ifdef TARGET_GS32
-        interrupt_disable(INT_EPWM2);
+        Interrupt_disable(INT_EPWM2);
         #else
         PieCtrlRegs.PIEIER3.bit.INTx2 = 0;              //�ر�EPWM2�ж�
         #endif

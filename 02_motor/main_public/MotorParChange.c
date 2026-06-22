@@ -339,12 +339,12 @@ void SystemParChg2Ms()
 #endif
 //	gDeadBand.MaxComp  = gDeadBand.DeadBand>>1; 
 	EALLOW;									//锟斤拷锟斤拷锟斤拷锟斤拷时锟斤拷
-	EPwm1Regs.DBFED = gDeadBand.DeadBand;
-	EPwm1Regs.DBRED = gDeadBand.DeadBand;
-	EPwm2Regs.DBFED = gDeadBand.DeadBand;
-	EPwm2Regs.DBRED = gDeadBand.DeadBand;
-	EPwm3Regs.DBFED = gDeadBand.DeadBand;
-	EPwm3Regs.DBRED = gDeadBand.DeadBand;
+	EPwm1Regs.DBFED.bit.DBFED = gDeadBand.DeadBand;
+	EPwm1Regs.DBRED.bit.DBRED = gDeadBand.DeadBand;
+	EPwm2Regs.DBFED.bit.DBFED = gDeadBand.DeadBand;
+	EPwm2Regs.DBRED.bit.DBRED = gDeadBand.DeadBand;
+	EPwm3Regs.DBFED.bit.DBFED = gDeadBand.DeadBand;
+	EPwm3Regs.DBRED.bit.DBRED = gDeadBand.DeadBand;
 	EDIS;
         
 //锟斤拷锟斤拷ADC锟斤拷锟斤拷锟接筹拷时锟斤拷

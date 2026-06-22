@@ -212,7 +212,7 @@ struct SPI_IN_OUT
 
 extern struct SPI_IN_OUT spiData;
 
-
+void InitSpiaGpio(void);
 
 #endif  // __F_DISPLAY_KEY_H__
 

@@ -55,8 +55,8 @@
 #define DEBUG_F_MOTOR_FUNCCODE    1   // 预留功能码给性能调试
 //=====================================================================
 
-#define DEBUG_F_PLC_CTRL          1    // 可编程卡
-#define DEBUG_F_MSC_CTRL          1    // 主从控制
+#define DEBUG_F_PLC_CTRL          0//1    // 可编程卡
+#define DEBUG_F_MSC_CTRL          0//1    // 主从控制
 
 //#define DEBUG_F_MSC_CTRL_AUTOADDR          1    // 主从控制
 //#if F_DEBUG_RAM && (!defined(_lint))

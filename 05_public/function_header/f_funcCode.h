@@ -215,7 +215,7 @@ struct ERROR_SCENE_STRUCT
 
 union ERROR_SCENE
 {
-    Uint16 all[sizeof(struct ERROR_SCENE_STRUCT)];
+    Uint16 all[sizeof(struct ERROR_SCENE_STRUCT)/2];
 
     struct ERROR_SCENE_STRUCT elem;
 };
@@ -285,14 +285,14 @@ struct PG_PARA_STRUCT
 
 union MOTOR_PARA
 {
-    Uint16 all[sizeof(struct MOTOR_PARA_STRUCT)];
+    Uint16 all[sizeof(struct MOTOR_PARA_STRUCT)/2];
     
     struct MOTOR_PARA_STRUCT elem;
 };
 
 union PG_PARA
 {
-    Uint16 all[sizeof(struct PG_PARA_STRUCT)];
+    Uint16 all[sizeof(struct PG_PARA_STRUCT)/2];
     
     struct PG_PARA_STRUCT elem;
 };
@@ -300,7 +300,7 @@ union PG_PARA
 //=================================
 
 //=================================
-enum MOTOR_SN
+enum MOTOR_SN	: uint16_t
 {
     MOTOR_SN_1,     // 第1电机
     MOTOR_SN_2      // 第2电机
@@ -1882,10 +1882,10 @@ typedef union FUNCCODE_ALL_UNION
 #define RUNCCODE_USER_PARA_END_INDEX     (GetCodeIndex(funcCode.group.cf[CFNUM - 1]))    // CF组的结束
 
 #define FC_MOTOR1_START_INDEX   (GetCodeIndex(funcCode.code.motorParaM1.all[0]))      // 第1电机参数的起始
-#define FC_MOTOR1_END_INDEX     (GetCodeIndex(funcCode.code.pgParaM1.all[sizeof(struct PG_PARA_STRUCT) - 1]))  // 第1电机参数的结束
+#define FC_MOTOR1_END_INDEX     (GetCodeIndex(funcCode.code.pgParaM1.all[sizeof(struct PG_PARA_STRUCT)/2 - 1]))  // 第1电机参数的结束
 
 #define FC_MOTOR2_START_INDEX   (GetCodeIndex(funcCode.code.motorFcM2.motorPara.all[0]))      // 第2电机参数的起始
-#define FC_MOTOR2_END_INDEX     (GetCodeIndex(funcCode.code.motorFcM2.pgPara.all[sizeof(struct PG_PARA_STRUCT) - 1]))  // 第2电机参数的结束
+#define FC_MOTOR2_END_INDEX     (GetCodeIndex(funcCode.code.motorFcM2.pgPara.all[sizeof(struct PG_PARA_STRUCT)/2 - 1]))  // 第2电机参数的结束
 
 
 
@@ -1983,7 +1983,7 @@ typedef union FUNCCODE_ALL_UNION
 #define ERROR_UDC_INDEX         (GetCodeIndex(funcCode.code.errorScene3.elem.errorGeneratrixVoltage)) // FB-25 故障时母线电压
 #define ERROR_DI_STATUS_INDEX   (GetCodeIndex(funcCode.code.errorScene3.elem.errorDiStatus))  // FB-26   故障时输入端子状态
 #define ERROR_DO_STATUS_INDEX   (GetCodeIndex(funcCode.code.errorScene3.elem.errorDoStatus))  // FB-27   故障时输出端子状态
-#define LAST_ERROR_RECORD_INDEX (GetCodeIndex(funcCode.code.errorScene1.all[sizeof(struct ERROR_SCENE_STRUCT) - 1]))  // 最后一个故障记录
+#define LAST_ERROR_RECORD_INDEX (GetCodeIndex(funcCode.code.errorScene1.all[sizeof(struct ERROR_SCENE_STRUCT)/2 - 1]))  // 最后一个故障记录
 
 #define MIN_CBC_TIME_INDEX       (GetCodeIndex(funcCode.code.cbcMinTime))         // A0-14   逐波限流时间下限
 #define MAX_CBC_TIME_INDEX       (GetCodeIndex(funcCode.code.cbcMaxTime))         // A0-15   逐波限流时间上限

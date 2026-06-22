@@ -1588,12 +1588,12 @@ void GetTemperature()
     if (FUNCCODE_tempSenorType_PTC100 == funcCode.code.motorOtMode)
     {
         p = voltageTempPT100;
-        size = sizeof(voltageTempPT100);
+        size = sizeof(voltageTempPT100)/2;
     }
     else if (FUNCCODE_tempSenorType_PTC1000 == funcCode.code.motorOtMode)
     {
         p = voltageTempPT1000;
-        size = sizeof(voltageTempPT1000);
+        size = sizeof(voltageTempPT1000)/2;
     }
 
     temperature = GetTemperatureCalc(temperatureVoltage, p, size);
@@ -1809,7 +1809,7 @@ void AiCalc(void)
        
         
 // AI校正曲线
-#define SIZE_AI_CALIBRATE   sizeof(struct ANALOG_CALIBRATE_CURVE)   // AI校正曲线的size
+#define SIZE_AI_CALIBRATE   sizeof(struct ANALOG_CALIBRATE_CURVE)/2   // AI校正曲线的size
         p = (&funcCode.code.aiCalibrateCurve[0].before1 + SIZE_AI_CALIBRATE * j);
 #undef SIZE_AI_CALIBRATE
         if (ai2Flag)
@@ -1885,7 +1885,7 @@ void AiCalc(void)
 
 
 // AI跳跃点
-#define SIZE_AI_JUMP sizeof(struct AI_JUMP)     // AI JUMP的size
+#define SIZE_AI_JUMP sizeof(struct AI_JUMP)/2     // AI JUMP的size
         p = (&funcCode.code.aiJumpSet[0].point + SIZE_AI_JUMP * j);
         point = (int32)(int16)(*(p + 0)) * 10;   // 设定跳跃点
         range = (int32)(int16)(*(p + 1)) * 10;   // 设定跳跃幅度

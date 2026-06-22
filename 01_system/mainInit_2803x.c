@@ -88,11 +88,11 @@ void InitSysCtrl()
 void InitInterrupt()
 {
    DINT;							//Clear all interrupts and initialize PIE vector table:
-   InitPieCtrl();  					//Disable PIE
+//   InitPieCtrl();  					//Disable PIE
 //    IER = 0x0000;
 //    IFR = 0x0000;
 
-   InitPieVectTable();				//Enable PIE
+//   InitPieVectTable();				//Enable PIE
 
    EALLOW;  						//设置用户服务程序
    //PieVectTable.TINT0 		= &cpu_timer0_isr;		//定时中断
@@ -177,15 +177,15 @@ void InitPeripherals(void)
 //---------------------------------------------------------------------------
 // Move program from FLASH to RAM size < 65535 words
 //---------------------------------------------------------------------------
-void copy_prg(COPY_TABLE *tp)
-{
-	Uint size;
-	COPY_RECORD *crp = &tp->recs[0];
-
-	size = (Uint)crp->size - 1;
-
-	MovePrgFrFlashToRam(crp->src_addr, crp->dst_addr, size);
-}
+//void copy_prg(COPY_TABLE *tp)
+//{
+//	Uint size;
+//	COPY_RECORD *crp = &tp->recs[0];
+//
+//	size = (Uint)crp->size - 1;
+//
+//	MovePrgFrFlashToRam(crp->src_addr, crp->dst_addr, size);
+//}
 
 //---------------------------------------------------------------------------
 // This function initializes the Flash Control registers
@@ -193,26 +193,26 @@ void copy_prg(COPY_TABLE *tp)
 // This function MUST be executed out of RAM. Executing it
 // out of OTP/Flash will yield unpredictable results
 //---------------------------------------------------------------------------
-void InitFlash(void)
-{
-   EALLOW;
-   //Enable Flash Pipeline mode to improve performance of code executed from Flash.
-   //FlashRegs.FOPT.bit.ENPIPE = 1;
-   FlashRegs.FOPT.all = 0x01;
-   //Set the Random Waitstate for the Flash
-   FlashRegs.FBANKWAIT.bit.RANDWAIT = READ_RAND_FLASH_WAITE;
-   //Set the Paged Waitstate for the Flash
-   FlashRegs.FBANKWAIT.bit.PAGEWAIT = READ_PAGE_FLASH_WAITE;
-   //Set the Waitstate for the OTP
-   FlashRegs.FOTPWAIT.bit.OTPWAIT = READ_OTP_WAITE;
-   
-   //Set number of cycles to transition from sleep to standby
-   //FlashRegs.FSTDBYWAIT.bit.STDBYWAIT = 0x01FF;       
-   //Set number of cycles to transition from standby to active
-   //FlashRegs.FACTIVEWAIT.bit.ACTIVEWAIT = 0x01FF;   
-   EDIS;
-   asm(" RPT #7 || NOP");	
-}	
+//void InitFlash(void)
+//{
+//   EALLOW;
+//   //Enable Flash Pipeline mode to improve performance of code executed from Flash.
+//   //FlashRegs.FOPT.bit.ENPIPE = 1;
+//   FlashRegs.FOPT.all = 0x01;
+//   //Set the Random Waitstate for the Flash
+//   FlashRegs.FBANKWAIT.bit.RANDWAIT = READ_RAND_FLASH_WAITE;
+//   //Set the Paged Waitstate for the Flash
+//   FlashRegs.FBANKWAIT.bit.PAGEWAIT = READ_PAGE_FLASH_WAITE;
+//   //Set the Waitstate for the OTP
+//   FlashRegs.FOTPWAIT.bit.OTPWAIT = READ_OTP_WAITE;
+//
+//   //Set number of cycles to transition from sleep to standby
+//   //FlashRegs.FSTDBYWAIT.bit.STDBYWAIT = 0x01FF;
+//   //Set number of cycles to transition from standby to active
+//   //FlashRegs.FACTIVEWAIT.bit.ACTIVEWAIT = 0x01FF;
+//   EDIS;
+//   asm(" RPT #7 || NOP");
+//}
 
 //---------------------------------------------------------------------------
 // This function resets the watchdog timer.
@@ -256,145 +256,145 @@ void EnableDog(void)
 //---------------------------------------------------------------------------
 // This function initializes the PLLCR register.
 //---------------------------------------------------------------------------
-void InitPll(Uint16 val)
-{
-    // select Osc source: external crystal-ocs, and turn off other osc-source
-    EALLOW;
-    SysCtrlRegs.CLKCTL.bit.XTALOSCOFF = 0;     // Turn on XTALOSC  晶体振荡器关闭位：如果晶体振荡器不使用，可以使用该位将其关闭  0-晶体振荡器开启（复位时的默认状态）,1-晶体振荡器关闭
-    SysCtrlRegs.CLKCTL.bit.XCLKINOFF = 1;      // Turn off XCLKIN    XCLKIN 关闭位：该位关闭外部 XCLKIN 振荡器输入
-    SysCtrlRegs.CLKCTL.bit.OSCCLKSRC2SEL = 0;  // Switch to external clock  选择外部振荡器
-    SysCtrlRegs.CLKCTL.bit.OSCCLKSRCSEL = 1;   // Switch from INTOSC1 to INTOSC2/ext clk   选择外部振荡器或内部振荡器 2
-    SysCtrlRegs.CLKCTL.bit.WDCLKSRCSEL = 1;    // Switch Watchdog Clk Src to external clock  选择外部振荡器或内部振荡器 2
-    SysCtrlRegs.CLKCTL.bit.INTOSC2OFF = 1;     // Turn off INTOSC2  内部振荡器 2 关闭
-    SysCtrlRegs.CLKCTL.bit.INTOSC1OFF = 1;     // Turn off INTOSC1  内部振荡器1 关闭
-    EDIS;
-
-    // configure the PLL
-    if (SysCtrlRegs.PLLSTS.bit.MCLKSTS != 1)	// Make sure the PLL is not running in limp mode
-    {
-        // DIVSEL MUST be 0 before PLLCR can be changed from
-        // 0x0000. It is set to 0 by an external reset XRSn
-        // This puts us in 1/4
-        if (SysCtrlRegs.PLLSTS.bit.DIVSEL != 0)
-        {
-            EALLOW;
-            SysCtrlRegs.PLLSTS.bit.DIVSEL = 0;
-            EDIS;
-        }
-
-        EALLOW;
-        // Before setting PLLCR turn off missing clock detect logic
-        SysCtrlRegs.PLLSTS.bit.MCLKOFF = 1;
-        SysCtrlRegs.PLLCR.bit.DIV = val;
-        EDIS;
-
-        // Optional: Wait for PLL to lock.
-        // During this time the CPU will switch to OSCCLK/2 until
-        // the PLL is stable.  Once the PLL is stable the CPU will
-        // switch to the new PLL value.
-        //
-        // This time-to-lock is monitored by a PLL lock counter.
-        //
-        // Code is not required to sit and wait for the PLL to lock.
-        // However, if the code does anything that is timing critical,
-        // and requires the correct clock be locked, then it is best to
-        // wait until this switching has completed.
-
-        // Wait for the PLL lock bit to be set.
-
-        // The watchdog should be disabled before this loop, or fed within
-        // the loop via ServiceDog().
-
-        // Uncomment to disable the watchdog
-        DisableDog();
-
-        while(SysCtrlRegs.PLLSTS.bit.PLLLOCKS != 1)//PLL 锁定状态位,1-示 PLL 已完成锁定，现在已经稳定下来  0-表示 PLLCR 寄存器已经被写入，PLL 当前正被锁定。CPU 由 OSCCLK/2 来计时，直至 PLL 被锁定。
-        {
-          // Uncomment to service the watchdog
-          // ServiceDog();
-        }
-
-        EALLOW;
-        SysCtrlRegs.PLLSTS.bit.MCLKOFF = 0;     // turn off missing clock detect   缺少时钟检测关闭位    主振荡器故障检测逻辑被使能。（默认）
-        EDIS;
-
-        EALLOW;
-        SysCtrlRegs.PLLSTS.bit.DIVSEL = 2;      // configure PLLSTS.DIVSEL = 2  (default)       (OSCCLK*2)/4        20M*6/2
-        EDIS;
-    }
-}
+//void InitPll(Uint16 val)
+//{
+//    // select Osc source: external crystal-ocs, and turn off other osc-source
+//    EALLOW;
+//    SysCtrlRegs.CLKCTL.bit.XTALOSCOFF = 0;     // Turn on XTALOSC  晶体振荡器关闭位：如果晶体振荡器不使用，可以使用该位将其关闭  0-晶体振荡器开启（复位时的默认状态）,1-晶体振荡器关闭
+//    SysCtrlRegs.CLKCTL.bit.XCLKINOFF = 1;      // Turn off XCLKIN    XCLKIN 关闭位：该位关闭外部 XCLKIN 振荡器输入
+//    SysCtrlRegs.CLKCTL.bit.OSCCLKSRC2SEL = 0;  // Switch to external clock  选择外部振荡器
+//    SysCtrlRegs.CLKCTL.bit.OSCCLKSRCSEL = 1;   // Switch from INTOSC1 to INTOSC2/ext clk   选择外部振荡器或内部振荡器 2
+//    SysCtrlRegs.CLKCTL.bit.WDCLKSRCSEL = 1;    // Switch Watchdog Clk Src to external clock  选择外部振荡器或内部振荡器 2
+//    SysCtrlRegs.CLKCTL.bit.INTOSC2OFF = 1;     // Turn off INTOSC2  内部振荡器 2 关闭
+//    SysCtrlRegs.CLKCTL.bit.INTOSC1OFF = 1;     // Turn off INTOSC1  内部振荡器1 关闭
+//    EDIS;
+//
+//    // configure the PLL
+//    if (SysCtrlRegs.PLLSTS.bit.MCLKSTS != 1)	// Make sure the PLL is not running in limp mode
+//    {
+//        // DIVSEL MUST be 0 before PLLCR can be changed from
+//        // 0x0000. It is set to 0 by an external reset XRSn
+//        // This puts us in 1/4
+//        if (SysCtrlRegs.PLLSTS.bit.DIVSEL != 0)
+//        {
+//            EALLOW;
+//            SysCtrlRegs.PLLSTS.bit.DIVSEL = 0;
+//            EDIS;
+//        }
+//
+//        EALLOW;
+//        // Before setting PLLCR turn off missing clock detect logic
+//        SysCtrlRegs.PLLSTS.bit.MCLKOFF = 1;
+//        SysCtrlRegs.PLLCR.bit.DIV = val;
+//        EDIS;
+//
+//        // Optional: Wait for PLL to lock.
+//        // During this time the CPU will switch to OSCCLK/2 until
+//        // the PLL is stable.  Once the PLL is stable the CPU will
+//        // switch to the new PLL value.
+//        //
+//        // This time-to-lock is monitored by a PLL lock counter.
+//        //
+//        // Code is not required to sit and wait for the PLL to lock.
+//        // However, if the code does anything that is timing critical,
+//        // and requires the correct clock be locked, then it is best to
+//        // wait until this switching has completed.
+//
+//        // Wait for the PLL lock bit to be set.
+//
+//        // The watchdog should be disabled before this loop, or fed within
+//        // the loop via ServiceDog().
+//
+//        // Uncomment to disable the watchdog
+//        DisableDog();
+//
+//        while(SysCtrlRegs.PLLSTS.bit.PLLLOCKS != 1)//PLL 锁定状态位,1-示 PLL 已完成锁定，现在已经稳定下来  0-表示 PLLCR 寄存器已经被写入，PLL 当前正被锁定。CPU 由 OSCCLK/2 来计时，直至 PLL 被锁定。
+//        {
+//          // Uncomment to service the watchdog
+//          // ServiceDog();
+//        }
+//
+//        EALLOW;
+//        SysCtrlRegs.PLLSTS.bit.MCLKOFF = 0;     // turn off missing clock detect   缺少时钟检测关闭位    主振荡器故障检测逻辑被使能。（默认）
+//        EDIS;
+//
+//        EALLOW;
+//        SysCtrlRegs.PLLSTS.bit.DIVSEL = 2;      // configure PLLSTS.DIVSEL = 2  (default)       (OSCCLK*2)/4        20M*6/2
+//        EDIS;
+//    }
+//}
 
 //--------------------------------------------------------------------------
 // This function initializes the clocks to the peripheral modules.
 //---------------------------------------------------------------------------
-void InitPeripheralClocks(void)
-{
-   EALLOW;
-
-   //SysCtrlRegs.HISPCP.all = 0x0001;	//50MHz for ADC / 30MHz
-   SysCtrlRegs.LOSPCP.all = 0x0002;	//25MHz for SCI and SPI / 15MHz
-
-   //SysCtrlRegs.XCLK.bit.XCLKOUTDIV = 2;	//Set ClockOut Pin = 100MHz/60MHZ
-   SysCtrlRegs.XCLK.all = 0x02;
-
-   //SysCtrlRegs.PCLKCR0.bit.ADCENCLK = 1;    // ADC
-   //SysCtrlRegs.PCLKCR0.bit.I2CAENCLK = 1;   // I2C
-
-   //SysCtrlRegs.PCLKCR0.bit.SPIAENCLK = 1;     // SPI-A
-   //SysCtrlRegs.PCLKCR0.bit.SPIBENCLK = 0;     // SPI-B
-   //SysCtrlRegs.PCLKCR0.bit.SPICENCLK = 0;     // SPI-C
-   //SysCtrlRegs.PCLKCR0.bit.SPIDENCLK = 0;     // SPI-D
-
-   //SysCtrlRegs.PCLKCR0.bit.SCIAENCLK = 1;     // SCI-A
-   //SysCtrlRegs.PCLKCR0.bit.SCIBENCLK = 0;     // SCI-B
-
-   //SysCtrlRegs.PCLKCR0.bit.ECANAENCLK = 0;    // eCAN-A
-   //SysCtrlRegs.PCLKCR0.bit.ECANBENCLK = 0;    // eCAN-B   
-
-   //SysCtrlRegs.PCLKCR0.bit.TBCLKSYNC = 1;   // Enable TBCLK within the ePWM
-
-   SysCtrlRegs.PCLKCR0.all = 0x051C;
-
-   //SysCtrlRegs.PCLKCR1.bit.ECAP1ENCLK = 1;  // eCAP1
-   //SysCtrlRegs.PCLKCR1.bit.ECAP2ENCLK = 1;  // eCAP2
-   //SysCtrlRegs.PCLKCR1.bit.ECAP3ENCLK = 0;  // eCAP3
-   //SysCtrlRegs.PCLKCR1.bit.ECAP4ENCLK = 0;  // eCAP4
-   
-   //SysCtrlRegs.PCLKCR1.bit.EPWM1ENCLK = 1;  // ePWM1  由系统时钟（SYSCLKOUT）为 ePWM1 模块计时。
-   //SysCtrlRegs.PCLKCR1.bit.EPWM2ENCLK = 1;  // ePWM2
-   //SysCtrlRegs.PCLKCR1.bit.EPWM3ENCLK = 1;  // ePWM3
-   //SysCtrlRegs.PCLKCR1.bit.EPWM4ENCLK = 0;  // ePWM4
-   //SysCtrlRegs.PCLKCR1.bit.EPWM5ENCLK = 0;  // ePWM5
-   //SysCtrlRegs.PCLKCR1.bit.EPWM6ENCLK = 0;  // ePWM6
-  
-   //SysCtrlRegs.PCLKCR1.bit.EQEP1ENCLK = 1;  // eQEP1
-   //SysCtrlRegs.PCLKCR1.bit.EQEP2ENCLK = 0;  // eQEP2
-
-   SysCtrlRegs.PCLKCR1.all = 0x4307;
-
-   EDIS;
-}
+//void InitPeripheralClocks(void)
+//{
+//   EALLOW;
+//
+//   //SysCtrlRegs.HISPCP.all = 0x0001;	//50MHz for ADC / 30MHz
+//   SysCtrlRegs.LOSPCP.all = 0x0002;	//25MHz for SCI and SPI / 15MHz
+//
+//   //SysCtrlRegs.XCLK.bit.XCLKOUTDIV = 2;	//Set ClockOut Pin = 100MHz/60MHZ
+//   SysCtrlRegs.XCLK.all = 0x02;
+//
+//   //SysCtrlRegs.PCLKCR0.bit.ADCENCLK = 1;    // ADC
+//   //SysCtrlRegs.PCLKCR0.bit.I2CAENCLK = 1;   // I2C
+//
+//   //SysCtrlRegs.PCLKCR0.bit.SPIAENCLK = 1;     // SPI-A
+//   //SysCtrlRegs.PCLKCR0.bit.SPIBENCLK = 0;     // SPI-B
+//   //SysCtrlRegs.PCLKCR0.bit.SPICENCLK = 0;     // SPI-C
+//   //SysCtrlRegs.PCLKCR0.bit.SPIDENCLK = 0;     // SPI-D
+//
+//   //SysCtrlRegs.PCLKCR0.bit.SCIAENCLK = 1;     // SCI-A
+//   //SysCtrlRegs.PCLKCR0.bit.SCIBENCLK = 0;     // SCI-B
+//
+//   //SysCtrlRegs.PCLKCR0.bit.ECANAENCLK = 0;    // eCAN-A
+//   //SysCtrlRegs.PCLKCR0.bit.ECANBENCLK = 0;    // eCAN-B
+//
+//   //SysCtrlRegs.PCLKCR0.bit.TBCLKSYNC = 1;   // Enable TBCLK within the ePWM
+//
+//   SysCtrlRegs.PCLKCR0.all = 0x051C;
+//
+//   //SysCtrlRegs.PCLKCR1.bit.ECAP1ENCLK = 1;  // eCAP1
+//   //SysCtrlRegs.PCLKCR1.bit.ECAP2ENCLK = 1;  // eCAP2
+//   //SysCtrlRegs.PCLKCR1.bit.ECAP3ENCLK = 0;  // eCAP3
+//   //SysCtrlRegs.PCLKCR1.bit.ECAP4ENCLK = 0;  // eCAP4
+//
+//   //SysCtrlRegs.PCLKCR1.bit.EPWM1ENCLK = 1;  // ePWM1  由系统时钟（SYSCLKOUT）为 ePWM1 模块计时。
+//   //SysCtrlRegs.PCLKCR1.bit.EPWM2ENCLK = 1;  // ePWM2
+//   //SysCtrlRegs.PCLKCR1.bit.EPWM3ENCLK = 1;  // ePWM3
+//   //SysCtrlRegs.PCLKCR1.bit.EPWM4ENCLK = 0;  // ePWM4
+//   //SysCtrlRegs.PCLKCR1.bit.EPWM5ENCLK = 0;  // ePWM5
+//   //SysCtrlRegs.PCLKCR1.bit.EPWM6ENCLK = 0;  // ePWM6
+//
+//   //SysCtrlRegs.PCLKCR1.bit.EQEP1ENCLK = 1;  // eQEP1
+//   //SysCtrlRegs.PCLKCR1.bit.EQEP2ENCLK = 0;  // eQEP2
+//
+//   SysCtrlRegs.PCLKCR1.all = 0x4307;
+//
+//   EDIS;
+//}
 
 //--------------------------------------------------------------------------
 // 
 //---------------------------------------------------------------------------
-void InitPieCtrl(void)
-{
-	Uint * m_Point1,* m_Point2;
-	Uint   m_Index;
-
-    DINT;    
-    
-    PieCtrlRegs.PIECTRL.bit.ENPIE = 0;	// Disable the PIE
-	// Clear all PIEIER registers:
-	m_Point1 = (Uint *)&PieCtrlRegs.PIEIER1.all;
-	m_Point2 = (Uint *)&PieCtrlRegs.PIEIFR1.all;
-	for(m_Index = 0;m_Index<12;m_Index++)
-	{
-		*(m_Point1++) = 0;
-		*(m_Point2++) = 0;
-	}
-}	
+//void InitPieCtrl(void)
+//{
+//	Uint * m_Point1,* m_Point2;
+//	Uint   m_Index;
+//
+//    DINT;
+//
+//    PieCtrlRegs.PIECTRL.bit.ENPIE = 0;	// Disable the PIE
+//	// Clear all PIEIER registers:
+//	m_Point1 = (Uint *)&PieCtrlRegs.PIEIER1.all;
+//	m_Point2 = (Uint *)&PieCtrlRegs.PIEIFR1.all;
+//	for(m_Index = 0;m_Index<12;m_Index++)
+//	{
+//		*(m_Point1++) = 0;
+//		*(m_Point2++) = 0;
+//	}
+//}
 
 /************************************************************
 所有误操作的中断处理
@@ -419,22 +419,22 @@ interrupt void rsvd_ISR(void)
 //--------------------------------------------------------------------------
 //初始化的时候首先把所有的中断服务程序 都初始化为默认服务程序
 //---------------------------------------------------------------------------
-void InitPieVectTable(void)
-{
-	int16	i;
-	PINT *pPieTable = (void *) &PieVectTable;
-		
-	EALLOW;	
-	for(i=0; i < 128; i++)
-	{
-		*pPieTable++ = rsvd_ISR;	
-	}
-	EDIS;
-
-	// Enable the PIE Vector Table
-	PieCtrlRegs.PIECTRL.bit.ENPIE = 1;	
-			
-}
+//void InitPieVectTable(void)
+//{
+//	int16	i;
+//	PINT *pPieTable = (void *) &PieVectTable;
+//
+//	EALLOW;
+//	for(i=0; i < 128; i++)
+//	{
+//		*pPieTable++ = rsvd_ISR;
+//	}
+//	EDIS;
+//
+//	// Enable the PIE Vector Table
+//	PieCtrlRegs.PIECTRL.bit.ENPIE = 1;
+//
+//}
 
 //---------------------------------------------------------------------------
 // Set GPIO 口的复用、上拉下拉、同步
@@ -549,8 +549,8 @@ void InitSetAdc(void)
 //	AdcRegs.ADCCTL1.bit.INTPULSEPOS	= 1;	//ADCINT1 trips after AdcResults latch
     ADC_clearInterruptStatus(ADCA_BASE, ADC_INT_NUMBER1);
 	ADC_setInterruptSource(ADCA_BASE, ADC_INT_NUMBER1, ADC_INT_TRIGGER_EOC5);
-	ADC_enableContinuousMode(ADCA_BASE);
-	ADC_enableInterrupt(ADCA_BASE);
+	ADC_enableContinuousMode(ADCA_BASE,ADC_INT_NUMBER1);
+	ADC_enableInterrupt(ADCA_BASE,ADC_INT_NUMBER1);
 
 	ADC_setInterruptPulseMode(ADCA_BASE, ADC_PULSE_END_OF_CONV);
 	ADC_setInterruptPulseMode(ADCC_BASE, ADC_PULSE_END_OF_CONV);

@@ -10,8 +10,12 @@
 #if 0
     // TODO Luke, 20260517, add uint16 def
 #else
+#ifdef TARGET_GS32
+#include "DSP_GS32_Device.h"
+#else
 #include "DSP2803x_Device.h"     // DSP2803x Headerfile Include File
 #include "DSP2803x_Examples.h"   // DSP2803x Examples Include File
+#endif
 #endif
 
 const Uint16 eeprom2Fc[] =

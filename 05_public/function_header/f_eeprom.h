@@ -141,6 +141,8 @@ void EepromOperateTimeDeal(void);
 Uint16 GetEepromIndexFromFcIndex(Uint16 index);
 Uint16 GetFcIndexFromEepromIndex(Uint16 a);
 
+void InitI2CGpio(void);
+
 void SaveOneFuncCode(Uint16 index);
 #endif // __F_EEPROM_H__
 

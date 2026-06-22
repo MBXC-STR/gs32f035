@@ -73,6 +73,7 @@
 									<listOptionValue builtIn="false" value="USING_VECTOR_INTERRUPT=1"/>
 									<listOptionValue builtIn="false" value="TARGET_GS32=1"/>
 									<listOptionValue builtIn="false" value="DSP2803X"/>
+									<listOptionValue builtIn="false" value="MATH_TYPE=IQ_MATH"/>
 								</option>
 								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.hpec.toolchains.riscv.option.c.compiler.include.paths.827121704" name="Include paths (-I)" superClass="com.hpec.toolchains.riscv.option.c.compiler.include.paths" useByScannerDiscovery="true" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${GS32_DRIVER_PATH}/driverlib/dsp&quot;"/>
@@ -102,8 +103,8 @@
 									<listOptionValue builtIn="false" value="--orphan-handling=warn"/>
 								</option>
 								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.hpec.toolchains.riscv.option.c.linker.scriptfile.1227816264" name="Script files (-T)" superClass="com.hpec.toolchains.riscv.option.c.linker.scriptfile" valueType="stringList">
-									<listOptionValue builtIn="false" value="&quot;${GS32_DRIVER_PATH}/driverlib/dsp/ld_scripts_dsp/gs32f00xx_dsp_flashilm.ld&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${GS32_DRIVER_PATH}/driverlib/dsp/ld_scripts_dsp/GS32F035_mem.ld&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${GS32_DRIVER_PATH}/driverlib/dsp/ld_scripts_dsp/gs32f00xx_dsp_flash.ld&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${GS32_DRIVER_PATH}/driverlib/dsp/ld_scripts_dsp/GS32F035P_mem.ld&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${GS32_DRIVER_PATH}/driverlib/dsp/ld_scripts_dsp/gs32f00xx_dsp_3.0_regs.ld&quot;"/>
 								</option>
 								<inputType id="com.hpec.toolchains.riscv.tool.c.linker.input.1883411043" superClass="com.hpec.toolchains.riscv.tool.c.linker.input">

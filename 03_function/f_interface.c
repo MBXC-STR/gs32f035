@@ -120,7 +120,7 @@ void copyDataFunc2Motor2ms(void)
     gSendToMotor2MsDataBuff[4] = motorFc.motorPara.elem.ratingPower;        // 4    电机额定功率
 
 #if 1    
-    memcpy(&gSendToMotor2MsDataBuff[5], &motorFc.motorPara.elem.ratingSpeed, 6);
+    memcpy(&gSendToMotor2MsDataBuff[5], &motorFc.motorPara.elem.ratingSpeed, 6 * 2);
 #else 
     gSendToMotor2MsDataBuff[5] = motorFc.motorPara.elem.ratingSpeed;        // 5    电机额定转速
     gSendToMotor2MsDataBuff[6] = motorFc.motorPara.elem.statorResistance;   // 6    定子电阻
@@ -131,7 +131,7 @@ void copyDataFunc2Motor2ms(void)
 #endif
 
 #if 1    
-    memcpy(&gSendToMotor2MsDataBuff[11], &motorFc.motorPara.elem.pmsmRs, 3);
+    memcpy(&gSendToMotor2MsDataBuff[11], &motorFc.motorPara.elem.pmsmRs, 3 * 2);
 #else 
     gSendToMotor2MsDataBuff[11] = motorFc.motorPara.elem.pmsmRs;             // 11   同步机定子电阻
     gSendToMotor2MsDataBuff[12] = motorFc.motorPara.elem.pmsmLd;             // 12   同步机D轴电感
@@ -154,7 +154,7 @@ void copyDataFunc2Motor2ms(void)
     gSendToMotor2MsDataBuff[27] = motorFc.torqueBoost;                       // 27   转矩提升
 
 #if 1    
-    memcpy(&gSendToMotor2MsDataBuff[28], &funcCode.code.boostCloseFrq, 9);
+    memcpy(&gSendToMotor2MsDataBuff[28], &funcCode.code.boostCloseFrq, 9 * 2);
 #else 
     gSendToMotor2MsDataBuff[28] = funcCode.code.boostCloseFrq;               // 28   VF提升截止频率
     gSendToMotor2MsDataBuff[29] = funcCode.code.vfFrq1;                      // 29   VF频率点1
@@ -193,7 +193,7 @@ void copyDataFunc2Motor2ms(void)
     gSendToMotor2MsDataBuff[60] = motorFc.motorPara.elem.pmsmCoeff;          // 60   同步机反电动势系数  
 
 #if 1    
-    memcpy(&gSendToMotor2MsDataBuff[61], &motorFc.vcPara.mAcrKp, 4);
+    memcpy(&gSendToMotor2MsDataBuff[61], &motorFc.vcPara.mAcrKp, 4 * 2);
 #else     
     gSendToMotor2MsDataBuff[61] = motorFc.vcPara.mAcrKp;                     // 61  M轴电流环Kp
     gSendToMotor2MsDataBuff[62] = motorFc.vcPara.mAcrKi;                     // 62  M轴电流环Ki
@@ -209,7 +209,7 @@ void copyDataFunc2Motor2ms(void)
     gSendToMotor2MsDataBuff[69] = motorFc.pgPara.elem.uvwSignAngle;          // 69 UVW信号零点位置角
 
 #if 1    
-    memcpy(&gSendToMotor2MsDataBuff[70], &motorFc.vcPara.weakFlusMode, 5);
+    memcpy(&gSendToMotor2MsDataBuff[70], &motorFc.vcPara.weakFlusMode, 5 * 2);
 #else  
     gSendToMotor2MsDataBuff[70] = motorFc.vcPara.weakFlusMode;               // 70 F2-18 同步机弱磁模式
     gSendToMotor2MsDataBuff[71] = motorFc.vcPara.weakFlusCoef;               // 71 F2-19 同步机弱磁系数
@@ -220,7 +220,7 @@ void copyDataFunc2Motor2ms(void)
 #endif 
 
 #if 1
-    memcpy(&gSendToMotor2MsDataBuff[75], &funcCode.code.VFOverCurLimitPoint, 4);
+    memcpy(&gSendToMotor2MsDataBuff[75], &funcCode.code.VFOverCurLimitPoint, 4 * 2);
 #else
     gSendToMotor2MsDataBuff[75] = funcCode.code.VFOverCurLimitPoint;               // 75 F3-18   VF过流失速动作电流
     gSendToMotor2MsDataBuff[76] = funcCode.code.VFOverCurEnableSwitch;             // 76 F3-19   VF过流失速使能
@@ -229,7 +229,7 @@ void copyDataFunc2Motor2ms(void)
 #endif
 
 #if 1
-	memcpy(&gSendToMotor2MsDataBuff[79], &funcCode.code.VFOverVdcLimitPoint, 5);
+	memcpy(&gSendToMotor2MsDataBuff[79], &funcCode.code.VFOverVdcLimitPoint, 5 * 2);
 #else
     gSendToMotor2MsDataBuff[79] = funcCode.code.VFOverVdcLimitPoint;               // 79 F3-22   VF过压失速动作电压
     gSendToMotor2MsDataBuff[80] = funcCode.code.VFOverVdcEnableSwitch;             // 80 F3-23   VF过压失速使能
@@ -261,7 +261,7 @@ void copyDataFunc2Motor2ms(void)
 	gSendToMotor2MsDataBuff[91] = funcCode.code.VFWsComTimeCoff;                  // 91  F3-27  转差补偿时间常数
 
 #if 1
-	memcpy(&gSendToMotor2MsDataBuff[92], &funcCode.code.VFAutoUpFreqEnableSwitch, 5);
+	memcpy(&gSendToMotor2MsDataBuff[92], &funcCode.code.VFAutoUpFreqEnableSwitch, 5 * 2);
 #else
     gSendToMotor2MsDataBuff[92] = funcCode.code.VFAutoUpFreqEnableSwitch;         // 92 F3-28  自动升频使能
     gSendToMotor2MsDataBuff[93] = funcCode.code.VFMinDriveCur;                    // 93 F3-29   最小电动力矩电流
@@ -271,7 +271,7 @@ void copyDataFunc2Motor2ms(void)
 #endif
 	gSendToMotor2MsDataBuff[97] = funcCode.code.torquepCompGain;                  // 97 F3-33    在线转矩补偿增益
 #if 1
-	memcpy(&gSendToMotor2MsDataBuff[98], &funcCode.code.rsvdF3[0], 10);
+	memcpy(&gSendToMotor2MsDataBuff[98], &funcCode.code.rsvdF3[0], 10 * 2);
 #else
     gSendToMotor2MsDataBuff[98]  = funcCode.code.rsvdF3[0];                       // 98  F3-35  预留
     gSendToMotor2MsDataBuff[99]  = funcCode.code.rsvdF3[1];                       // 99  F3-36   
@@ -287,7 +287,7 @@ void copyDataFunc2Motor2ms(void)
 
 #endif
 #if 1
-	memcpy(&gSendToMotor2MsDataBuff[108], &funcCode.code.SpdSearchCurKp, 6);
+	memcpy(&gSendToMotor2MsDataBuff[108], &funcCode.code.SpdSearchCurKp, 6 * 2);
 #else
     gSendToMotor2MsDataBuff[108] = funcCode.code.SpdSearchCurKp;                   // 108 F6-16  转速跟踪闭环电流KP
     gSendToMotor2MsDataBuff[109] = funcCode.code.SpdSearchCurKi;                  // 109 F6-17  转速跟踪闭环电流KI 
@@ -297,7 +297,7 @@ void copyDataFunc2Motor2ms(void)
     gSendToMotor2MsDataBuff[113] = funcCode.code.SpdSearchOffMagTime;             // 113 F6-21  去磁时间
 #endif
 #if 1
-    memcpy(&gSendToMotor2MsDataBuff[114], &funcCode.code.rsvdF6[0], 5);
+    memcpy(&gSendToMotor2MsDataBuff[114], &funcCode.code.rsvdF6[0], 5 * 2);
 #else
     gSendToMotor2MsDataBuff[114] = funcCode.code.rsvdF6[0];                       // 108 F6-22  预留
     gSendToMotor2MsDataBuff[115] = funcCode.code.rsvdF6[1];                       // 109 F6-23   
@@ -313,13 +313,13 @@ void copyDataFunc2Motor2ms(void)
     // 更新同步电机控制参数
     if (MOTOR_SN_1 == motorSn)  // 第1电机(F2-23~F2-51)
    	{
-        memcpy(&gSendToMotor2MsDataBuff[120], &funcCode.code.vcparaM1.pmsmWeakCoef, sizeof(struct SYNCHRO_MOtOR_VC_PARA));
+        memcpy(&gSendToMotor2MsDataBuff[120], &funcCode.code.vcparaM1.pmsmWeakCoef, sizeof(struct SYNCHRO_MOtOR_VC_PARA) * 2);
 	}
 	else if(MOTOR_SN_2 == motorSn)// 第1电机(A2-66~F2-94)
 	{
 #if 0
 	    // TODO Luke, 20260517, vcparaM2不存在整理功能码
-        memcpy(&gSendToMotor2MsDataBuff[120], &funcCode.code.vcparaM2.pmsmWeakCoef, sizeof(struct SYNCHRO_MOtOR_VC_PARA));
+        memcpy(&gSendToMotor2MsDataBuff[120], &funcCode.code.vcparaM2.pmsmWeakCoef, sizeof(struct SYNCHRO_MOtOR_VC_PARA) * 2);
 
 #endif
 	}
@@ -389,7 +389,7 @@ void copyDataFunc2CF2ms(void)
         masterTorqueUp = -masterTorqueUp;
     }
 #endif
-    memcpy(&gSendToMotor2MsDataBuff[FUNC_TO_MOTOR_2MS_DATA_NUM], &funcCode.group.cf[0], CFNUM);
+    memcpy(&gSendToMotor2MsDataBuff[FUNC_TO_MOTOR_2MS_DATA_NUM], &funcCode.group.cf[0], CFNUM * 2);
 #if DEBUG_F_MSC_CTRL
     gSendToMotor2MsDataBuff[FUNC_TO_MOTOR_2MS_DATA_NUM + CFNUM] = funcCode.code.slaveWacthWindowFrq;
     gSendToMotor2MsDataBuff[FUNC_TO_MOTOR_2MS_DATA_NUM + CFNUM + 1] = masterTorqueUp;///主机转矩,从机直接叠加
@@ -454,7 +454,7 @@ void copyDataCore2Func2ms(void)
 void copyDataCore2Uf2ms(void)
 {
 #if 1
-    memcpy(&funcCode.group.uf[0], &gSendToFunctionDataBuff[MOTOR_TO_Func_2MS_DATA_NUM], 30);
+    memcpy(&funcCode.group.uf[0], &gSendToFunctionDataBuff[MOTOR_TO_Func_2MS_DATA_NUM], 30 * 2);
 #elif 1
     funcCode.group.uf[0]  = gSendToFunctionDataBuff[26];
 ...

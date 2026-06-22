@@ -99,8 +99,8 @@ void InitRtInterface(void)
     GpioCtrlRegs.GPAQSEL2.bit.GPIO20 = 0x0;              //????څ  
     GpioCtrlRegs.GPAQSEL2.bit.GPIO21 = 0x0;              //????څ  
     GpioCtrlRegs.GPAQSEL2.bit.GPIO23 = 0x0;              //????څ  
-    GpioCtrlRegs.GPACTRL.bit.QUALPRD2 = 0x00; //PULS_IN??????5*5*20ns = 300ns????????????????
 
+    GpioCtrlRegs.GPACTRL.all &= ~(0xFF << 16);
     GpioCtrlRegs.AIOMUX1.bit.AIO10 = 0;         // SAMPLE    AIO-port ->
     GpioCtrlRegs.AIOMUX1.bit.AIO12 = 0;         // RD\       AIO-port ->
 
@@ -170,7 +170,9 @@ void ReInitForPG(void)
             GpioCtrlRegs.GPAQSEL2.bit.GPIO20 = 0x2;              //????څ  
    			GpioCtrlRegs.GPAQSEL2.bit.GPIO21 = 0x2;              //????څ  
             GpioCtrlRegs.GPAQSEL2.bit.GPIO23 = 0x2;              //????څ  
-			GpioCtrlRegs.GPACTRL.bit.QUALPRD2 = 0x01; //PULS_IN??????5*5*20ns = 300ns????????????????
+//			GpioCtrlRegs.GPACTRL.bit.QUALPRD2 = 0x01; //PULS_IN??????5*5*20ns = 300ns????????????????
+            GpioCtrlRegs.GPACTRL.all &= ~(0xFF << 16);
+			GpioCtrlRegs.GPACTRL.all |= (0x01 << 16);
         #ifdef TMS320F2808
             GpioCtrlRegs.GPAMUX2.bit.GPIO24 = 2;    //eQEP2A
             GpioCtrlRegs.GPAMUX2.bit.GPIO25 = 2;    //eQEP2B
@@ -221,8 +223,10 @@ void ReInitForPG(void)
             GpioCtrlRegs.GPAQSEL2.bit.GPIO20 = 0x2;              //????څ  
    			GpioCtrlRegs.GPAQSEL2.bit.GPIO21 = 0x2;              //????څ  
             GpioCtrlRegs.GPAQSEL2.bit.GPIO23 = 0x2;              //????څ  
-			GpioCtrlRegs.GPACTRL.bit.QUALPRD2 = 0x01; //PULS_IN??????5*5*20ns = 300ns????????????????
-        #ifdef TMS320F2808
+//			GpioCtrlRegs.GPACTRL.bit.QUALPRD2 = 0x01; //PULS_IN??????5*5*20ns = 300ns????????????????
+            GpioCtrlRegs.GPACTRL.all &= ~(0xFF << 16);
+			GpioCtrlRegs.GPACTRL.all |= (0x01 << 16);
+            #ifdef TMS320F2808
             GpioCtrlRegs.GPAMUX2.bit.GPIO24 = 2;    //eQEP2A
             GpioCtrlRegs.GPAMUX2.bit.GPIO25 = 2;    //eQEP2B
             GpioCtrlRegs.GPAMUX2.bit.GPIO26 = 2;    //eQEP2I
@@ -362,116 +366,196 @@ u16 GetRotorTransPos()
 	ROTOR_TRANS_RD=0;		//begin to transmit data  	  
 // 1st Fall-edge
 	ROTOR_TRANS_SCLK  = 0;	//Set SCLK
-    asm(" RPT #5 || NOP ");
+//    asm(" RPT #5 || NOP ");
+	NOP;
+	NOP;
+	NOP;
+	NOP;
+	NOP;
 	mBit   = (ROTOR_TRANS_SO) << 15;     //MSB-bit15	    
 	mData  = mData | mBit;	
 	ROTOR_TRANS_SCLK = 1;
-    asm(" RPT #5 || NOP ");
+//    asm(" RPT #5 || NOP ");
+    NOP;
+	NOP;
+	NOP;
+	NOP;
+	NOP;
 // 2nd Fall-edge
     ROTOR_TRANS_SCLK  = 0;
     //asm(" RPT #5 || NOP ");
 	mBit   = (ROTOR_TRANS_SO) << 14;     // bit14
 	mData  = mData | mBit;	
 	ROTOR_TRANS_SCLK = 1;
-    asm(" RPT #5 || NOP ");
+//    asm(" RPT #5 || NOP ");
+    NOP;
+	NOP;
+	NOP;
+	NOP;
+	NOP;
 // 3rd Fall-edge
     ROTOR_TRANS_SCLK  = 0;
     //asm(" RPT #5 || NOP ");
 	mBit   = (ROTOR_TRANS_SO) << 13;     // bit13
 	mData  = mData | mBit;	
 	ROTOR_TRANS_SCLK = 1;
-    asm(" RPT #5 || NOP ");
+//    asm(" RPT #5 || NOP ");
+	NOP;
+	NOP;
+	NOP;
+	NOP;
+	NOP;
 // 4th Fall-edge
     ROTOR_TRANS_SCLK  = 0;
     //asm(" RPT #5 || NOP ");
 	mBit   = (ROTOR_TRANS_SO) << 12;     // bit12
 	mData  = mData | mBit;	
 	ROTOR_TRANS_SCLK = 1;
-    asm(" RPT #5 || NOP ");
+//    asm(" RPT #5 || NOP ");
+	NOP;
+	NOP;
+	NOP;
+	NOP;
+	NOP;
 // 5th Fall-edge
     ROTOR_TRANS_SCLK  = 0;
     //asm(" RPT #5 || NOP ");
 	mBit   = (ROTOR_TRANS_SO) << 11;     // bit11
 	mData  = mData | mBit;	
 	ROTOR_TRANS_SCLK = 1;
-    asm(" RPT #5 || NOP ");
+//    asm(" RPT #5 || NOP ");
+	NOP;
+	NOP;
+	NOP;
+	NOP;
+	NOP;
 // 6th Fall-edge
     ROTOR_TRANS_SCLK  = 0;
     //asm(" RPT #5 || NOP ");
 	mBit   = (ROTOR_TRANS_SO) << 10;     // bit10
 	mData  = mData | mBit;	
 	ROTOR_TRANS_SCLK = 1;
-    asm(" RPT #5 || NOP ");
+//    asm(" RPT #5 || NOP ");
+    NOP;
+	NOP;
+	NOP;
+	NOP;
+	NOP;
 // 7th Fall-edge
     ROTOR_TRANS_SCLK  = 0;
     //asm(" RPT #5 || NOP ");
 	mBit   = (ROTOR_TRANS_SO) << 9;     // bit9
 	mData  = mData | mBit;	
 	ROTOR_TRANS_SCLK = 1;
-    asm(" RPT #5 || NOP ");
+//    asm(" RPT #5 || NOP ");
+    NOP;
+	NOP;
+	NOP;
+	NOP;
+	NOP;
 // 8th Fall-edge
     ROTOR_TRANS_SCLK  = 0;
     //asm(" RPT #5 || NOP ");
 	mBit   = (ROTOR_TRANS_SO) << 8;     // bit8
 	mData  = mData | mBit;	
 	ROTOR_TRANS_SCLK = 1;
-    asm(" RPT #5 || NOP ");
+//    asm(" RPT #5 || NOP ");
 // 9th Fall-edge
     ROTOR_TRANS_SCLK  = 0;
     //asm(" RPT #5 || NOP ");
 	mBit   = (ROTOR_TRANS_SO) << 7;     // bit7
 	mData  = mData | mBit;	
 	ROTOR_TRANS_SCLK = 1;
-    asm(" RPT #5 || NOP ");
+//    asm(" RPT #5 || NOP ");
+	NOP;
+	NOP;
+	NOP;
+	NOP;
+	NOP;
 // 10th Fall-edge
     ROTOR_TRANS_SCLK  = 0;
     //asm(" RPT #5 || NOP ");
 	mBit   = (ROTOR_TRANS_SO) << 6;     // bit6
 	mData  = mData | mBit;	
 	ROTOR_TRANS_SCLK = 1;
-    asm(" RPT #5 || NOP ");
+//    asm(" RPT #5 || NOP ");
+	NOP;
+	NOP;
+	NOP;
+	NOP;
+	NOP;
 // 11th Fall-edge
     ROTOR_TRANS_SCLK  = 0;
     //asm(" RPT #5 || NOP ");
 	mBit   = (ROTOR_TRANS_SO) << 5;     // bit5
 	mData  = mData | mBit;	
 	ROTOR_TRANS_SCLK = 1;
-    asm(" RPT #5 || NOP ");
+//    asm(" RPT #5 || NOP ");
+	NOP;
+	NOP;
+	NOP;
+	NOP;
+	NOP;
 // 12th Fall-edge
     ROTOR_TRANS_SCLK  = 0;
     //asm(" RPT #5 || NOP ");
 	mBit   = (ROTOR_TRANS_SO) << 4;     // bit4
 	mData  = mData | mBit;	
 	ROTOR_TRANS_SCLK = 1;
-    asm(" RPT #5 || NOP ");
+//    asm(" RPT #5 || NOP ");
+	NOP;
+	NOP;
+	NOP;
+	NOP;
+	NOP;
 // 12th Fall-edge
     ROTOR_TRANS_SCLK  = 0;
     //asm(" RPT #5 || NOP ");
 	mBit   = (ROTOR_TRANS_SO) << 3;     // bit3
 	mData  = mData | mBit;	
 	ROTOR_TRANS_SCLK = 1;
-    asm(" RPT #5 || NOP ");
+//    asm(" RPT #5 || NOP ");
+	NOP;
+	NOP;
+	NOP;
+	NOP;
+	NOP;
 // 12th Fall-edge
     ROTOR_TRANS_SCLK  = 0;
     //asm(" RPT #5 || NOP ");
 	mBit   = (ROTOR_TRANS_SO) << 2;     // bit2
 	mData  = mData | mBit;	
 	ROTOR_TRANS_SCLK = 1;
-    asm(" RPT #5 || NOP ");
+//    asm(" RPT #5 || NOP ");
+	NOP;
+	NOP;
+	NOP;
+	NOP;
+	NOP;
 // 12th Fall-edge
     ROTOR_TRANS_SCLK  = 0;
     //asm(" RPT #5 || NOP ");
 	mBit   = (ROTOR_TRANS_SO) << 1;     // bit1
 	mData  = mData | mBit;	
 	ROTOR_TRANS_SCLK = 1;
-    asm(" RPT #5 || NOP ");
+//    asm(" RPT #5 || NOP ");
+	NOP;
+	NOP;
+	NOP;
+	NOP;
+	NOP;
 // 12th Fall-edge
     ROTOR_TRANS_SCLK  = 0;
     //asm(" RPT #5 || NOP ");
 	mBit   = (ROTOR_TRANS_SO) << 0;     // bit0
 	mData  = mData | mBit;	
 	ROTOR_TRANS_SCLK = 1;
-    asm(" RPT #5 || NOP ");
+//    asm(" RPT #5 || NOP ");
+	NOP;
+	NOP;
+	NOP;
+	NOP;
+	NOP;
 // 12th Fall-edge
     ROTOR_TRANS_SCLK  = 0;
     //asm(" RPT #5 || NOP ");

@@ -299,16 +299,16 @@ void InitSciOSC(uint8 baudRate)
 	SciRxBufStr.len = 0xff;
 #if 	(1 == OSC_SCI_SEL)	
 	#ifdef TARGET_GS32
-	interrupt_disable(INT_SCIA_RX);
-	interrupt_disable(INT_SCIA_TX);
-#else
+	Interrupt_disable(INT_SCIA_RX);
+	Interrupt_disable(INT_SCIA_TX);
+	#else
     PieCtrlRegs.PIEIER9.bit.INTx1 = 0;     					// PIE Group 9, INT1	RX卸 止
 	PieCtrlRegs.PIEIER9.bit.INTx2 = 0;     					// PIE Group 9, INT2	TX卸
 	#endif
 #else
 	#ifdef TARGET_GS32
-	interrupt_disable(INT_LINA);
-	interrupt_disable(INT_LINB);
+	Interrupt_disable(INT_LINA);
+	Interrupt_disable(INT_LINB);
 	#else
     PieCtrlRegs.PIEIER9.bit.INTx3 = 0;     					// PIE Group 9, INT3	RX卸 止
 	PieCtrlRegs.PIEIER9.bit.INTx4 = 0;     					// PIE Group 9, INT4	TX卸
@@ -367,14 +367,15 @@ void InitSciOSC(uint8 baudRate)
 #else    
 		#ifdef TARGET_GS32
 		Interrupt_register(INT_SCIB_RX, &sciaRxFifoIsr);
-#else    
-	PieVectTable.SCIRXINTB = &sciaRxFifoIsr;
+		#else
+		PieVectTable.SCIRXINTB = &sciaRxFifoIsr;
 		#endif
     #if OSC_TX_INT_EN == 1
 		#ifdef TARGET_GS32
 		Interrupt_register(INT_SCIB_TX, &sciaTxFifoIsr);
 		#else
 	    PieVectTable.SCITXINTB = &sciaTxFifoIsr;
+		#endif
     #endif
 #endif
 	EDIS;
@@ -2858,4 +2859,6 @@ uint16 upsend(uint16 curFcindex)
 return attribute.all;
 }
 #endif
+
+
 //end

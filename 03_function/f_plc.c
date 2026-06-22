@@ -15,7 +15,7 @@
 #include "f_plc.h"
 
 
-#define DEBUG_F_PLC              1
+#define DEBUG_F_PLC              0
 
 
 #if DEBUG_F_PLC

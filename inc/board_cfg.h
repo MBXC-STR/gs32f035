@@ -57,7 +57,7 @@ extern "C"{
 #endif
 
 /* 系统时钟 */
-#define DEVICE_SYSCLK_FREQ              (120*1000*1000U)
+#define DEVICE_SYSCLK_FREQ              (240*1000*1000U)
 
 /* 系统时钟分频 */
 #define DEVICE_SYSCLK_DIV               (2)

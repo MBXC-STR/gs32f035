@@ -121,6 +121,7 @@ void InitRtInterface(void)
 *************************************************************/
 void InitSetQEP(void)
 {  
+	EQepRegs = &EQep1Regs;
 	/****************?????????wyk******************/
 	EALLOW;
 	(*EQepRegs).QEPCTL.all = 0;

@@ -1,8 +1,8 @@
 /****************************************************************
-�ļ�˵��������TMS320F280X DSP�ĵ����������
-          �����л㴨�����ɷ����޹�˾
-�ļ��汾�� 
-���¸��£� 888
+锟侥硷拷说锟斤拷锟斤拷锟斤拷锟斤拷TMS320F280X DSP锟侥碉拷锟斤拷锟斤拷锟斤拷锟斤拷锟�
+          锟斤拷锟斤拷锟叫汇川锟斤拷锟斤拷锟缴凤拷锟斤拷锟睫癸拷司
+锟侥硷拷锟芥本锟斤拷
+锟斤拷锟铰革拷锟铰ｏ拷 888
 ****************************************************************/
 #include "MotorInclude.h"
 
@@ -26,7 +26,7 @@ extern void Main05msFunctionC(void);
 extern void Main05msFunctionD(void);
 extern void Main0msFunction(void);
 /***************************************************************
--------------------------�����򲿷�-----------------------------
+-------------------------锟斤拷锟斤拷锟津部凤拷-----------------------------
 ****************************************************************/
 void main(void)
 {					
@@ -42,7 +42,7 @@ void main(void)
    	InitForMotorApp();					// Step 4. User specific code
    	InitForFunctionApp();
 
-	EnableDog();                  // d
+//	EnableDog();                  // d
 	SetInterruptEnable();				// Step 5. enable interrupts:
    	EINT;   							    
    	ERTM;   							    
@@ -53,13 +53,13 @@ void main(void)
   	while(1)							// Step 6. User Application function:
    	{
 		m_DetaTime = m_BaseTime - GetTime();		
-		if(m_DetaTime >= C_TIME_05MS)	//�ж�0.5MS����
+		if(m_DetaTime >= C_TIME_05MS)
         {            
 			m_LoopFlag ++;			
 			m_BaseTime -= C_TIME_05MS;
  			KickDog();
 
-            Main05msMotor();                        // ����0.5ms����          
+            Main05msMotor();
                     
 			if((m_LoopFlag & 0x03) == 0)            // prA
 			{         
@@ -86,21 +86,21 @@ void main(void)
 				Main2msMotorD(); 	
             }
 
-            // ����cpuæµϵ��1
+            // 锟斤拷锟斤拷cpu忙碌系锟斤拷1
            // gCpuTime.Det05msClk = __IQsat(m_DetaTime, 65535, C_TIME_05MS);
         }
 
-		Main0msFunction();				//���ȴ�ѭ����ִ�й��ܲ��ֳ���
-//		Main0msMotor();					//���ȴ�ѭ����ִ�е�����Ʋ��ֳ���
+		Main0msFunction();				//锟斤拷锟饺达拷循锟斤拷锟斤拷执锟叫癸拷锟杰诧拷锟街筹拷锟斤拷
+//		Main0msMotor();					//锟斤拷锟饺达拷循锟斤拷锟斤拷执锟叫碉拷锟斤拷锟斤拷撇锟斤拷殖锟斤拷锟�
    	}
 } 
 
 
 /***************************************************************
------------------------�жϳ��򲿷�-----------------------------
+-----------------------锟叫断筹拷锟津部凤拷-----------------------------
 ****************************************************************/
 /***************************************************************
-	EPWM�������жϣ�Լ30us
+	EPWM锟斤拷锟斤拷锟斤拷锟叫断ｏ拷约30us
 ****************************************************************/
 #ifdef TARGET_GS32
 __interrupt void ADC_Over_isr(void)
@@ -111,13 +111,13 @@ interrupt void ADC_Over_isr(void)
 #ifdef TARGET_GS32
     SAVE_IRQ_CSR_CONTEXT();
 #endif
-    EALLOW;             //28035ΪEALLOW
+    EALLOW;             //28035为EALLOW
     ADC_CLEAR_INT_FLAG;
     EDIS;
 	EINT;
 	//gCpuTime.ADCIntBase = GetTime();
 	//ADCOverInterrupt();
-	gMainCmd.pADCIsr();                         /*޸Ϊָ뷽ʽִADCжϳĬADCEndIsr()*/					
+	gMainCmd.pADCIsr();                         /*薷为指敕绞街碅DC卸铣默ADCEndIsr()*/
 //	gCpuTime.ADCInt = gCpuTime.ADCIntBase - GetTime();
 	DINT;
     EALLOW;
@@ -134,7 +134,7 @@ interrupt void ADC_Over_isr(void)
 #endif
 }
 /***************************************************************
-	EPWM�Ĺ����жϣ���Ӳ�������źŴ���
+	EPWM锟侥癸拷锟斤拷锟叫断ｏ拷锟斤拷硬锟斤拷锟斤拷锟斤拷锟脚号达拷锟斤拷
 ****************************************************************/
 #ifdef TARGET_GS32
 __interrupt void EPWM1_TZ_isr(void)
@@ -145,8 +145,8 @@ interrupt void EPWM1_TZ_isr(void)
 #ifdef TARGET_GS32
     SAVE_IRQ_CSR_CONTEXT();
 #endif
-	DisableDrive();								//���ȷ������
-	HardWareErrorDeal();					    //����Ӳ�����ϣ��������ģ�鴦��
+	DisableDrive();								//锟斤拷锟饺凤拷锟斤拷锟斤拷锟�
+	HardWareErrorDeal();					    //锟斤拷锟斤拷硬锟斤拷锟斤拷锟较ｏ拷锟斤拷锟斤拷锟斤拷锟侥ｏ拷榇︼拷锟�
                 // 
 #ifdef TARGET_GS32
     
@@ -159,7 +159,7 @@ interrupt void EPWM1_TZ_isr(void)
 }
 
 /***************************************************************
-	CBC������TZ�жϣ��ж���ǿ�ƹر�����ʹ���ź�
+	CBC锟斤拷锟斤拷锟斤拷TZ锟叫断ｏ拷锟叫讹拷锟斤拷强锟狡关憋拷锟斤拷锟斤拷使锟斤拷锟脚猴拷
 ****************************************************************/
 #ifdef TARGET_GS32
 __interrupt void EPWM2_TZ_isr(void)
@@ -170,7 +170,7 @@ interrupt void EPWM2_TZ_isr(void)
 #ifdef TARGET_GS32
     SAVE_IRQ_CSR_CONTEXT();
 #endif
-	DisableDrive();								//���ȷ������,�����ж��п���
+	DisableDrive();								//锟斤拷锟饺凤拷锟斤拷锟斤拷锟�,锟斤拷锟斤拷锟叫讹拷锟叫匡拷锟斤拷
     gCBCProtect.CBCIntFlag = 1;
 #ifdef TARGET_GS32
     

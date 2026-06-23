@@ -3187,7 +3187,7 @@ C:/Users/Jianrong Lin/str/GS32 Studio/toolchain/gs-riscv-gcc/bin/../lib/gcc/risc
                 0x00000000        0xa ./gs32_driver/common/log.o
  .rodata.log_log.str1.4
                 0x00000000       0x46 ./gs32_driver/common/log.o
- .text.log_log  0x00000000      0x140 ./gs32_driver/common/log.o
+ .text.log_log  0x00000000      0x142 ./gs32_driver/common/log.o
  .rodata.str1.4
                 0x00000000       0x5e ./gs32_driver/common/log.o
  .rodata.level_colors
@@ -3573,6 +3573,8 @@ C:/Users/Jianrong Lin/str/GS32 Studio/toolchain/gs-riscv-gcc/bin/../lib/gcc/risc
  .bss           0x00000000        0x0 ./03_function/f_main.o
  .text.Main2msFunction
                 0x00000000        0x2 ./03_function/f_main.o
+ .text.getMomeryValue
+                0x00000000        0x2 ./03_function/f_main.o
  .bss.motorPara
                 0x00000000       0x36 ./03_function/f_main.o
  .bss.driveCoeff
@@ -3918,6 +3920,8 @@ C:/Users/Jianrong Lin/str/GS32 Studio/toolchain/gs-riscv-gcc/bin/../lib/gcc/risc
  .text          0x00000000        0x0 ./01_system/mainInit_2803x.o
  .data          0x00000000        0x0 ./01_system/mainInit_2803x.o
  .bss           0x00000000        0x0 ./01_system/mainInit_2803x.o
+ .text.EnableDog
+                0x00000000       0x32 ./01_system/mainInit_2803x.o
  .text.rsvd_ISR
                 0x00000000       0x4a ./01_system/mainInit_2803x.o
  .sbss.gErrorIntCnt
@@ -4301,7 +4305,7 @@ C:/Users/Jianrong Lin/str/GS32 Studio/toolchain/gs-riscv-gcc/bin/../lib/gcc/risc
  ----MAP-FILE-- MEMORY REGION -------------------- 
 
 Name             Origin             Length             Used               Attributes
-flash            0x08000000         0x00080000         0x00025830         axr!w
+flash            0x08000000         0x00080000         0x00025810         axr!w
 ilm              0x20100000         0x00020000         0x00000b00         axw!r
 dlm              0x20120000         0x00007800         0x00006a00         axw!r
 dlm_stk          0x20127800         0x00000800         0x00000800         axw!r
@@ -4606,7 +4610,7 @@ END GROUP
                 0x080006e0        0x0 ./gs32_driver/mathlib/IQMathLib.o
 
  -------------------------- 
-.text           0x08000700    0x1ff00   : output_sect 
+.text           0x08000700    0x1fee0   : output_sect 
  --------------- input_sect 
  *(.text.unlikely .text.unlikely.*)
  --------------- input_sect 
@@ -4747,1346 +4751,1340 @@ END GROUP
                 0x08001bce       0x3e ./03_function/f_eeprom.o
                 0x08001bce                InitI2CGpio
  .text.InitSetI2ca
-                0x08001c0c       0x46 ./03_function/f_eeprom.o
+                0x08001c0c       0x66 ./03_function/f_eeprom.o
                 0x08001c0c                InitSetI2ca
  .text.I2cIntDeal
-                0x08001c52      0x10c ./03_function/f_eeprom.o
-                0x08001c52                I2cIntDeal
+                0x08001c72      0x10c ./03_function/f_eeprom.o
+                0x08001c72                I2cIntDeal
  .text.I2CNoACK
-                0x08001d5e       0x5e ./03_function/f_eeprom.o
-                0x08001d5e                I2CNoACK
- .text.I2CStop  0x08001dbc       0x52 ./03_function/f_eeprom.o
-                0x08001dbc                I2CStop
+                0x08001d7e       0x5e ./03_function/f_eeprom.o
+                0x08001d7e                I2CNoACK
+ .text.I2CStop  0x08001ddc       0x52 ./03_function/f_eeprom.o
+                0x08001ddc                I2CStop
  .text.I2CRcvByte
-                0x08001e0e       0x9c ./03_function/f_eeprom.o
-                0x08001e0e                I2CRcvByte
+                0x08001e2e       0x9c ./03_function/f_eeprom.o
+                0x08001e2e                I2CRcvByte
  .text.I2cDealBeforeInit
-                0x08001eaa       0xd0 ./03_function/f_eeprom.o
-                0x08001eaa                I2cDealBeforeInit
+                0x08001eca       0xd0 ./03_function/f_eeprom.o
+                0x08001eca                I2cDealBeforeInit
  .text.GetEepromIndexFromFcIndex
-                0x08001f7a       0x2a ./03_function/f_eeprom.o
-                0x08001f7a                GetEepromIndexFromFcIndex
+                0x08001f9a       0x2a ./03_function/f_eeprom.o
+                0x08001f9a                GetEepromIndexFromFcIndex
  .text.EepromDeal
-                0x08001fa4      0x446 ./03_function/f_eeprom.o
-                0x08001fa4                EepromDeal
+                0x08001fc4      0x446 ./03_function/f_eeprom.o
+                0x08001fc4                EepromDeal
  .text.underVoltageDeal
-                0x080023ea       0xac ./03_function/f_error.o
-                0x080023ea                underVoltageDeal
+                0x0800240a       0xac ./03_function/f_error.o
+                0x0800240a                underVoltageDeal
  .text.ErrorSceneSave
-                0x08002496      0x10a ./03_function/f_error.o
-                0x08002496                ErrorSceneSave
+                0x080024b6      0x10a ./03_function/f_error.o
+                0x080024b6                ErrorSceneSave
  .text.GetErrorResetDeal
-                0x080025a0       0x7c ./03_function/f_error.o
-                0x080025a0                GetErrorResetDeal
+                0x080025c0       0x7c ./03_function/f_error.o
+                0x080025c0                GetErrorResetDeal
  .text.AutoResetErrorTrueDeal
-                0x0800261c       0x5c ./03_function/f_error.o
-                0x0800261c                AutoResetErrorTrueDeal
+                0x0800263c       0x5c ./03_function/f_error.o
+                0x0800263c                AutoResetErrorTrueDeal
  .text.AutoResetErrorFcDeal
-                0x08002678       0xb8 ./03_function/f_error.o
-                0x08002678                AutoResetErrorFcDeal
+                0x08002698       0xb8 ./03_function/f_error.o
+                0x08002698                AutoResetErrorFcDeal
  .text.AutoResetErrorDeal
-                0x08002730       0x1a ./03_function/f_error.o
-                0x08002730                AutoResetErrorDeal
+                0x08002750       0x1a ./03_function/f_error.o
+                0x08002750                AutoResetErrorDeal
  .text.ErrorReset
-                0x0800274a      0x190 ./03_function/f_error.o
-                0x0800274a                ErrorReset
+                0x0800276a      0x190 ./03_function/f_error.o
+                0x0800276a                ErrorReset
  .text.GetErrorAttribute
-                0x080028da       0xee ./03_function/f_error.o
-                0x080028da                GetErrorAttribute
+                0x080028fa       0xee ./03_function/f_error.o
+                0x080028fa                GetErrorAttribute
  .text.getMotorError
-                0x080029c8       0xfc ./03_function/f_error.o
-                0x080029c8                getMotorError
+                0x080029e8       0xfc ./03_function/f_error.o
+                0x080029e8                getMotorError
  .text.GetNewError
-                0x08002ac4      0x41a ./03_function/f_error.o
-                0x08002ac4                GetNewError
+                0x08002ae4      0x41a ./03_function/f_error.o
+                0x08002ae4                GetNewError
  .text.GetNewErrorAttribute
-                0x08002ede       0x48 ./03_function/f_error.o
-                0x08002ede                GetNewErrorAttribute
+                0x08002efe       0x48 ./03_function/f_error.o
+                0x08002efe                GetNewErrorAttribute
  .text.UpdateError
-                0x08002f26       0xbc ./03_function/f_error.o
-                0x08002f26                UpdateError
+                0x08002f46       0xbc ./03_function/f_error.o
+                0x08002f46                UpdateError
  .text.ErrorDeal
-                0x08002fe2       0x14 ./03_function/f_error.o
-                0x08002fe2                ErrorDeal
+                0x08003002       0x14 ./03_function/f_error.o
+                0x08003002                ErrorDeal
  .text.ClearRecordDeal
-                0x08002ff6       0x8e ./03_function/f_fcDeal.o
-                0x08002ff6                ClearRecordDeal
+                0x08003016       0x8e ./03_function/f_fcDeal.o
+                0x08003016                ClearRecordDeal
  .text.PowerOffRemDeal
-                0x08003084       0xda ./03_function/f_fcDeal.o
-                0x08003084                PowerOffRemDeal
+                0x080030a4       0xda ./03_function/f_fcDeal.o
+                0x080030a4                PowerOffRemDeal
  .text.LimitOtherCodeDeal
-                0x0800315e      0x152 ./03_function/f_fcDeal.o
-                0x0800315e                LimitOtherCodeDeal
+                0x0800317e      0x152 ./03_function/f_fcDeal.o
+                0x0800317e                LimitOtherCodeDeal
  .text.RestoreCompanyParaOtherDeal
-                0x080032b0       0x5c ./03_function/f_fcDeal.o
-                0x080032b0                RestoreCompanyParaOtherDeal
+                0x080032d0       0x5c ./03_function/f_fcDeal.o
+                0x080032d0                RestoreCompanyParaOtherDeal
  .text.GetFuncCodeInitOriginal
-                0x0800330c       0x46 ./03_function/f_fcDeal.o
-                0x0800330c                GetFuncCodeInitOriginal
+                0x0800332c       0x46 ./03_function/f_fcDeal.o
+                0x0800332c                GetFuncCodeInitOriginal
  .text.GetFuncCodeInit
-                0x08003352      0x34a ./03_function/f_fcDeal.o
-                0x08003352                GetFuncCodeInit
+                0x08003372      0x34a ./03_function/f_fcDeal.o
+                0x08003372                GetFuncCodeInit
  .text.UpdateFrqAim
-                0x0800369c      0x2b2 ./03_function/f_frqSrc.o
-                0x0800369c                UpdateFrqAim
+                0x080036bc      0x2b2 ./03_function/f_frqSrc.o
+                0x080036bc                UpdateFrqAim
  .text.FrqAimUpDownDeal
-                0x0800394e      0x32a ./03_function/f_frqSrc.o
-                0x0800394e                FrqAimUpDownDeal
+                0x0800396e      0x32a ./03_function/f_frqSrc.o
+                0x0800396e                FrqAimUpDownDeal
  .text.UpdateMultiSetFrq
-                0x08003c78       0xf8 ./03_function/f_frqSrc.o
-                0x08003c78                UpdateMultiSetFrq
+                0x08003c98       0xf8 ./03_function/f_frqSrc.o
+                0x08003c98                UpdateMultiSetFrq
  .text.FrqPlcSetDeal
-                0x08003d70      0x2e4 ./03_function/f_frqSrc.o
-                0x08003d70                FrqPlcSetDeal
+                0x08003d90      0x2e4 ./03_function/f_frqSrc.o
+                0x08003d90                FrqPlcSetDeal
  .text.UpdateLimitFrq
-                0x08004054       0xe2 ./03_function/f_frqSrc.o
-                0x08004054                UpdateLimitFrq
+                0x08004074       0xe2 ./03_function/f_frqSrc.o
+                0x08004074                UpdateLimitFrq
  .text.JumpFrqEndCalc
-                0x08004136       0x14 ./03_function/f_frqSrc.o
-                0x08004136                JumpFrqEndCalc
+                0x08004156       0x14 ./03_function/f_frqSrc.o
+                0x08004156                JumpFrqEndCalc
  .text.JumpFrqDeal
-                0x0800414a      0x23e ./03_function/f_frqSrc.o
-                0x0800414a                JumpFrqDeal
+                0x0800416a      0x23e ./03_function/f_frqSrc.o
+                0x0800416a                JumpFrqDeal
  .text.UpdateRunMode
-                0x08004388       0xb0 ./03_function/f_frqSrc.o
-                0x08004388                UpdateRunMode
+                0x080043a8       0xb0 ./03_function/f_frqSrc.o
+                0x080043a8                UpdateRunMode
  .text.getUpDownLimit
-                0x08004438      0x10a ./03_function/f_frqSrc.o
-                0x08004438                getUpDownLimit
+                0x08004458      0x10a ./03_function/f_frqSrc.o
+                0x08004458                getUpDownLimit
  .text.ResetUpDownFrq
-                0x08004542       0x3a ./03_function/f_frqSrc.o
-                0x08004542                ResetUpDownFrq
+                0x08004562       0x3a ./03_function/f_frqSrc.o
+                0x08004562                ResetUpDownFrq
  .text.GetFrqComp
-                0x0800457c      0x124 ./03_function/f_frqSrc.o
-                0x0800457c                GetFrqComp
+                0x0800459c      0x124 ./03_function/f_frqSrc.o
+                0x0800459c                GetFrqComp
  .text.FrqXyCalc
-                0x080046a0       0xc8 ./03_function/f_frqSrc.o
-                0x080046a0                FrqXyCalc
- .text.GetFrqX  0x08004768       0x54 ./03_function/f_frqSrc.o
-                0x08004768                GetFrqX
- .text.GetFrqY  0x080047bc      0x100 ./03_function/f_frqSrc.o
-                0x080047bc                GetFrqY
- .text.GetFrq   0x080048bc      0x304 ./03_function/f_frqSrc.o
-                0x080048bc                GetFrq
+                0x080046c0       0xc8 ./03_function/f_frqSrc.o
+                0x080046c0                FrqXyCalc
+ .text.GetFrqX  0x08004788       0x54 ./03_function/f_frqSrc.o
+                0x08004788                GetFrqX
+ .text.GetFrqY  0x080047dc      0x100 ./03_function/f_frqSrc.o
+                0x080047dc                GetFrqY
+ .text.GetFrq   0x080048dc      0x304 ./03_function/f_frqSrc.o
+                0x080048dc                GetFrq
  .text.FrqSrcOperate
-                0x08004bc0       0x92 ./03_function/f_frqSrc.o
-                0x08004bc0                FrqSrcOperate
+                0x08004be0       0x92 ./03_function/f_frqSrc.o
+                0x08004be0                FrqSrcOperate
  .text.FrqSrcDeal
-                0x08004c52      0x172 ./03_function/f_frqSrc.o
-                0x08004c52                FrqSrcDeal
+                0x08004c72      0x172 ./03_function/f_frqSrc.o
+                0x08004c72                FrqSrcDeal
  .text.PidFuncCalc
-                0x08004dc4      0x40e ./03_function/f_frqSrc_pid.o
-                0x08004dc4                PidFuncCalc
+                0x08004de4      0x40e ./03_function/f_frqSrc_pid.o
+                0x08004de4                PidFuncCalc
  .text.UpdatePidFuncPara
-                0x080051d2      0x2c6 ./03_function/f_frqSrc_pid.o
-                0x080051d2                UpdatePidFuncPara
+                0x080051f2      0x2c6 ./03_function/f_frqSrc_pid.o
+                0x080051f2                UpdatePidFuncPara
  .text.UpdatePidFuncRefFdb
-                0x08005498      0x266 ./03_function/f_frqSrc_pid.o
-                0x08005498                UpdatePidFuncRefFdb
+                0x080054b8      0x266 ./03_function/f_frqSrc_pid.o
+                0x080054b8                UpdatePidFuncRefFdb
  .text.FrqPidSetDeal
-                0x080056fe      0x34a ./03_function/f_frqSrc_pid.o
-                0x080056fe                FrqPidSetDeal
+                0x0800571e      0x34a ./03_function/f_frqSrc_pid.o
+                0x0800571e                FrqPidSetDeal
  .text.UpdateU0Data
-                0x08005a48      0x342 ./03_function/f_funcCode_disp.o
-                0x08005a48                UpdateU0Data
+                0x08005a68      0x342 ./03_function/f_funcCode_disp.o
+                0x08005a68                UpdateU0Data
  .text.copyDataFunc2Motor05ms
-                0x08005d8a       0x9a ./03_function/f_interface.o
-                0x08005d8a                copyDataFunc2Motor05ms
+                0x08005daa       0x9a ./03_function/f_interface.o
+                0x08005daa                copyDataFunc2Motor05ms
  .text.copyDataFunc2Motor2ms
-                0x08005e24      0x54e ./03_function/f_interface.o
-                0x08005e24                copyDataFunc2Motor2ms
+                0x08005e44      0x54e ./03_function/f_interface.o
+                0x08005e44                copyDataFunc2Motor2ms
  .text.copyDataFunc2CF2ms
-                0x08006372       0x32 ./03_function/f_interface.o
-                0x08006372                copyDataFunc2CF2ms
+                0x08006392       0x32 ./03_function/f_interface.o
+                0x08006392                copyDataFunc2CF2ms
  .text.copyDataCore2Func2ms
-                0x080063a4      0x1a2 ./03_function/f_interface.o
-                0x080063a4                copyDataCore2Func2ms
+                0x080063c4      0x1a2 ./03_function/f_interface.o
+                0x080063c4                copyDataCore2Func2ms
  .text.copyDataCore2Uf2ms
-                0x08006546       0x22 ./03_function/f_interface.o
-                0x08006546                copyDataCore2Uf2ms
+                0x08006566       0x22 ./03_function/f_interface.o
+                0x08006566                copyDataCore2Uf2ms
  .text.UpdateDataCore2Func
-                0x08006568      0x484 ./03_function/f_interface.o
-                0x08006568                UpdateDataCore2Func
+                0x08006588      0x484 ./03_function/f_interface.o
+                0x08006588                UpdateDataCore2Func
  .text.UpdateDataFunc2Core0p5ms
-                0x080069ec      0x1a6 ./03_function/f_interface.o
-                0x080069ec                UpdateDataFunc2Core0p5ms
+                0x08006a0c      0x1a6 ./03_function/f_interface.o
+                0x08006a0c                UpdateDataFunc2Core0p5ms
  .text.UpdateDataFunc2Core2ms
-                0x08006b92      0x19e ./03_function/f_interface.o
-                0x08006b92                UpdateDataFunc2Core2ms
+                0x08006bb2      0x19e ./03_function/f_interface.o
+                0x08006bb2                UpdateDataFunc2Core2ms
  .text.InverterTypeRelatedNoMotorParaSaveDeal
-                0x08006d30       0xa4 ./03_function/f_invPara.o
-                0x08006d30                InverterTypeRelatedNoMotorParaSaveDeal
+                0x08006d50       0xa4 ./03_function/f_invPara.o
+                0x08006d50                InverterTypeRelatedNoMotorParaSaveDeal
  .text.TorqueBoostDeal
-                0x08006dd4       0x3a ./03_function/f_invPara.o
-                0x08006dd4                TorqueBoostDeal
+                0x08006df4       0x3a ./03_function/f_invPara.o
+                0x08006df4                TorqueBoostDeal
  .text.InverterTypeRelatedNoMotorParaDeal
-                0x08006e0e      0x118 ./03_function/f_invPara.o
-                0x08006e0e                InverterTypeRelatedNoMotorParaDeal
+                0x08006e2e      0x118 ./03_function/f_invPara.o
+                0x08006e2e                InverterTypeRelatedNoMotorParaDeal
  .text.MotorPowerRelatedParaDeal
-                0x08006f26      0x1e8 ./03_function/f_invPara.o
-                0x08006f26                MotorPowerRelatedParaDeal
+                0x08006f46      0x1e8 ./03_function/f_invPara.o
+                0x08006f46                MotorPowerRelatedParaDeal
  .text.Cf00Deal
-                0x0800710e        0x4 ./03_function/f_invPara.o
-                0x0800710e                Cf00Deal
+                0x0800712e        0x4 ./03_function/f_invPara.o
+                0x0800712e                Cf00Deal
  .text.initFor1140vDeal
-                0x08007112       0x34 ./03_function/f_invPara.o
-                0x08007112                initFor1140vDeal
+                0x08007132       0x34 ./03_function/f_invPara.o
+                0x08007132                initFor1140vDeal
  .text.ValidateInvType
-                0x08007146       0x52 ./03_function/f_invPara.o
-                0x08007146                ValidateInvType
+                0x08007166       0x52 ./03_function/f_invPara.o
+                0x08007166                ValidateInvType
  .text.UpdateInvType
-                0x08007198       0x5c ./03_function/f_invPara.o
-                0x08007198                UpdateInvType
+                0x080071b8       0x5c ./03_function/f_invPara.o
+                0x080071b8                UpdateInvType
  .text.InverterTypeRelatedParaDeal
-                0x080071f4      0x18a ./03_function/f_invPara.o
-                0x080071f4                InverterTypeRelatedParaDeal
+                0x08007214      0x18a ./03_function/f_invPara.o
+                0x08007214                InverterTypeRelatedParaDeal
  .text.SaveTuneData
-                0x0800737e       0x90 ./03_function/f_invPara.o
-                0x0800737e                SaveTuneData
- .text.Dout1    0x0800740e       0x1e ./03_function/f_io.o
-                0x0800740e                Dout1
- .text.Dout2    0x0800742c       0x54 ./03_function/f_io.o
-                0x0800742c                Dout2
- .text.Dout38   0x08007480       0x46 ./03_function/f_io.o
-                0x08007480                Dout38
- .text.Dout41   0x080074c6       0x58 ./03_function/f_io.o
-                0x080074c6                Dout41
- .text.Dout3    0x0800751e       0x7a ./03_function/f_io.o
-                0x0800751e                Dout3
- .text.Dout4    0x08007598       0x8a ./03_function/f_io.o
-                0x08007598                Dout4
- .text.Dout5    0x08007622       0x28 ./03_function/f_io.o
-                0x08007622                Dout5
- .text.Dout23   0x0800764a       0x1c ./03_function/f_io.o
-                0x0800764a                Dout23
- .text.Dout6    0x08007666       0x20 ./03_function/f_io.o
-                0x08007666                Dout6
- .text.Dout7    0x08007686       0x20 ./03_function/f_io.o
-                0x08007686                Dout7
- .text.Dout8    0x080076a6       0x40 ./03_function/f_io.o
-                0x080076a6                Dout8
- .text.Dout9    0x080076e6       0x40 ./03_function/f_io.o
-                0x080076e6                Dout9
- .text.Dout10   0x08007726       0x30 ./03_function/f_io.o
-                0x08007726                Dout10
- .text.Dout11   0x08007756       0x1c ./03_function/f_io.o
-                0x08007756                Dout11
- .text.Dout12   0x08007772       0x28 ./03_function/f_io.o
-                0x08007772                Dout12
- .text.Dout13   0x0800779a       0x1c ./03_function/f_io.o
-                0x0800779a                Dout13
- .text.Dout15   0x080077b6       0x34 ./03_function/f_io.o
-                0x080077b6                Dout15
- .text.Dout16   0x080077ea       0x3e ./03_function/f_io.o
-                0x080077ea                Dout16
- .text.Dout17   0x08007828       0x42 ./03_function/f_io.o
-                0x08007828                Dout17
- .text.Dout18   0x0800786a       0x4e ./03_function/f_io.o
-                0x0800786a                Dout18
- .text.Dout19   0x080078b8       0x1e ./03_function/f_io.o
-                0x080078b8                Dout19
+                0x0800739e       0x90 ./03_function/f_invPara.o
+                0x0800739e                SaveTuneData
+ .text.Dout1    0x0800742e       0x1e ./03_function/f_io.o
+                0x0800742e                Dout1
+ .text.Dout2    0x0800744c       0x54 ./03_function/f_io.o
+                0x0800744c                Dout2
+ .text.Dout38   0x080074a0       0x46 ./03_function/f_io.o
+                0x080074a0                Dout38
+ .text.Dout41   0x080074e6       0x58 ./03_function/f_io.o
+                0x080074e6                Dout41
+ .text.Dout3    0x0800753e       0x7a ./03_function/f_io.o
+                0x0800753e                Dout3
+ .text.Dout4    0x080075b8       0x8a ./03_function/f_io.o
+                0x080075b8                Dout4
+ .text.Dout5    0x08007642       0x28 ./03_function/f_io.o
+                0x08007642                Dout5
+ .text.Dout23   0x0800766a       0x1c ./03_function/f_io.o
+                0x0800766a                Dout23
+ .text.Dout6    0x08007686       0x20 ./03_function/f_io.o
+                0x08007686                Dout6
+ .text.Dout7    0x080076a6       0x20 ./03_function/f_io.o
+                0x080076a6                Dout7
+ .text.Dout8    0x080076c6       0x40 ./03_function/f_io.o
+                0x080076c6                Dout8
+ .text.Dout9    0x08007706       0x40 ./03_function/f_io.o
+                0x08007706                Dout9
+ .text.Dout10   0x08007746       0x30 ./03_function/f_io.o
+                0x08007746                Dout10
+ .text.Dout11   0x08007776       0x1c ./03_function/f_io.o
+                0x08007776                Dout11
+ .text.Dout12   0x08007792       0x28 ./03_function/f_io.o
+                0x08007792                Dout12
+ .text.Dout13   0x080077ba       0x1c ./03_function/f_io.o
+                0x080077ba                Dout13
+ .text.Dout15   0x080077d6       0x34 ./03_function/f_io.o
+                0x080077d6                Dout15
+ .text.Dout16   0x0800780a       0x3e ./03_function/f_io.o
+                0x0800780a                Dout16
+ .text.Dout17   0x08007848       0x42 ./03_function/f_io.o
+                0x08007848                Dout17
+ .text.Dout18   0x0800788a       0x4e ./03_function/f_io.o
+                0x0800788a                Dout18
+ .text.Dout19   0x080078d8       0x1e ./03_function/f_io.o
+                0x080078d8                Dout19
  .text.DoutRSVD
-                0x080078d6        0x2 ./03_function/f_io.o
-                0x080078d6                DoutRSVD
- .text.Dout21   0x080078d8        0x2 ./03_function/f_io.o
-                0x080078d8                Dout21
- .text.Dout22   0x080078da        0x2 ./03_function/f_io.o
-                0x080078da                Dout22
- .text.Dout24   0x080078dc       0x28 ./03_function/f_io.o
-                0x080078dc                Dout24
- .text.Dout25   0x08007904       0x7a ./03_function/f_io.o
-                0x08007904                Dout25
- .text.Dout26   0x0800797e       0x5e ./03_function/f_io.o
-                0x0800797e                Dout26
- .text.Dout27   0x080079dc       0x5e ./03_function/f_io.o
-                0x080079dc                Dout27
- .text.Dout28   0x08007a3a       0x60 ./03_function/f_io.o
-                0x08007a3a                Dout28
- .text.Dout29   0x08007a9a       0x60 ./03_function/f_io.o
-                0x08007a9a                Dout29
- .text.Dout30   0x08007afa       0x46 ./03_function/f_io.o
-                0x08007afa                Dout30
- .text.Dout31   0x08007b40       0x42 ./03_function/f_io.o
-                0x08007b40                Dout31
- .text.Dout32   0x08007b82       0x20 ./03_function/f_io.o
-                0x08007b82                Dout32
- .text.Dout33   0x08007ba2       0x38 ./03_function/f_io.o
-                0x08007ba2                Dout33
- .text.Dout34   0x08007bda       0xa0 ./03_function/f_io.o
-                0x08007bda                Dout34
- .text.Dout35   0x08007c7a       0x26 ./03_function/f_io.o
-                0x08007c7a                Dout35
- .text.Dout36   0x08007ca0       0x22 ./03_function/f_io.o
-                0x08007ca0                Dout36
- .text.Dout37   0x08007cc2       0x42 ./03_function/f_io.o
-                0x08007cc2                Dout37
- .text.Dout39   0x08007d04       0x1c ./03_function/f_io.o
-                0x08007d04                Dout39
- .text.Dout40   0x08007d20       0x28 ./03_function/f_io.o
-                0x08007d20                Dout40
- .text.Dout42   0x08007d48       0x28 ./03_function/f_io.o
-                0x08007d48                Dout42
- .text.Dout43   0x08007d70       0x28 ./03_function/f_io.o
-                0x08007d70                Dout43
+                0x080078f6        0x2 ./03_function/f_io.o
+                0x080078f6                DoutRSVD
+ .text.Dout21   0x080078f8        0x2 ./03_function/f_io.o
+                0x080078f8                Dout21
+ .text.Dout22   0x080078fa        0x2 ./03_function/f_io.o
+                0x080078fa                Dout22
+ .text.Dout24   0x080078fc       0x28 ./03_function/f_io.o
+                0x080078fc                Dout24
+ .text.Dout25   0x08007924       0x7a ./03_function/f_io.o
+                0x08007924                Dout25
+ .text.Dout26   0x0800799e       0x5e ./03_function/f_io.o
+                0x0800799e                Dout26
+ .text.Dout27   0x080079fc       0x5e ./03_function/f_io.o
+                0x080079fc                Dout27
+ .text.Dout28   0x08007a5a       0x60 ./03_function/f_io.o
+                0x08007a5a                Dout28
+ .text.Dout29   0x08007aba       0x60 ./03_function/f_io.o
+                0x08007aba                Dout29
+ .text.Dout30   0x08007b1a       0x46 ./03_function/f_io.o
+                0x08007b1a                Dout30
+ .text.Dout31   0x08007b60       0x42 ./03_function/f_io.o
+                0x08007b60                Dout31
+ .text.Dout32   0x08007ba2       0x20 ./03_function/f_io.o
+                0x08007ba2                Dout32
+ .text.Dout33   0x08007bc2       0x38 ./03_function/f_io.o
+                0x08007bc2                Dout33
+ .text.Dout34   0x08007bfa       0xa0 ./03_function/f_io.o
+                0x08007bfa                Dout34
+ .text.Dout35   0x08007c9a       0x26 ./03_function/f_io.o
+                0x08007c9a                Dout35
+ .text.Dout36   0x08007cc0       0x22 ./03_function/f_io.o
+                0x08007cc0                Dout36
+ .text.Dout37   0x08007ce2       0x42 ./03_function/f_io.o
+                0x08007ce2                Dout37
+ .text.Dout39   0x08007d24       0x1c ./03_function/f_io.o
+                0x08007d24                Dout39
+ .text.Dout40   0x08007d40       0x28 ./03_function/f_io.o
+                0x08007d40                Dout40
+ .text.Dout42   0x08007d68       0x28 ./03_function/f_io.o
+                0x08007d68                Dout42
+ .text.Dout43   0x08007d90       0x28 ./03_function/f_io.o
+                0x08007d90                Dout43
  .text.LineCalc
-                0x08007d98       0xb4 ./03_function/f_io.o
-                0x08007d98                LineCalc
- .text.LpfCalc  0x08007e4c       0x26 ./03_function/f_io.o
-                0x08007e4c                LpfCalc
- .text.Dout14   0x08007e72       0x20 ./03_function/f_io.o
-                0x08007e72                Dout14
+                0x08007db8       0xb4 ./03_function/f_io.o
+                0x08007db8                LineCalc
+ .text.LpfCalc  0x08007e6c       0x26 ./03_function/f_io.o
+                0x08007e6c                LpfCalc
+ .text.Dout14   0x08007e92       0x20 ./03_function/f_io.o
+                0x08007e92                Dout14
  .text.GetTemperatureCalc
-                0x08007e92       0x60 ./03_function/f_io.o
-                0x08007e92                GetTemperatureCalc
+                0x08007eb2       0x60 ./03_function/f_io.o
+                0x08007eb2                GetTemperatureCalc
  .text.GetTemperature
-                0x08007ef2       0x44 ./03_function/f_io.o
-                0x08007ef2                GetTemperature
+                0x08007f12       0x44 ./03_function/f_io.o
+                0x08007f12                GetTemperature
  .text.TemperatureSensorDeal
-                0x08007f36       0xae ./03_function/f_io.o
-                0x08007f36                TemperatureSensorDeal
+                0x08007f56       0xae ./03_function/f_io.o
+                0x08007f56                TemperatureSensorDeal
  .text.TemperatureAfterDeal
-                0x08007fe4       0x4c ./03_function/f_io.o
-                0x08007fe4                TemperatureAfterDeal
+                0x08008004       0x4c ./03_function/f_io.o
+                0x08008004                TemperatureAfterDeal
  .text.TemperatureDeal
-                0x08008030       0x5c ./03_function/f_io.o
-                0x08008030                TemperatureDeal
- .text.AiCalc   0x0800808c      0x2d4 ./03_function/f_io.o
-                0x0800808c                AiCalc
+                0x08008050       0x5c ./03_function/f_io.o
+                0x08008050                TemperatureDeal
+ .text.AiCalc   0x080080ac      0x2d4 ./03_function/f_io.o
+                0x080080ac                AiCalc
  .text.PulseInCalc
-                0x08008360      0x2c0 ./03_function/f_io.o
-                0x08008360                PulseInCalc
+                0x08008380      0x2c0 ./03_function/f_io.o
+                0x08008380                PulseInCalc
  .text.PulseInSample
-                0x08008620       0xae ./03_function/f_io.o
-                0x08008620                PulseInSample
+                0x08008640       0xae ./03_function/f_io.o
+                0x08008640                PulseInSample
  .text.UpdateFmpAoValue
-                0x080086ce      0x25a ./03_function/f_io.o
-                0x080086ce                UpdateFmpAoValue
+                0x080086ee      0x25a ./03_function/f_io.o
+                0x080086ee                UpdateFmpAoValue
  .text.AoCalcChannel
-                0x08008928      0x172 ./03_function/f_io.o
-                0x08008928                AoCalcChannel
+                0x08008948      0x172 ./03_function/f_io.o
+                0x08008948                AoCalcChannel
  .text.PulseOutCalc
-                0x08008a9a      0x220 ./03_function/f_io.o
-                0x08008a9a                PulseOutCalc
- .text.FMPDeal  0x08008cba       0x8c ./03_function/f_io.o
-                0x08008cba                FMPDeal
+                0x08008aba      0x220 ./03_function/f_io.o
+                0x08008aba                PulseOutCalc
+ .text.FMPDeal  0x08008cda       0x8c ./03_function/f_io.o
+                0x08008cda                FMPDeal
  .text.InitSetEPWM4
-                0x08008d46       0xa6 ./03_function/f_io.o
-                0x08008d46                InitSetEPWM4
+                0x08008d66       0xa6 ./03_function/f_io.o
+                0x08008d66                InitSetEPWM4
  .text.InitSetEPWM5
-                0x08008dec       0xb8 ./03_function/f_io.o
-                0x08008dec                InitSetEPWM5
+                0x08008e0c       0xb8 ./03_function/f_io.o
+                0x08008e0c                InitSetEPWM5
  .text.InitSetEPWM6
-                0x08008ea4       0xa6 ./03_function/f_io.o
-                0x08008ea4                InitSetEPWM6
+                0x08008ec4       0xa6 ./03_function/f_io.o
+                0x08008ec4                InitSetEPWM6
  .text.InitSetEcap1
-                0x08008f4a       0x36 ./03_function/f_io.o
-                0x08008f4a                InitSetEcap1
+                0x08008f6a       0x36 ./03_function/f_io.o
+                0x08008f6a                InitSetEcap1
  .text.InitDIGpio
-                0x08008f80      0x100 ./03_function/f_io.o
-                0x08008f80                InitDIGpio
+                0x08008fa0      0x100 ./03_function/f_io.o
+                0x08008fa0                InitDIGpio
  .text.InitDOGpio
-                0x08009080       0x9c ./03_function/f_io.o
-                0x08009080                InitDOGpio
+                0x080090a0       0x9c ./03_function/f_io.o
+                0x080090a0                InitDOGpio
  .text.InitEPwm5Gpio
-                0x0800911c       0x30 ./03_function/f_io.o
-                0x0800911c                InitEPwm5Gpio
+                0x0800913c       0x30 ./03_function/f_io.o
+                0x0800913c                InitEPwm5Gpio
  .text.InitEPwm4Gpio
-                0x0800914c       0x2e ./03_function/f_io.o
-                0x0800914c                InitEPwm4Gpio
+                0x0800916c       0x2e ./03_function/f_io.o
+                0x0800916c                InitEPwm4Gpio
  .text.InitEPwm6Gpio
-                0x0800917a       0x30 ./03_function/f_io.o
-                0x0800917a                InitEPwm6Gpio
+                0x0800919a       0x30 ./03_function/f_io.o
+                0x0800919a                InitEPwm6Gpio
  .text.InitECap1Gpio
-                0x080091aa       0x26 ./03_function/f_io.o
-                0x080091aa                InitECap1Gpio
- .text.Di2Bin   0x080091d0       0xf8 ./03_function/f_io.o
-                0x080091d0                Di2Bin
+                0x080091ca       0x26 ./03_function/f_io.o
+                0x080091ca                InitECap1Gpio
+ .text.Di2Bin   0x080091f0       0xf8 ./03_function/f_io.o
+                0x080091f0                Di2Bin
  .text.getDiHwStatus
-                0x080092c8       0xd2 ./03_function/f_io.o
-                0x080092c8                getDiHwStatus
- .text.DiCalc   0x0800939a      0x2f0 ./03_function/f_io.o
-                0x0800939a                DiCalc
+                0x080092e8       0xd2 ./03_function/f_io.o
+                0x080092e8                getDiHwStatus
+ .text.DiCalc   0x080093ba      0x2f0 ./03_function/f_io.o
+                0x080093ba                DiCalc
  .text.setDOStatus
-                0x0800968a       0xd2 ./03_function/f_io.o
-                0x0800968a                setDOStatus
- .text.Do2Bin   0x0800975c       0x72 ./03_function/f_io.o
-                0x0800975c                Do2Bin
- .text.DoCalc   0x080097ce      0x240 ./03_function/f_io.o
-                0x080097ce                DoCalc
+                0x080096aa       0xd2 ./03_function/f_io.o
+                0x080096aa                setDOStatus
+ .text.Do2Bin   0x0800977c       0x72 ./03_function/f_io.o
+                0x0800977c                Do2Bin
+ .text.DoCalc   0x080097ee      0x240 ./03_function/f_io.o
+                0x080097ee                DoCalc
  .text.InitDspFunc
-                0x08009a0e       0x8a ./03_function/f_main.o
-                0x08009a0e                InitDspFunc
+                0x08009a2e       0x8a ./03_function/f_main.o
+                0x08009a2e                InitDspFunc
  .text.FuncVariableInit
-                0x08009a98      0x14c ./03_function/f_main.o
-                0x08009a98                FuncVariableInit
+                0x08009ab8      0x14c ./03_function/f_main.o
+                0x08009ab8                FuncVariableInit
  .text.Main0msFunction
-                0x08009be4       0x52 ./03_function/f_main.o
-                0x08009be4                Main0msFunction
+                0x08009c04       0x52 ./03_function/f_main.o
+                0x08009c04                Main0msFunction
  .text.Main05msFunctionEachStart
-                0x08009c36       0x7e ./03_function/f_main.o
-                0x08009c36                Main05msFunctionEachStart
+                0x08009c56       0x7e ./03_function/f_main.o
+                0x08009c56                Main05msFunctionEachStart
  .text.Main05msFunctionEachEnd
-                0x08009cb4       0x6c ./03_function/f_main.o
-                0x08009cb4                Main05msFunctionEachEnd
- .text.Main05msFunctionC
-                0x08009d20       0x3c ./03_function/f_main.o
-                0x08009d20                Main05msFunctionC
- .text.CodeRunMonitor
-                0x08009d5c       0xae ./03_function/f_main.o
-                0x08009d5c                CodeRunMonitor
- .text.Main05msFunctionD
-                0x08009e0a       0x40 ./03_function/f_main.o
-                0x08009e0a                Main05msFunctionD
- .text.GetNumberDigit1
-                0x08009e4a       0x4c ./03_function/f_main.o
-                0x08009e4a                GetNumberDigit1
- .text.GetNumberDigit2
-                0x08009e96       0x2e ./03_function/f_main.o
-                0x08009e96                GetNumberDigit2
- .text.GetNumberDigit
-                0x08009ec4       0x38 ./03_function/f_main.o
-                0x08009ec4                GetNumberDigit
- .text.SoftVersionDeal
-                0x08009efc       0x34 ./03_function/f_main.o
-                0x08009efc                SoftVersionDeal
- .text.InitFuncCode
-                0x08009f30      0x40a ./03_function/f_main.o
-                0x08009f30                InitFuncCode
- .text.InitForFunctionApp
-                0x0800a33a       0x16 ./03_function/f_main.o
-                0x0800a33a                InitForFunctionApp
- .text.coreSoftVersionDeal
-                0x0800a350       0x7c ./03_function/f_main.o
-                0x0800a350                coreSoftVersionDeal
- .text.Main05msFunctionA
-                0x0800a3cc       0x40 ./03_function/f_main.o
-                0x0800a3cc                Main05msFunctionA
- .text.getMomeryValue
-                0x0800a40c       0x14 ./03_function/f_main.o
-                0x0800a40c                getMomeryValue
+                0x08009cd4       0x6c ./03_function/f_main.o
+                0x08009cd4                Main05msFunctionEachEnd
  .text.Main05msFunctionB
-                0x0800a420       0x40 ./03_function/f_main.o
-                0x0800a420                Main05msFunctionB
+                0x08009d40       0x3a ./03_function/f_main.o
+                0x08009d40                Main05msFunctionB
+ .text.Main05msFunctionC
+                0x08009d7a       0x3c ./03_function/f_main.o
+                0x08009d7a                Main05msFunctionC
+ .text.CodeRunMonitor
+                0x08009db6       0xae ./03_function/f_main.o
+                0x08009db6                CodeRunMonitor
+ .text.Main05msFunctionD
+                0x08009e64       0x40 ./03_function/f_main.o
+                0x08009e64                Main05msFunctionD
+ .text.GetNumberDigit1
+                0x08009ea4       0x4c ./03_function/f_main.o
+                0x08009ea4                GetNumberDigit1
+ .text.GetNumberDigit2
+                0x08009ef0       0x2e ./03_function/f_main.o
+                0x08009ef0                GetNumberDigit2
+ .text.GetNumberDigit
+                0x08009f1e       0x38 ./03_function/f_main.o
+                0x08009f1e                GetNumberDigit
+ .text.SoftVersionDeal
+                0x08009f56       0x34 ./03_function/f_main.o
+                0x08009f56                SoftVersionDeal
+ .text.InitFuncCode
+                0x08009f8a      0x40a ./03_function/f_main.o
+                0x08009f8a                InitFuncCode
+ .text.InitForFunctionApp
+                0x0800a394       0x16 ./03_function/f_main.o
+                0x0800a394                InitForFunctionApp
+ .text.coreSoftVersionDeal
+                0x0800a3aa       0x7c ./03_function/f_main.o
+                0x0800a3aa                coreSoftVersionDeal
+ .text.Main05msFunctionA
+                0x0800a426       0x40 ./03_function/f_main.o
+                0x0800a426                Main05msFunctionA
  .text.MenuOnRun
-                0x0800a460        0x2 ./03_function/f_menu.o
-                0x0800a460                MenuOnRun
+                0x0800a466        0x2 ./03_function/f_menu.o
+                0x0800a466                MenuOnRun
  .text.MenuOnStop
-                0x0800a462        0x2 ./03_function/f_menu.o
-                0x0800a462                MenuOnStop
+                0x0800a468        0x2 ./03_function/f_menu.o
+                0x0800a468                MenuOnStop
  .text.MenuOnMfk
-                0x0800a464       0x78 ./03_function/f_menu.o
-                0x0800a464                MenuOnMfk
+                0x0800a46a       0x78 ./03_function/f_menu.o
+                0x0800a46a                MenuOnMfk
  .text.Menu0OnUpDown
-                0x0800a4dc       0x2e ./03_function/f_menu.o
-                0x0800a4dc                Menu0OnUpDown
+                0x0800a4e2       0x2e ./03_function/f_menu.o
+                0x0800a4e2                Menu0OnUpDown
  .text.Menu1OnPrg
-                0x0800a50a       0x1a ./03_function/f_menu.o
-                0x0800a50a                Menu1OnPrg
+                0x0800a510       0x1a ./03_function/f_menu.o
+                0x0800a510                Menu1OnPrg
  .text.Menu1OnShift
-                0x0800a524        0x2 ./03_function/f_menu.o
-                0x0800a524                Menu1OnShift
+                0x0800a52a        0x2 ./03_function/f_menu.o
+                0x0800a52a                Menu1OnShift
  .text.Menu2OnPrg
-                0x0800a526       0x36 ./03_function/f_menu.o
-                0x0800a526                Menu2OnPrg
+                0x0800a52c       0x36 ./03_function/f_menu.o
+                0x0800a52c                Menu2OnPrg
  .text.Menu2OnShift
-                0x0800a55c       0x42 ./03_function/f_menu.o
-                0x0800a55c                Menu2OnShift
+                0x0800a562       0x42 ./03_function/f_menu.o
+                0x0800a562                Menu2OnShift
  .text.Menu3OnPrg
-                0x0800a59e       0x14 ./03_function/f_menu.o
-                0x0800a59e                Menu3OnPrg
+                0x0800a5a4       0x14 ./03_function/f_menu.o
+                0x0800a5a4                Menu3OnPrg
  .text.Menu3OnShift
-                0x0800a5b2       0x38 ./03_function/f_menu.o
-                0x0800a5b2                Menu3OnShift
+                0x0800a5b8       0x38 ./03_function/f_menu.o
+                0x0800a5b8                Menu3OnShift
  .text.MenuPwdOnPrg
-                0x0800a5ea       0x26 ./03_function/f_menu.o
-                0x0800a5ea                MenuPwdOnPrg
+                0x0800a5f0       0x26 ./03_function/f_menu.o
+                0x0800a5f0                MenuPwdOnPrg
  .text.MenuPwdHint2Input
-                0x0800a610       0x1c ./03_function/f_menu.o
-                0x0800a610                MenuPwdHint2Input
+                0x0800a616       0x1c ./03_function/f_menu.o
+                0x0800a616                MenuPwdHint2Input
  .text.MenuPwdHintOnShift
-                0x0800a62c        0xc ./03_function/f_menu.o
-                0x0800a62c                MenuPwdHintOnShift
+                0x0800a632        0xc ./03_function/f_menu.o
+                0x0800a632                MenuPwdHintOnShift
  .text.MenuPwdInputOnShift
-                0x0800a638       0x1c ./03_function/f_menu.o
-                0x0800a638                MenuPwdInputOnShift
+                0x0800a63e       0x1c ./03_function/f_menu.o
+                0x0800a63e                MenuPwdInputOnShift
  .text.UpdateMenuPwdHintDisplayBuffer
-                0x0800a654       0x2e ./03_function/f_menu.o
-                0x0800a654                UpdateMenuPwdHintDisplayBuffer
+                0x0800a65a       0x2e ./03_function/f_menu.o
+                0x0800a65a                UpdateMenuPwdHintDisplayBuffer
  .text.MenuPwdHintOnQuick
-                0x0800a682        0x2 ./03_function/f_menu.o
-                0x0800a682                MenuPwdHintOnQuick
+                0x0800a688        0x2 ./03_function/f_menu.o
+                0x0800a688                MenuPwdHintOnQuick
  .text.MenuPwdInputOnQuick
-                0x0800a684        0x2 ./03_function/f_menu.o
-                0x0800a684                MenuPwdInputOnQuick
+                0x0800a68a        0x2 ./03_function/f_menu.o
+                0x0800a68a                MenuPwdInputOnQuick
  .text.MenuOnQuick
-                0x0800a686       0x72 ./03_function/f_menu.o
-                0x0800a686                MenuOnQuick
+                0x0800a68c       0x72 ./03_function/f_menu.o
+                0x0800a68c                MenuOnQuick
  .text.UpdateMenuPwdInputDisplayBuffer
-                0x0800a6f8       0x84 ./03_function/f_menu.o
-                0x0800a6f8                UpdateMenuPwdInputDisplayBuffer
+                0x0800a6fe       0x84 ./03_function/f_menu.o
+                0x0800a6fe                UpdateMenuPwdInputDisplayBuffer
  .text.ValidateTuneCmd
-                0x0800a77c       0x54 ./03_function/f_menu.o
-                0x0800a77c                ValidateTuneCmd
+                0x0800a782       0x54 ./03_function/f_menu.o
+                0x0800a782                ValidateTuneCmd
  .text.LimitDeal
-                0x0800a7d0       0x18 ./03_function/f_menu.o
-                0x0800a7d0                LimitDeal
+                0x0800a7d6       0x18 ./03_function/f_menu.o
+                0x0800a7d6                LimitDeal
  .text.NoSameDeal
-                0x0800a7e8       0xb0 ./03_function/f_menu.o
-                0x0800a7e8                NoSameDeal
+                0x0800a7ee       0xb0 ./03_function/f_menu.o
+                0x0800a7ee                NoSameDeal
  .text.cycleShiftDeal
-                0x0800a898       0xa4 ./03_function/f_menu.o
-                0x0800a898                cycleShiftDeal
+                0x0800a89e       0xa4 ./03_function/f_menu.o
+                0x0800a89e                cycleShiftDeal
  .text.Menu0OnShift
-                0x0800a93c       0x2a ./03_function/f_menu.o
-                0x0800a93c                Menu0OnShift
+                0x0800a942       0x2a ./03_function/f_menu.o
+                0x0800a942                Menu0OnShift
  .text.UpdateMenu0DispStatus
-                0x0800a966       0x6a ./03_function/f_menu.o
-                0x0800a966                UpdateMenu0DispStatus
+                0x0800a96c       0x6a ./03_function/f_menu.o
+                0x0800a96c                UpdateMenu0DispStatus
  .text.UpdateErrorDisplayBuffer
-                0x0800a9d0       0x92 ./03_function/f_menu.o
-                0x0800a9d0                UpdateErrorDisplayBuffer
+                0x0800a9d6       0x92 ./03_function/f_menu.o
+                0x0800a9d6                UpdateErrorDisplayBuffer
  .text.UpdateTuneDisplayBuffer
-                0x0800aa62       0x38 ./03_function/f_menu.o
-                0x0800aa62                UpdateTuneDisplayBuffer
+                0x0800aa68       0x38 ./03_function/f_menu.o
+                0x0800aa68                UpdateTuneDisplayBuffer
  .text.ModifyFunccodeUpDown
-                0x0800aa9a      0x420 ./03_function/f_menu.o
-                0x0800aa9a                ModifyFunccodeUpDown
+                0x0800aaa0      0x420 ./03_function/f_menu.o
+                0x0800aaa0                ModifyFunccodeUpDown
  .text.DispDataDeal
-                0x0800aeba      0x180 ./03_function/f_menu.o
-                0x0800aeba                DispDataDeal
+                0x0800aec0      0x180 ./03_function/f_menu.o
+                0x0800aec0                DispDataDeal
  .text.GetDispDigits
-                0x0800b03a       0x9c ./03_function/f_menu.o
-                0x0800b03a                GetDispDigits
+                0x0800b040       0x9c ./03_function/f_menu.o
+                0x0800b040                GetDispDigits
  .text.UpdateGroupDisplay
-                0x0800b0d6       0x4c ./03_function/f_menu.o
-                0x0800b0d6                UpdateGroupDisplay
+                0x0800b0dc       0x4c ./03_function/f_menu.o
+                0x0800b0dc                UpdateGroupDisplay
  .text.UpdateMenu1DisplayBuffer
-                0x0800b122       0x54 ./03_function/f_menu.o
-                0x0800b122                UpdateMenu1DisplayBuffer
+                0x0800b128       0x54 ./03_function/f_menu.o
+                0x0800b128                UpdateMenu1DisplayBuffer
  .text.UpdateMenu2DisplayBuffer
-                0x0800b176      0x18a ./03_function/f_menu.o
-                0x0800b176                UpdateMenu2DisplayBuffer
+                0x0800b17c      0x18a ./03_function/f_menu.o
+                0x0800b17c                UpdateMenu2DisplayBuffer
  .text.UpdateDisplayBufferAttribute
-                0x0800b300      0x3a4 ./03_function/f_menu.o
-                0x0800b300                UpdateDisplayBufferAttribute
+                0x0800b306      0x3a4 ./03_function/f_menu.o
+                0x0800b306                UpdateDisplayBufferAttribute
  .text.UpdateMenu0DisplayBuffer
-                0x0800b6a4      0x15c ./03_function/f_menu.o
-                0x0800b6a4                UpdateMenu0DisplayBuffer
+                0x0800b6aa      0x15c ./03_function/f_menu.o
+                0x0800b6aa                UpdateMenu0DisplayBuffer
  .text.LimitOverTurnDeal
-                0x0800b800       0x50 ./03_function/f_menu.o
-                0x0800b800                LimitOverTurnDeal
+                0x0800b806       0x50 ./03_function/f_menu.o
+                0x0800b806                LimitOverTurnDeal
  .text.GroupUpDown
-                0x0800b850       0x14 ./03_function/f_menu.o
-                0x0800b850                GroupUpDown
+                0x0800b856       0x14 ./03_function/f_menu.o
+                0x0800b856                GroupUpDown
  .text.Menu1OnUpDown
-                0x0800b864       0x2c ./03_function/f_menu.o
-                0x0800b864                Menu1OnUpDown
+                0x0800b86a       0x2c ./03_function/f_menu.o
+                0x0800b86a                Menu1OnUpDown
  .text.Menu1OnUp
-                0x0800b890        0xe ./03_function/f_menu.o
-                0x0800b890                Menu1OnUp
+                0x0800b896        0xe ./03_function/f_menu.o
+                0x0800b896                Menu1OnUp
  .text.Menu1OnDown
-                0x0800b89e        0xe ./03_function/f_menu.o
-                0x0800b89e                Menu1OnDown
+                0x0800b8a4        0xe ./03_function/f_menu.o
+                0x0800b8a4                Menu1OnDown
  .text.DealUserMenuModeGroupGrade
-                0x0800b8ac       0x5c ./03_function/f_menu.o
-                0x0800b8ac                DealUserMenuModeGroupGrade
+                0x0800b8b2       0x5c ./03_function/f_menu.o
+                0x0800b8b2                DealUserMenuModeGroupGrade
  .text.DealCheckMenuModeGroupGrade
-                0x0800b908      0x1bc ./03_function/f_menu.o
-                0x0800b908                DealCheckMenuModeGroupGrade
+                0x0800b90e      0x1bc ./03_function/f_menu.o
+                0x0800b90e                DealCheckMenuModeGroupGrade
  .text.FcDigit2Bin
-                0x0800bac4       0x32 ./03_function/f_menu.o
-                0x0800bac4                FcDigit2Bin
+                0x0800baca       0x32 ./03_function/f_menu.o
+                0x0800baca                FcDigit2Bin
  .text.MotorDebugFcDeal
-                0x0800baf6       0x3c ./03_function/f_menu.o
-                0x0800baf6                MotorDebugFcDeal
+                0x0800bafc       0x3c ./03_function/f_menu.o
+                0x0800bafc                MotorDebugFcDeal
  .text.UpdataFuncCodeGrade
-                0x0800bb32       0xba ./03_function/f_menu.o
-                0x0800bb32                UpdataFuncCodeGrade
+                0x0800bb38       0xba ./03_function/f_menu.o
+                0x0800bb38                UpdataFuncCodeGrade
  .text.MenuModeDeal
-                0x0800bbec       0x9c ./03_function/f_menu.o
-                0x0800bbec                MenuModeDeal
+                0x0800bbf2       0x9c ./03_function/f_menu.o
+                0x0800bbf2                MenuModeDeal
  .text.MenuModeSwitch
-                0x0800bc88      0x110 ./03_function/f_menu.o
-                0x0800bc88                MenuModeSwitch
+                0x0800bc8e      0x110 ./03_function/f_menu.o
+                0x0800bc8e                MenuModeSwitch
  .text.Menu0OnEnter
-                0x0800bd98       0x1c ./03_function/f_menu.o
-                0x0800bd98                Menu0OnEnter
+                0x0800bd9e       0x1c ./03_function/f_menu.o
+                0x0800bd9e                Menu0OnEnter
  .text.Menu1OnEnter
-                0x0800bdb4       0x44 ./03_function/f_menu.o
-                0x0800bdb4                Menu1OnEnter
+                0x0800bdba       0x44 ./03_function/f_menu.o
+                0x0800bdba                Menu1OnEnter
  .text.Menu0AddMenuLevel
-                0x0800bdf8       0x26 ./03_function/f_menu.o
-                0x0800bdf8                Menu0AddMenuLevel
+                0x0800bdfe       0x26 ./03_function/f_menu.o
+                0x0800bdfe                Menu0AddMenuLevel
  .text.Menu0OnPrg
-                0x0800be1e       0x7a ./03_function/f_menu.o
-                0x0800be1e                Menu0OnPrg
+                0x0800be24       0x7a ./03_function/f_menu.o
+                0x0800be24                Menu0OnPrg
  .text.MenuPwdInputOnEnter
-                0x0800be98       0x38 ./03_function/f_menu.o
-                0x0800be98                MenuPwdInputOnEnter
+                0x0800be9e       0x38 ./03_function/f_menu.o
+                0x0800be9e                MenuPwdInputOnEnter
  .text.Menu2OnEnter
-                0x0800bed0       0xa4 ./03_function/f_menu.o
-                0x0800bed0                Menu2OnEnter
+                0x0800bed6       0xa4 ./03_function/f_menu.o
+                0x0800bed6                Menu2OnEnter
  .text.Menu2OnUpDown
-                0x0800bf74       0xcc ./03_function/f_menu.o
-                0x0800bf74                Menu2OnUpDown
+                0x0800bf7a       0xcc ./03_function/f_menu.o
+                0x0800bf7a                Menu2OnUpDown
  .text.Menu2OnUp
-                0x0800c040       0x10 ./03_function/f_menu.o
-                0x0800c040                Menu2OnUp
+                0x0800c046       0x10 ./03_function/f_menu.o
+                0x0800c046                Menu2OnUp
  .text.Menu2OnDown
-                0x0800c050       0x10 ./03_function/f_menu.o
-                0x0800c050                Menu2OnDown
+                0x0800c056       0x10 ./03_function/f_menu.o
+                0x0800c056                Menu2OnDown
  .text.ModifyFunccodeEnter
-                0x0800c060      0x1ae ./03_function/f_menu.o
-                0x0800c060                ModifyFunccodeEnter
+                0x0800c066      0x1ae ./03_function/f_menu.o
+                0x0800c066                ModifyFunccodeEnter
  .text.Menu3OnEnter
-                0x0800c20e      0x228 ./03_function/f_menu.o
-                0x0800c20e                Menu3OnEnter
+                0x0800c214      0x228 ./03_function/f_menu.o
+                0x0800c214                Menu3OnEnter
  .text.Menu3OnUpDown
-                0x0800c436      0x11a ./03_function/f_menu.o
-                0x0800c436                Menu3OnUpDown
+                0x0800c43c      0x11a ./03_function/f_menu.o
+                0x0800c43c                Menu3OnUpDown
  .text.Menu3OnUp
-                0x0800c550       0x10 ./03_function/f_menu.o
-                0x0800c550                Menu3OnUp
+                0x0800c556       0x10 ./03_function/f_menu.o
+                0x0800c556                Menu3OnUp
  .text.Menu3OnDown
-                0x0800c560       0x10 ./03_function/f_menu.o
-                0x0800c560                Menu3OnDown
+                0x0800c566       0x10 ./03_function/f_menu.o
+                0x0800c566                Menu3OnDown
  .text.MenuInit
-                0x0800c570       0x34 ./03_function/f_menu.o
-                0x0800c570                MenuInit
+                0x0800c576       0x34 ./03_function/f_menu.o
+                0x0800c576                MenuInit
  .text.UpdateDisplayBufferVisualIoStatus
-                0x0800c5a4       0x4c ./03_function/f_menu.o
-                0x0800c5a4                UpdateDisplayBufferVisualIoStatus
+                0x0800c5aa       0x4c ./03_function/f_menu.o
+                0x0800c5aa                UpdateDisplayBufferVisualIoStatus
  .text.UpdateDisplayBufferVisualDiFunc
-                0x0800c5f0       0x40 ./03_function/f_menu.o
-                0x0800c5f0                UpdateDisplayBufferVisualDiFunc
+                0x0800c5f6       0x40 ./03_function/f_menu.o
+                0x0800c5f6                UpdateDisplayBufferVisualDiFunc
  .text.UpdateMenu3DisplayBuffer
-                0x0800c630      0x34e ./03_function/f_menu.o
-                0x0800c630                UpdateMenu3DisplayBuffer
+                0x0800c636      0x34e ./03_function/f_menu.o
+                0x0800c636                UpdateMenu3DisplayBuffer
  .text.MenuPwdInputOnUpDown
-                0x0800c97e       0x3e ./03_function/f_menu.o
-                0x0800c97e                MenuPwdInputOnUpDown
+                0x0800c984       0x3e ./03_function/f_menu.o
+                0x0800c984                MenuPwdInputOnUpDown
  .text.MenuPwdInputOnUp
-                0x0800c9bc       0x10 ./03_function/f_menu.o
-                0x0800c9bc                MenuPwdInputOnUp
+                0x0800c9c2       0x10 ./03_function/f_menu.o
+                0x0800c9c2                MenuPwdInputOnUp
  .text.MenuPwdInputOnDown
-                0x0800c9cc       0x10 ./03_function/f_menu.o
-                0x0800c9cc                MenuPwdInputOnDown
+                0x0800c9d2       0x10 ./03_function/f_menu.o
+                0x0800c9d2                MenuPwdInputOnDown
  .text.UpdateMotorPara
-                0x0800c9dc      0x16e ./03_function/f_motorFc.o
-                0x0800c9dc                UpdateMotorPara
+                0x0800c9e2      0x16e ./03_function/f_motorFc.o
+                0x0800c9e2                UpdateMotorPara
  .text.OscSciFunction
-                0x0800cb4a        0x2 ./03_function/f_osc.o
-                0x0800cb4a                OscSciFunction
+                0x0800cb50        0x2 ./03_function/f_osc.o
+                0x0800cb50                OscSciFunction
  .text.setTimeRun
-                0x0800cb4c       0xc6 ./03_function/f_runSrc.o
-                0x0800cb4c                setTimeRun
+                0x0800cb52       0xc6 ./03_function/f_runSrc.o
+                0x0800cb52                setTimeRun
  .text.runTimeCal
-                0x0800cc12      0x1ca ./03_function/f_runSrc.o
-                0x0800cc12                runTimeCal
+                0x0800cc18      0x1ca ./03_function/f_runSrc.o
+                0x0800cc18                runTimeCal
  .text.UpdateBenchTime
-                0x0800cddc       0x22 ./03_function/f_runSrc.o
-                0x0800cddc                UpdateBenchTime
+                0x0800cde2       0x22 ./03_function/f_runSrc.o
+                0x0800cde2                UpdateBenchTime
  .text.StartRunCtrl
-                0x0800cdfe      0x2d2 ./03_function/f_runSrc.o
-                0x0800cdfe                StartRunCtrl
+                0x0800ce04      0x2d2 ./03_function/f_runSrc.o
+                0x0800ce04                StartRunCtrl
  .text.StopRunCtrl
-                0x0800d0d0      0x1e6 ./03_function/f_runSrc.o
-                0x0800d0d0                StopRunCtrl
+                0x0800d0d6      0x1e6 ./03_function/f_runSrc.o
+                0x0800d0d6                StopRunCtrl
  .text.JogRunCtrl
-                0x0800d2b6       0xb0 ./03_function/f_runSrc.o
-                0x0800d2b6                JogRunCtrl
+                0x0800d2bc       0xb0 ./03_function/f_runSrc.o
+                0x0800d2bc                JogRunCtrl
  .text.TuneRunCtrl
-                0x0800d366      0x1c6 ./03_function/f_runSrc.o
-                0x0800d366                TuneRunCtrl
+                0x0800d36c      0x1c6 ./03_function/f_runSrc.o
+                0x0800d36c                TuneRunCtrl
  .text.LoseLoadRunCtrl
-                0x0800d52c       0xc6 ./03_function/f_runSrc.o
-                0x0800d52c                LoseLoadRunCtrl
+                0x0800d532       0xc6 ./03_function/f_runSrc.o
+                0x0800d532                LoseLoadRunCtrl
  .text.ShutDownRunCtrl
-                0x0800d5f2      0x13c ./03_function/f_runSrc.o
-                0x0800d5f2                ShutDownRunCtrl
+                0x0800d5f8      0x13c ./03_function/f_runSrc.o
+                0x0800d5f8                ShutDownRunCtrl
  .text.UpdateSwingPara
-                0x0800d72e      0x15a ./03_function/f_runSrc.o
-                0x0800d72e                UpdateSwingPara
+                0x0800d734      0x15a ./03_function/f_runSrc.o
+                0x0800d734                UpdateSwingPara
  .text.SwingDeal
-                0x0800d888      0x13c ./03_function/f_runSrc.o
-                0x0800d888                SwingDeal
+                0x0800d88e      0x13c ./03_function/f_runSrc.o
+                0x0800d88e                SwingDeal
  .text.LowerThanLowerFrqDeal
-                0x0800d9c4       0xe8 ./03_function/f_runSrc.o
-                0x0800d9c4                LowerThanLowerFrqDeal
+                0x0800d9ca       0xe8 ./03_function/f_runSrc.o
+                0x0800d9ca                LowerThanLowerFrqDeal
  .text.NormalRunCtrl
-                0x0800daac      0x134 ./03_function/f_runSrc.o
-                0x0800daac                NormalRunCtrl
+                0x0800dab2      0x134 ./03_function/f_runSrc.o
+                0x0800dab2                NormalRunCtrl
  .text.PowerOffNoStopDeal
-                0x0800dbe0       0xa2 ./03_function/f_runSrc.o
-                0x0800dbe0                PowerOffNoStopDeal
+                0x0800dbe6       0xa2 ./03_function/f_runSrc.o
+                0x0800dbe6                PowerOffNoStopDeal
  .text.RunSrcUpdateFrq
-                0x0800dc82      0x4b8 ./03_function/f_runSrc.o
-                0x0800dc82                RunSrcUpdateFrq
+                0x0800dc88      0x4b8 ./03_function/f_runSrc.o
+                0x0800dc88                RunSrcUpdateFrq
  .text.AccDecTimeCalc
-                0x0800e13a      0x1b6 ./03_function/f_runSrc.o
-                0x0800e13a                AccDecTimeCalc
+                0x0800e140      0x1b6 ./03_function/f_runSrc.o
+                0x0800e140                AccDecTimeCalc
  .text.DormantDeal
-                0x0800e2f0      0x10a ./03_function/f_runSrc.o
-                0x0800e2f0                DormantDeal
+                0x0800e2f6      0x10a ./03_function/f_runSrc.o
+                0x0800e2f6                DormantDeal
  .text.UpdateRunCmd
-                0x0800e3fa      0xb98 ./03_function/f_runSrc.o
-                0x0800e3fa                UpdateRunCmd
+                0x0800e400      0xb98 ./03_function/f_runSrc.o
+                0x0800e400                UpdateRunCmd
  .text.RunSrcDeal
-                0x0800ef92       0x12 ./03_function/f_runSrc.o
-                0x0800ef92                RunSrcDeal
+                0x0800ef98       0x12 ./03_function/f_runSrc.o
+                0x0800ef98                RunSrcDeal
  .text.LineChangeCalc
-                0x0800efa4       0x38 ./03_function/f_runSrc_accDecFrq.o
-                0x0800efa4                LineChangeCalc
+                0x0800efaa       0x38 ./03_function/f_runSrc_accDecFrq.o
+                0x0800efaa                LineChangeCalc
  .text.SCurveOridinaryCalc
-                0x0800efdc      0x456 ./03_function/f_runSrc_accDecFrq.o
-                0x0800efdc                SCurveOridinaryCalc
+                0x0800efe2      0x456 ./03_function/f_runSrc_accDecFrq.o
+                0x0800efe2                SCurveOridinaryCalc
  .text.SCurveEOridinaryCalc
-                0x0800f432      0x3ce ./03_function/f_runSrc_accDecFrq.o
-                0x0800f432                SCurveEOridinaryCalc
+                0x0800f438      0x3ce ./03_function/f_runSrc_accDecFrq.o
+                0x0800f438                SCurveEOridinaryCalc
  .text.AccDecFrqCalc
-                0x0800f800      0x214 ./03_function/f_runSrc_accDecFrq.o
-                0x0800f800                AccDecFrqCalc
+                0x0800f806      0x214 ./03_function/f_runSrc_accDecFrq.o
+                0x0800f806                AccDecFrqCalc
  .text.UpdateTorqueAim
-                0x0800fa14      0x19a ./03_function/f_torqueCtrl.o
-                0x0800fa14                UpdateTorqueAim
+                0x0800fa1a      0x19a ./03_function/f_torqueCtrl.o
+                0x0800fa1a                UpdateTorqueAim
  .text.AccDecTorqueCalc
-                0x0800fbae       0xda ./03_function/f_torqueCtrl.o
-                0x0800fbae                AccDecTorqueCalc
+                0x0800fbb4       0xda ./03_function/f_torqueCtrl.o
+                0x0800fbb4                AccDecTorqueCalc
  .text.TorqueCalc
-                0x0800fc88       0x12 ./03_function/f_torqueCtrl.o
-                0x0800fc88                TorqueCalc
+                0x0800fc8e       0x12 ./03_function/f_torqueCtrl.o
+                0x0800fc8e                TorqueCalc
  .text.TorqueLimitCalc
-                0x0800fc9a       0xb6 ./03_function/f_torqueCtrl.o
-                0x0800fc9a                TorqueLimitCalc
+                0x0800fca0       0xb6 ./03_function/f_torqueCtrl.o
+                0x0800fca0                TorqueLimitCalc
  .text.WinkDeal
-                0x0800fd50      0x268 ./03_function/f_ui.o
-                0x0800fd50                WinkDeal
+                0x0800fd56      0x268 ./03_function/f_ui.o
+                0x0800fd56                WinkDeal
  .text.DisplayScanPrepare
-                0x0800ffb8      0x13e ./03_function/f_ui.o
-                0x0800ffb8                DisplayScanPrepare
+                0x0800ffbe      0x13e ./03_function/f_ui.o
+                0x0800ffbe                DisplayScanPrepare
  .text.DisplayScan
-                0x080100f6       0x3e ./03_function/f_ui.o
-                0x080100f6                DisplayScan
- .text.KeyScan  0x08010134      0x222 ./03_function/f_ui.o
-                0x08010134                KeyScan
+                0x080100fc       0x3e ./03_function/f_ui.o
+                0x080100fc                DisplayScan
+ .text.KeyScan  0x0801013a      0x222 ./03_function/f_ui.o
+                0x0801013a                KeyScan
  .text.KeyBordTest
-                0x08010356       0x32 ./03_function/f_ui.o
-                0x08010356                KeyBordTest
+                0x0801035c       0x32 ./03_function/f_ui.o
+                0x0801035c                KeyBordTest
  .text.KeyProcess
-                0x08010388      0x208 ./03_function/f_ui.o
-                0x08010388                KeyProcess
+                0x0801038e      0x208 ./03_function/f_ui.o
+                0x0801038e                KeyProcess
  .text.InitSpiaGpio
-                0x08010590       0xa0 ./03_function/f_ui.o
-                0x08010590                InitSpiaGpio
+                0x08010596       0xa0 ./03_function/f_ui.o
+                0x08010596                InitSpiaGpio
  .text.InitSetSpiForFunc
-                0x08010630       0x6e ./03_function/f_ui.o
-                0x08010630                InitSetSpiForFunc
+                0x08010636       0x6e ./03_function/f_ui.o
+                0x08010636                InitSetSpiForFunc
  .text.UpdateMenuModeDisplayBuffer
-                0x0801069e       0x62 ./03_function/f_ui.o
-                0x0801069e                UpdateMenuModeDisplayBuffer
+                0x080106a4       0x62 ./03_function/f_ui.o
+                0x080106a4                UpdateMenuModeDisplayBuffer
  .text.UpdateDisplayBuffer
-                0x08010700      0x21e ./03_function/f_ui.o
-                0x08010700                UpdateDisplayBuffer
+                0x08010706      0x21e ./03_function/f_ui.o
+                0x08010706                UpdateDisplayBuffer
  .text.vfSeparateDeal
-                0x0801091e      0x234 ./03_function/f_vf.o
-                0x0801091e                vfSeparateDeal
+                0x08010924      0x234 ./03_function/f_vf.o
+                0x08010924                vfSeparateDeal
  .text.VfVarInitiate
-                0x08010b52       0xbe ./02_motor/vf/MotorVF.o
-                0x08010b52                VfVarInitiate
+                0x08010b58       0xbe ./02_motor/vf/MotorVF.o
+                0x08010b58                VfVarInitiate
  .text.VFOVUdcLimit
-                0x08010c10       0x4e ./02_motor/vf/MotorVF.o
-                0x08010c10                VFOVUdcLimit
+                0x08010c16       0x4e ./02_motor/vf/MotorVF.o
+                0x08010c16                VFOVUdcLimit
  .text.CalOutVotInVFStatus
-                0x08010c5e      0x166 ./02_motor/vf/MotorVF.o
-                0x08010c5e                CalOutVotInVFStatus
+                0x08010c64      0x166 ./02_motor/vf/MotorVF.o
+                0x08010c64                CalOutVotInVFStatus
  .text.CalTorqueUp
-                0x08010dc4       0xe8 ./02_motor/vf/MotorVF.o
-                0x08010dc4                CalTorqueUp
+                0x08010dca       0xe8 ./02_motor/vf/MotorVF.o
+                0x08010dca                CalTorqueUp
  .text.VFWsTorqueBoostComm
-                0x08010eac      0x1f0 ./02_motor/vf/MotorVF.o
-                0x08010eac                VFWsTorqueBoostComm
+                0x08010eb2      0x1f0 ./02_motor/vf/MotorVF.o
+                0x08010eb2                VFWsTorqueBoostComm
  .text.VFAutoTorqueBoost
-                0x0801109c      0x1a8 ./02_motor/vf/MotorVF.o
-                0x0801109c                VFAutoTorqueBoost
+                0x080110a2      0x1a8 ./02_motor/vf/MotorVF.o
+                0x080110a2                VFAutoTorqueBoost
  .text.VFWSCompControl
-                0x08011244      0x1c4 ./02_motor/vf/MotorVF.o
-                0x08011244                VFWSCompControl
+                0x0801124a      0x1c4 ./02_motor/vf/MotorVF.o
+                0x0801124a                VFWSCompControl
  .text.VFOverMagneticControl
-                0x08011408       0xb6 ./02_motor/vf/MotorVF.o
-                0x08011408                VFOverMagneticControl
+                0x0801140e       0xb6 ./02_motor/vf/MotorVF.o
+                0x0801140e                VFOverMagneticControl
  .text.VFSpeedControl
-                0x080114be       0x58 ./02_motor/vf/MotorVF.o
-                0x080114be                VFSpeedControl
+                0x080114c4       0x58 ./02_motor/vf/MotorVF.o
+                0x080114c4                VFSpeedControl
  .text.VfOverCurDeal
-                0x08011516      0x2da ./02_motor/vf/MotorVF.o
-                0x08011516                VfOverCurDeal
+                0x0801151c      0x2da ./02_motor/vf/MotorVF.o
+                0x0801151c                VfOverCurDeal
  .text.VfFreqDeal
-                0x080117f0      0x296 ./02_motor/vf/MotorVF.o
-                0x080117f0                VfFreqDeal
+                0x080117f6      0x296 ./02_motor/vf/MotorVF.o
+                0x080117f6                VfFreqDeal
  .text.HVfDeadBandComp
-                0x08011a86      0x24e ./02_motor/vf/MotorVF.o
-                0x08011a86                HVfDeadBandComp
+                0x08011a8c      0x24e ./02_motor/vf/MotorVF.o
+                0x08011a8c                HVfDeadBandComp
  .text.HVfOscDampDeal
-                0x08011cd4      0x11e ./02_motor/vf/MotorVF.o
-                0x08011cd4                HVfOscDampDeal
+                0x08011cda      0x11e ./02_motor/vf/MotorVF.o
+                0x08011cda                HVfOscDampDeal
  .text.PrepareParForPmsmSvc
-                0x08011df2       0xdc ./02_motor/vc/PM_svc/MotorIPMSVC.o
-                0x08011df2                PrepareParForPmsmSvc
+                0x08011df8       0xdc ./02_motor/vc/PM_svc/MotorIPMSVC.o
+                0x08011df8                PrepareParForPmsmSvc
  .text.ResetParForPmsmSvc
-                0x08011ece       0xac ./02_motor/vc/PM_svc/MotorIPMSVC.o
-                0x08011ece                ResetParForPmsmSvc
+                0x08011ed4       0xac ./02_motor/vc/PM_svc/MotorIPMSVC.o
+                0x08011ed4                ResetParForPmsmSvc
  .text.PmsmSvcCtrl
-                0x08011f7a      0x218 ./02_motor/vc/PM_svc/MotorIPMSVC.o
-                0x08011f7a                PmsmSvcCtrl
+                0x08011f80      0x218 ./02_motor/vc/PM_svc/MotorIPMSVC.o
+                0x08011f80                PmsmSvcCtrl
  .text.PmsmSvcCalFc
-                0x08012192       0xda ./02_motor/vc/PM_svc/MotorIPMSVC.o
-                0x08012192                PmsmSvcCalFc
+                0x08012198       0xda ./02_motor/vc/PM_svc/MotorIPMSVC.o
+                0x08012198                PmsmSvcCalFc
  .text.PmsmSvcCalImForLowSpeed
-                0x0801226c       0x96 ./02_motor/vc/PM_svc/MotorIPMSVC.o
-                0x0801226c                PmsmSvcCalImForLowSpeed
+                0x08012272       0x96 ./02_motor/vc/PM_svc/MotorIPMSVC.o
+                0x08012272                PmsmSvcCalImForLowSpeed
  .text.PG_Zero_isr
-                0x08012302       0xfc ./02_motor/vc/MotorPmsmMain.o
-                0x08012302                PG_Zero_isr
+                0x08012308       0xfc ./02_motor/vc/MotorPmsmMain.o
+                0x08012308                PG_Zero_isr
  .text.IPMPosCalZWindage
-                0x080123fe       0x2c ./02_motor/vc/MotorPmsmMain.o
-                0x080123fe                IPMPosCalZWindage
+                0x08012404       0x2c ./02_motor/vc/MotorPmsmMain.o
+                0x08012404                IPMPosCalZWindage
  .text.IPMPosAdjustZIndex
-                0x0801242a      0x10c ./02_motor/vc/MotorPmsmMain.o
-                0x0801242a                IPMPosAdjustZIndex
+                0x08012430      0x10c ./02_motor/vc/MotorPmsmMain.o
+                0x08012430                IPMPosAdjustZIndex
  .text.IPMCheckInitPos
-                0x08012536       0x5c ./02_motor/vc/MotorPmsmMain.o
-                0x08012536                IPMCheckInitPos
+                0x0801253c       0x5c ./02_motor/vc/MotorPmsmMain.o
+                0x0801253c                IPMCheckInitPos
  .text.SynCalLdAndLq
-                0x08012592       0x98 ./02_motor/vc/MotorPmsmMain.o
-                0x08012592                SynCalLdAndLq
+                0x08012598       0x98 ./02_motor/vc/MotorPmsmMain.o
+                0x08012598                SynCalLdAndLq
  .text.IPMCalAcrPIDCoff
-                0x0801262a      0x13e ./02_motor/vc/MotorPmsmMain.o
-                0x0801262a                IPMCalAcrPIDCoff
+                0x08012630      0x13e ./02_motor/vc/MotorPmsmMain.o
+                0x08012630                IPMCalAcrPIDCoff
  .text.RunCaseIpmInitPos
-                0x08012768      0x1c0 ./02_motor/vc/MotorPmsmMain.o
-                0x08012768                RunCaseIpmInitPos
+                0x0801276e      0x1c0 ./02_motor/vc/MotorPmsmMain.o
+                0x0801276e                RunCaseIpmInitPos
  .text.PrepPmsmCsrPrar
-                0x08012928      0x104 ./02_motor/vc/MotorPmsmMain.o
-                0x08012928                PrepPmsmCsrPrar
+                0x0801292e      0x104 ./02_motor/vc/MotorPmsmMain.o
+                0x0801292e                PrepPmsmCsrPrar
  .text.PmDecoupleDeal
-                0x08012a2c       0xe6 ./02_motor/vc/MotorPmsmMain.o
-                0x08012a2c                PmDecoupleDeal
+                0x08012a32       0xe6 ./02_motor/vc/MotorPmsmMain.o
+                0x08012a32                PmDecoupleDeal
  .text.ResetParForPmsmFwc
-                0x08012b12       0x98 ./02_motor/vc/MotorPmsmMain.o
-                0x08012b12                ResetParForPmsmFwc
+                0x08012b18       0x98 ./02_motor/vc/MotorPmsmMain.o
+                0x08012b18                ResetParForPmsmFwc
  .text.PmsmFreqAdjMethod
-                0x08012baa       0xb2 ./02_motor/vc/MotorPmsmMain.o
-                0x08012baa                PmsmFreqAdjMethod
+                0x08012bb0       0xb2 ./02_motor/vc/MotorPmsmMain.o
+                0x08012bb0                PmsmFreqAdjMethod
  .text.PmsmMaxTorqCtrl
-                0x08012c5c       0xa6 ./02_motor/vc/MotorPmsmMain.o
-                0x08012c5c                PmsmMaxTorqCtrl
+                0x08012c62       0xa6 ./02_motor/vc/MotorPmsmMain.o
+                0x08012c62                PmsmMaxTorqCtrl
  .text.PmsmFwcAdjMethod
-                0x08012d02       0xb6 ./02_motor/vc/MotorPmsmMain.o
-                0x08012d02                PmsmFwcAdjMethod
+                0x08012d08       0xb6 ./02_motor/vc/MotorPmsmMain.o
+                0x08012d08                PmsmFwcAdjMethod
  .text.IPMPosAdjustStop
-                0x08012db8       0xea ./02_motor/vc/MotorPmsmMain.o
-                0x08012db8                IPMPosAdjustStop
+                0x08012dbe       0xea ./02_motor/vc/MotorPmsmMain.o
+                0x08012dbe                IPMPosAdjustStop
  .text.FluxWeak05Ms
-                0x08012ea2      0x1ce ./02_motor/vc/MotorPmsmMain.o
-                0x08012ea2                FluxWeak05Ms
+                0x08012ea8      0x1ce ./02_motor/vc/MotorPmsmMain.o
+                0x08012ea8                FluxWeak05Ms
  .text.PMFluxWeak05Ms
-                0x08013070       0x8c ./02_motor/vc/MotorPmsmMain.o
-                0x08013070                PMFluxWeak05Ms
+                0x08013076       0x8c ./02_motor/vc/MotorPmsmMain.o
+                0x08013076                PMFluxWeak05Ms
  .text.IMFluxWeak2
-                0x080130fc      0x17c ./02_motor/vc/MotorPmsmMain.o
-                0x080130fc                IMFluxWeak2
+                0x08013102      0x17c ./02_motor/vc/MotorPmsmMain.o
+                0x08013102                IMFluxWeak2
  .text.CalUVWVoltSet
-                0x08013278      0x108 ./02_motor/vc/MotorPmsmMain.o
-                0x08013278                CalUVWVoltSet
+                0x0801327e      0x108 ./02_motor/vc/MotorPmsmMain.o
+                0x0801327e                CalUVWVoltSet
  .text.ResetAsrPar
-                0x08013380       0x48 ./02_motor/vc/MotorVCMain.o
-                0x08013380                ResetAsrPar
+                0x08013386       0x48 ./02_motor/vc/MotorVCMain.o
+                0x08013386                ResetAsrPar
  .text.ResetCsrPar
-                0x080133c8       0x9a ./02_motor/vc/MotorVCMain.o
-                0x080133c8                ResetCsrPar
+                0x080133ce       0x9a ./02_motor/vc/MotorVCMain.o
+                0x080133ce                ResetCsrPar
  .text.ResetParForVC
-                0x08013462       0x16 ./02_motor/vc/MotorVCMain.o
-                0x08013462                ResetParForVC
+                0x08013468       0x16 ./02_motor/vc/MotorVCMain.o
+                0x08013468                ResetParForVC
  .text.PrepareAsrPar
-                0x08013478      0x196 ./02_motor/vc/MotorVCMain.o
-                0x08013478                PrepareAsrPar
+                0x0801347e      0x196 ./02_motor/vc/MotorVCMain.o
+                0x0801347e                PrepareAsrPar
  .text.PrepareAsrPar1
-                0x0801360e      0x226 ./02_motor/vc/MotorVCMain.o
-                0x0801360e                PrepareAsrPar1
+                0x08013614      0x226 ./02_motor/vc/MotorVCMain.o
+                0x08013614                PrepareAsrPar1
  .text.CalUdcLimitIT
-                0x08013834       0xdc ./02_motor/vc/MotorVCMain.o
-                0x08013834                CalUdcLimitIT
+                0x0801383a       0xdc ./02_motor/vc/MotorVCMain.o
+                0x0801383a                CalUdcLimitIT
  .text.CalTorqueLimitPar
-                0x08013910      0x126 ./02_motor/vc/MotorVCMain.o
-                0x08013910                CalTorqueLimitPar
+                0x08013916      0x126 ./02_motor/vc/MotorVCMain.o
+                0x08013916                CalTorqueLimitPar
  .text.VcAsrControl
-                0x08013a36      0x154 ./02_motor/vc/MotorVCMain.o
-                0x08013a36                VcAsrControl
+                0x08013a3c      0x154 ./02_motor/vc/MotorVCMain.o
+                0x08013a3c                VcAsrControl
  .text.VcAsrControl1
-                0x08013b8a      0x1be ./02_motor/vc/MotorVCMain.o
-                0x08013b8a                VcAsrControl1
+                0x08013b90      0x1be ./02_motor/vc/MotorVCMain.o
+                0x08013b90                VcAsrControl1
  .text.VCCsrControl
-                0x08013d48      0x28e ./02_motor/vc/MotorVCMain.o
-                0x08013d48                VCCsrControl
+                0x08013d4e      0x28e ./02_motor/vc/MotorVCMain.o
+                0x08013d4e                VCCsrControl
  .text.InitSetPWM
-                0x08013fd6      0x1ec ./02_motor/pwm/MotorPWM.o
-                0x08013fd6                InitSetPWM
+                0x08013fdc      0x1f8 ./02_motor/pwm/MotorPWM.o
+                0x08013fdc                InitSetPWM
  .text.DeadBandComp
-                0x080141c2       0x9e ./02_motor/pwm/MotorPWM.o
-                0x080141c2                DeadBandComp
- .text.SendPWM  0x08014260      0x41a ./02_motor/pwm/MotorPWM.o
-                0x08014260                SendPWM
+                0x080141d4       0x9e ./02_motor/pwm/MotorPWM.o
+                0x080141d4                DeadBandComp
+ .text.SendPWM  0x08014272      0x41a ./02_motor/pwm/MotorPWM.o
+                0x08014272                SendPWM
  .text.OutPutVolt
-                0x0801467a       0x5c ./02_motor/pwm/MotorPWM.o
-                0x0801467a                OutPutVolt
+                0x0801468c       0x5c ./02_motor/pwm/MotorPWM.o
+                0x0801468c                OutPutVolt
  .text.OutPutPWM1
-                0x080146d6      0x224 ./02_motor/pwm/Svpwm1.o
-                0x080146d6                OutPutPWM1
+                0x080146e8      0x224 ./02_motor/pwm/Svpwm1.o
+                0x080146e8                OutPutPWM1
  .text.PrepareParForTune
-                0x080148fa      0x16c ./02_motor/para_estimation/MotorParEst.o
-                0x080148fa                PrepareParForTune
+                0x0801490c      0x16c ./02_motor/para_estimation/MotorParEst.o
+                0x0801490c                PrepareParForTune
  .text.PrepareParForTuneBeforeRun
-                0x08014a66       0x8c ./02_motor/para_estimation/MotorParEst.o
-                0x08014a66                PrepareParForTuneBeforeRun
+                0x08014a78       0x8c ./02_motor/para_estimation/MotorParEst.o
+                0x08014a78                PrepareParForTuneBeforeRun
  .text.EndOfParIdentify
-                0x08014af2       0xe4 ./02_motor/para_estimation/MotorParEst.o
-                0x08014af2                EndOfParIdentify
+                0x08014b04       0xe4 ./02_motor/para_estimation/MotorParEst.o
+                0x08014b04                EndOfParIdentify
  .text.RunCaseGetPar
-                0x08014bd6       0x9a ./02_motor/para_estimation/MotorParEst.o
-                0x08014bd6                RunCaseGetPar
+                0x08014be8       0x9a ./02_motor/para_estimation/MotorParEst.o
+                0x08014be8                RunCaseGetPar
  .text.InitSetPosTune
-                0x08014c70       0x58 ./02_motor/para_estimation/MotorPmsmParEst.o
-                0x08014c70                InitSetPosTune
+                0x08014c82       0x58 ./02_motor/para_estimation/MotorPmsmParEst.o
+                0x08014c82                InitSetPosTune
  .text.SetIPMPos
-                0x08014cc8       0x22 ./02_motor/para_estimation/MotorPmsmParEst.o
-                0x08014cc8                SetIPMPos
+                0x08014cda       0x22 ./02_motor/para_estimation/MotorPmsmParEst.o
+                0x08014cda                SetIPMPos
  .text.SetIPMRefPos
-                0x08014cea       0x14 ./02_motor/para_estimation/MotorPmsmParEst.o
-                0x08014cea                SetIPMRefPos
+                0x08014cfc       0x14 ./02_motor/para_estimation/MotorPmsmParEst.o
+                0x08014cfc                SetIPMRefPos
  .text.SynTuneInitPos
-                0x08014cfe      0x17e ./02_motor/para_estimation/MotorPmsmParEst.o
-                0x08014cfe                SynTuneInitPos
+                0x08014d10      0x17e ./02_motor/para_estimation/MotorPmsmParEst.o
+                0x08014d10                SynTuneInitPos
  .text.SynCalLabAndLbc
-                0x08014e7c       0xa8 ./02_motor/para_estimation/MotorPmsmParEst.o
-                0x08014e7c                SynCalLabAndLbc
+                0x08014e8e       0xa8 ./02_motor/para_estimation/MotorPmsmParEst.o
+                0x08014e8e                SynCalLabAndLbc
  .text.SynInitPosDetCal
-                0x08014f24       0x88 ./02_motor/para_estimation/MotorPmsmParEst.o
-                0x08014f24                SynInitPosDetCal
+                0x08014f36       0x88 ./02_motor/para_estimation/MotorPmsmParEst.o
+                0x08014f36                SynInitPosDetCal
  .text.SynInitPosDetSetTs
-                0x08014fac       0x2e ./02_motor/para_estimation/MotorPmsmParEst.o
-                0x08014fac                SynInitPosDetSetTs
+                0x08014fbe       0x2e ./02_motor/para_estimation/MotorPmsmParEst.o
+                0x08014fbe                SynInitPosDetSetTs
  .text.SynInitPosDetSetPwm
-                0x08014fda      0x1ca ./02_motor/para_estimation/MotorPmsmParEst.o
-                0x08014fda                SynInitPosDetSetPwm
+                0x08014fec      0x1ca ./02_motor/para_estimation/MotorPmsmParEst.o
+                0x08014fec                SynInitPosDetSetPwm
  .text.SynInitPosDetect
-                0x080151a4      0x854 ./02_motor/para_estimation/MotorPmsmParEst.o
-                0x080151a4                SynInitPosDetect
+                0x080151b6      0x854 ./02_motor/para_estimation/MotorPmsmParEst.o
+                0x080151b6                SynInitPosDetect
  .text.ADCEndIsrTune_POLSE_POS
-                0x080159f8       0xa6 ./02_motor/para_estimation/MotorPmsmParEst.o
-                0x080159f8                ADCEndIsrTune_POLSE_POS
+                0x08015a0a       0xa6 ./02_motor/para_estimation/MotorPmsmParEst.o
+                0x08015a0a                ADCEndIsrTune_POLSE_POS
  .text.SynTunePGZero_No_Load
-                0x08015a9e      0x614 ./02_motor/para_estimation/MotorPmsmParEst.o
-                0x08015a9e                SynTunePGZero_No_Load
+                0x08015ab0      0x614 ./02_motor/para_estimation/MotorPmsmParEst.o
+                0x08015ab0                SynTunePGZero_No_Load
  .text.SynTunePGZero_Load
-                0x080160b2      0x5f2 ./02_motor/para_estimation/MotorPmsmParEst.o
-                0x080160b2                SynTunePGZero_Load
+                0x080160c4      0x5f2 ./02_motor/para_estimation/MotorPmsmParEst.o
+                0x080160c4                SynTunePGZero_Load
  .text.SynTuneBemf
-                0x080166a4      0x464 ./02_motor/para_estimation/MotorPmsmParEst.o
-                0x080166a4                SynTuneBemf
+                0x080166b6      0x464 ./02_motor/para_estimation/MotorPmsmParEst.o
+                0x080166b6                SynTuneBemf
  .text.BeforeRunRsIdentify
-                0x08016b08      0x40a ./02_motor/para_estimation/MotorPmsmParEst.o
-                0x08016b08                BeforeRunRsIdentify
+                0x08016b1a      0x40a ./02_motor/para_estimation/MotorPmsmParEst.o
+                0x08016b1a                BeforeRunRsIdentify
  .text.BeforeRunRsIdentifyICal
-                0x08016f12      0x24e ./02_motor/para_estimation/MotorPmsmParEst.o
-                0x08016f12                BeforeRunRsIdentifyICal
+                0x08016f24      0x24e ./02_motor/para_estimation/MotorPmsmParEst.o
+                0x08016f24                BeforeRunRsIdentifyICal
  .text.RsIdentify_ADC_Over_isr
-                0x08017160       0x78 ./02_motor/para_estimation/MotorPmsmParEst.o
-                0x08017160                RsIdentify_ADC_Over_isr
+                0x08017172       0x78 ./02_motor/para_estimation/MotorPmsmParEst.o
+                0x08017172                RsIdentify_ADC_Over_isr
  .text.AsynPWMAngleCal
-                0x080171d8       0xae ./02_motor/main_public/MotorCarrier.o
-                0x080171d8                AsynPWMAngleCal
+                0x080171ea       0xae ./02_motor/main_public/MotorCarrier.o
+                0x080171ea                AsynPWMAngleCal
  .text.CalCarrierWaveFreq
-                0x08017286      0x446 ./02_motor/main_public/MotorCarrier.o
-                0x08017286                CalCarrierWaveFreq
+                0x08017298      0x446 ./02_motor/main_public/MotorCarrier.o
+                0x08017298                CalCarrierWaveFreq
  .text.SoftPWMProcess
-                0x080176cc       0xd8 ./02_motor/main_public/MotorCarrier.o
-                0x080176cc                SoftPWMProcess
+                0x080176de       0xd8 ./02_motor/main_public/MotorCarrier.o
+                0x080176de                SoftPWMProcess
  .text.CalOutputPhase
-                0x080177a4      0x228 ./02_motor/main_public/MotorCarrier.o
-                0x080177a4                CalOutputPhase
+                0x080177b6      0x228 ./02_motor/main_public/MotorCarrier.o
+                0x080177b6                CalOutputPhase
  .text.CompOnePhase
-                0x080179cc       0x6c ./02_motor/main_public/MotorCarrier.o
-                0x080179cc                CompOnePhase
+                0x080179de       0x6c ./02_motor/main_public/MotorCarrier.o
+                0x080179de                CompOnePhase
  .text.CalDeadBandComp
-                0x08017a38       0xea ./02_motor/main_public/MotorCarrier.o
-                0x08017a38                CalDeadBandComp
+                0x08017a4a       0xea ./02_motor/main_public/MotorCarrier.o
+                0x08017a4a                CalDeadBandComp
  .text.AlphBetaToDQ
-                0x08017b22       0xba ./02_motor/main_public/MotorCurrentTransform.o
-                0x08017b22                AlphBetaToDQ
+                0x08017b34       0xba ./02_motor/main_public/MotorCurrentTransform.o
+                0x08017b34                AlphBetaToDQ
  .text.ChangeCurrent
-                0x08017bdc      0x168 ./02_motor/main_public/MotorCurrentTransform.o
-                0x08017bdc                ChangeCurrent
+                0x08017bee      0x168 ./02_motor/main_public/MotorCurrentTransform.o
+                0x08017bee                ChangeCurrent
  .text.ParSend05Ms
-                0x08017d44        0x2 ./02_motor/main_public/MotorDataExchange.o
-                0x08017d44                ParSend05Ms
+                0x08017d56        0x2 ./02_motor/main_public/MotorDataExchange.o
+                0x08017d56                ParSend05Ms
  .text.ParGet05Ms
-                0x08017d46       0x94 ./02_motor/main_public/MotorDataExchange.o
-                0x08017d46                ParGet05Ms
+                0x08017d58       0x94 ./02_motor/main_public/MotorDataExchange.o
+                0x08017d58                ParGet05Ms
  .text.ParSend2Ms
-                0x08017dda      0x2d0 ./02_motor/main_public/MotorDataExchange.o
-                0x08017dda                ParSend2Ms
+                0x08017dec      0x2d0 ./02_motor/main_public/MotorDataExchange.o
+                0x08017dec                ParSend2Ms
  .text.ParGet2Ms
-                0x080180aa      0x574 ./02_motor/main_public/MotorDataExchange.o
-                0x080180aa                ParGet2Ms
+                0x080180bc      0x574 ./02_motor/main_public/MotorDataExchange.o
+                0x080180bc                ParGet2Ms
  .text.ParSendTune
-                0x0801861e       0xb2 ./02_motor/main_public/MotorDataExchange.o
-                0x0801861e                ParSendTune
+                0x08018630       0xb2 ./02_motor/main_public/MotorDataExchange.o
+                0x08018630                ParSendTune
  .text.ParSendTuneBeforeRun
-                0x080186d0       0xb2 ./02_motor/main_public/MotorDataExchange.o
-                0x080186d0                ParSendTuneBeforeRun
+                0x080186e2       0xb2 ./02_motor/main_public/MotorDataExchange.o
+                0x080186e2                ParSendTuneBeforeRun
  .text.SynFlyingStartCalc
-                0x08018782      0x5a0 ./02_motor/main_public/MotorFlyingStart.o
-                0x08018782                SynFlyingStartCalc
+                0x08018794      0x5a0 ./02_motor/main_public/MotorFlyingStart.o
+                0x08018794                SynFlyingStartCalc
  .text.FlyingStratPreparePar
-                0x08018d22      0x15e ./02_motor/main_public/MotorFlyingStart.o
-                0x08018d22                FlyingStratPreparePar
+                0x08018d34      0x15e ./02_motor/main_public/MotorFlyingStart.o
+                0x08018d34                FlyingStratPreparePar
  .text.RunCaseFlyingStart
-                0x08018e80      0x1ca ./02_motor/main_public/MotorFlyingStart.o
-                0x08018e80                RunCaseFlyingStart
+                0x08018e92      0x1ca ./02_motor/main_public/MotorFlyingStart.o
+                0x08018e92                RunCaseFlyingStart
  .text.FlyingStartParaAdjust
-                0x0801904a      0x11a ./02_motor/main_public/MotorFlyingStart.o
-                0x0801904a                FlyingStartParaAdjust
+                0x0801905c      0x11a ./02_motor/main_public/MotorFlyingStart.o
+                0x0801905c                FlyingStartParaAdjust
  .text.FlyingStartFcDeal
-                0x08019164       0x56 ./02_motor/main_public/MotorFlyingStart.o
-                0x08019164                FlyingStartFcDeal
+                0x08019176       0x56 ./02_motor/main_public/MotorFlyingStart.o
+                0x08019176                FlyingStartFcDeal
  .text.FlyingStartInitDeal
-                0x080191ba       0x16 ./02_motor/main_public/MotorFlyingStart.o
-                0x080191ba                FlyingStartInitDeal
+                0x080191cc       0x16 ./02_motor/main_public/MotorFlyingStart.o
+                0x080191cc                FlyingStartInitDeal
  .text.SynFlyingStartSetTs
-                0x080191d0       0x4a ./02_motor/main_public/MotorFlyingStart.o
-                0x080191d0                SynFlyingStartSetTs
+                0x080191e2       0x4a ./02_motor/main_public/MotorFlyingStart.o
+                0x080191e2                SynFlyingStartSetTs
  .text.SynFlyingStart
-                0x0801921a      0x49a ./02_motor/main_public/MotorFlyingStart.o
-                0x0801921a                SynFlyingStart
+                0x0801922c      0x49a ./02_motor/main_public/MotorFlyingStart.o
+                0x0801922c                SynFlyingStart
  .text.ADCEndIsrFlying_Start
-                0x080196b4       0x86 ./02_motor/main_public/MotorFlyingStart.o
-                0x080196b4                ADCEndIsrFlying_Start
+                0x080196c6       0x86 ./02_motor/main_public/MotorFlyingStart.o
+                0x080196c6                ADCEndIsrFlying_Start
  .text.GetCurExcursion
-                0x0801973a      0x140 ./02_motor/main_public/MotorInfoCollect.o
-                0x0801973a                GetCurExcursion
+                0x0801974c      0x140 ./02_motor/main_public/MotorInfoCollect.o
+                0x0801974c                GetCurExcursion
  .text.GetUDCInfo
-                0x0801987a       0x70 ./02_motor/main_public/MotorInfoCollect.o
-                0x0801987a                GetUDCInfo
+                0x0801988c       0x70 ./02_motor/main_public/MotorInfoCollect.o
+                0x0801988c                GetUDCInfo
  .text.GetCurrentInfo
-                0x080198ea      0x142 ./02_motor/main_public/MotorInfoCollect.o
-                0x080198ea                GetCurrentInfo
+                0x080198fc      0x142 ./02_motor/main_public/MotorInfoCollect.o
+                0x080198fc                GetCurrentInfo
  .text.MotorOverLoadTimeGenerate
-                0x08019a2c       0x40 ./02_motor/main_public/MotorInvProtect.o
-                0x08019a2c                MotorOverLoadTimeGenerate
+                0x08019a3e       0x40 ./02_motor/main_public/MotorInvProtect.o
+                0x08019a3e                MotorOverLoadTimeGenerate
  .text.SoftWareErrorDeal
-                0x08019a6c      0x234 ./02_motor/main_public/MotorInvProtect.o
-                0x08019a6c                SoftWareErrorDeal
+                0x08019a7e      0x234 ./02_motor/main_public/MotorInvProtect.o
+                0x08019a7e                SoftWareErrorDeal
  .text.TemperatureCheck
-                0x08019ca0      0x21a ./02_motor/main_public/MotorInvProtect.o
-                0x08019ca0                TemperatureCheck
+                0x08019cb2      0x21c ./02_motor/main_public/MotorInvProtect.o
+                0x08019cb2                TemperatureCheck
  .text.OutputLoseAdd
-                0x08019eba       0x60 ./02_motor/main_public/MotorInvProtect.o
-                0x08019eba                OutputLoseAdd
+                0x08019ece       0x60 ./02_motor/main_public/MotorInvProtect.o
+                0x08019ece                OutputLoseAdd
  .text.OutputLoseReset
-                0x08019f1a       0x1e ./02_motor/main_public/MotorInvProtect.o
-                0x08019f1a                OutputLoseReset
+                0x08019f2e       0x1e ./02_motor/main_public/MotorInvProtect.o
+                0x08019f2e                OutputLoseReset
  .text.OutputPhaseLoseDetect
-                0x08019f38       0xe0 ./02_motor/main_public/MotorInvProtect.o
-                0x08019f38                OutputPhaseLoseDetect
+                0x08019f4c       0xe0 ./02_motor/main_public/MotorInvProtect.o
+                0x08019f4c                OutputPhaseLoseDetect
  .text.ResetPhaseLoseDetect
-                0x0801a018       0x68 ./02_motor/main_public/MotorInvProtect.o
-                0x0801a018                ResetPhaseLoseDetect
+                0x0801a02c       0x68 ./02_motor/main_public/MotorInvProtect.o
+                0x0801a02c                ResetPhaseLoseDetect
  .text.BeforeRunShortGndDetect
-                0x0801a080      0x16a ./02_motor/main_public/MotorInvProtect.o
-                0x0801a080                BeforeRunShortGndDetect
+                0x0801a094      0x16a ./02_motor/main_public/MotorInvProtect.o
+                0x0801a094                BeforeRunShortGndDetect
  .text.BeforeRunOutputPhaseLoseDetect
-                0x0801a1ea      0x12c ./02_motor/main_public/MotorInvProtect.o
-                0x0801a1ea                BeforeRunOutputPhaseLoseDetect
+                0x0801a1fe      0x12c ./02_motor/main_public/MotorInvProtect.o
+                0x0801a1fe                BeforeRunOutputPhaseLoseDetect
  .text.OutputPhaseLoseAndShortGndDetect
-                0x0801a316      0x260 ./02_motor/main_public/MotorInvProtect.o
-                0x0801a316                OutputPhaseLoseAndShortGndDetect
+                0x0801a32a      0x260 ./02_motor/main_public/MotorInvProtect.o
+                0x0801a32a                OutputPhaseLoseAndShortGndDetect
  .text.ShortGnd_PhaseLoseICal
-                0x0801a576      0x108 ./02_motor/main_public/MotorInvProtect.o
-                0x0801a576                ShortGnd_PhaseLoseICal
+                0x0801a58a      0x108 ./02_motor/main_public/MotorInvProtect.o
+                0x0801a58a                ShortGnd_PhaseLoseICal
  .text.ShortGnd_ADC_Over_isr
-                0x0801a67e       0xf8 ./02_motor/main_public/MotorInvProtect.o
-                0x0801a67e                ShortGnd_ADC_Over_isr
+                0x0801a692       0xf8 ./02_motor/main_public/MotorInvProtect.o
+                0x0801a692                ShortGnd_ADC_Over_isr
  .text.InputPhaseLoseDetect
-                0x0801a776      0x164 ./02_motor/main_public/MotorInvProtect.o
-                0x0801a776                InputPhaseLoseDetect
+                0x0801a78a      0x164 ./02_motor/main_public/MotorInvProtect.o
+                0x0801a78a                InputPhaseLoseDetect
  .text.ControlFan
-                0x0801a8da       0xf8 ./02_motor/main_public/MotorInvProtect.o
-                0x0801a8da                ControlFan
+                0x0801a8ee       0xf8 ./02_motor/main_public/MotorInvProtect.o
+                0x0801a8ee                ControlFan
  .text.OverLoadProtect
-                0x0801a9d2      0x5b8 ./02_motor/main_public/MotorInvProtect.o
-                0x0801a9d2                OverLoadProtect
+                0x0801a9e6      0x5b8 ./02_motor/main_public/MotorInvProtect.o
+                0x0801a9e6                OverLoadProtect
  .text.SetCBCEnable
-                0x0801af8a       0x48 ./02_motor/main_public/MotorInvProtect.o
-                0x0801af8a                SetCBCEnable
+                0x0801af9e       0x48 ./02_motor/main_public/MotorInvProtect.o
+                0x0801af9e                SetCBCEnable
  .text.SetCBCDisable
-                0x0801afd2       0x44 ./02_motor/main_public/MotorInvProtect.o
-                0x0801afd2                SetCBCDisable
+                0x0801afe6       0x44 ./02_motor/main_public/MotorInvProtect.o
+                0x0801afe6                SetCBCDisable
  .text.CBCLimitCurProtect
-                0x0801b016      0x392 ./02_motor/main_public/MotorInvProtect.o
-                0x0801b016                CBCLimitCurProtect
+                0x0801b02a      0x392 ./02_motor/main_public/MotorInvProtect.o
+                0x0801b02a                CBCLimitCurProtect
  .text.BufferResProtect
-                0x0801b3a8       0x4e ./02_motor/main_public/MotorInvProtect.o
-                0x0801b3a8                BufferResProtect
+                0x0801b3bc       0x4e ./02_motor/main_public/MotorInvProtect.o
+                0x0801b3bc                BufferResProtect
  .text.BrakeResShortProtect
-                0x0801b3f6       0xba ./02_motor/main_public/MotorInvProtect.o
-                0x0801b3f6                BrakeResShortProtect
+                0x0801b40a       0xba ./02_motor/main_public/MotorInvProtect.o
+                0x0801b40a                BrakeResShortProtect
  .text.InvDeviceControl
-                0x0801b4b0       0x36 ./02_motor/main_public/MotorInvProtect.o
-                0x0801b4b0                InvDeviceControl
+                0x0801b4c4       0x36 ./02_motor/main_public/MotorInvProtect.o
+                0x0801b4c4                InvDeviceControl
  .text.InitForMotorApp
-                0x0801b4e6      0x146 ./02_motor/main_public/MotorMain.o
-                0x0801b4e6                InitForMotorApp
+                0x0801b4fa      0x146 ./02_motor/main_public/MotorMain.o
+                0x0801b4fa                InitForMotorApp
  .text.Main05msMotor
-                0x0801b62c      0x14a ./02_motor/main_public/MotorMain.o
-                0x0801b62c                Main05msMotor
+                0x0801b640      0x14a ./02_motor/main_public/MotorMain.o
+                0x0801b640                Main05msMotor
  .text.Main2msMotorA
-                0x0801b776       0x30 ./02_motor/main_public/MotorMain.o
-                0x0801b776                Main2msMotorA
+                0x0801b78a       0x30 ./02_motor/main_public/MotorMain.o
+                0x0801b78a                Main2msMotorA
  .text.Main2msMotorC
-                0x0801b7a6       0x12 ./02_motor/main_public/MotorMain.o
-                0x0801b7a6                Main2msMotorC
+                0x0801b7ba       0x12 ./02_motor/main_public/MotorMain.o
+                0x0801b7ba                Main2msMotorC
  .text.SendDataPrepare
-                0x0801b7b8      0x22a ./02_motor/main_public/MotorMain.o
-                0x0801b7b8                SendDataPrepare
+                0x0801b7cc      0x22a ./02_motor/main_public/MotorMain.o
+                0x0801b7cc                SendDataPrepare
  .text.Main2msMotorD
-                0x0801b9e2       0x1a ./02_motor/main_public/MotorMain.o
-                0x0801b9e2                Main2msMotorD
+                0x0801b9f6       0x1a ./02_motor/main_public/MotorMain.o
+                0x0801b9f6                Main2msMotorD
  .text.PrepareParForRun
-                0x0801b9fc      0x1c2 ./02_motor/main_public/MotorMain.o
-                0x0801b9fc                PrepareParForRun
+                0x0801ba10      0x1c2 ./02_motor/main_public/MotorMain.o
+                0x0801ba10                PrepareParForRun
  .text.TurnToStopStatus
-                0x0801bbbe       0x24 ./02_motor/main_public/MotorMain.o
-                0x0801bbbe                TurnToStopStatus
+                0x0801bbd2       0x24 ./02_motor/main_public/MotorMain.o
+                0x0801bbd2                TurnToStopStatus
  .text.RunCaseStop
-                0x0801bbe2      0x33c ./02_motor/main_public/MotorMain.o
-                0x0801bbe2                RunCaseStop
+                0x0801bbf6      0x33c ./02_motor/main_public/MotorMain.o
+                0x0801bbf6                RunCaseStop
  .text.RunCaseRun2Ms
-                0x0801bf1e      0x1d6 ./02_motor/main_public/MotorMain.o
-                0x0801bf1e                RunCaseRun2Ms
+                0x0801bf32      0x1d6 ./02_motor/main_public/MotorMain.o
+                0x0801bf32                RunCaseRun2Ms
  .text.Main2msMotorB
-                0x0801c0f4      0x1da ./02_motor/main_public/MotorMain.o
-                0x0801c0f4                Main2msMotorB
+                0x0801c108      0x1da ./02_motor/main_public/MotorMain.o
+                0x0801c108                Main2msMotorB
  .text.CalRatioFromVot
-                0x0801c2ce       0x6c ./02_motor/main_public/MotorMain.o
-                0x0801c2ce                CalRatioFromVot
+                0x0801c2e2       0x6c ./02_motor/main_public/MotorMain.o
+                0x0801c2e2                CalRatioFromVot
  .text.PWMPeriodIsr
-                0x0801c33a       0xbe ./02_motor/main_public/MotorMain.o
-                0x0801c33a                PWMPeriodIsr
+                0x0801c34e       0xbe ./02_motor/main_public/MotorMain.o
+                0x0801c34e                PWMPeriodIsr
  .text.PWMZeroIsr
-                0x0801c3f8       0x30 ./02_motor/main_public/MotorMain.o
-                0x0801c3f8                PWMZeroIsr
+                0x0801c40c       0x30 ./02_motor/main_public/MotorMain.o
+                0x0801c40c                PWMZeroIsr
  .text.ADCEndIsr
-                0x0801c428      0x14c ./02_motor/main_public/MotorMain.o
-                0x0801c428                ADCEndIsr
+                0x0801c43c      0x14c ./02_motor/main_public/MotorMain.o
+                0x0801c43c                ADCEndIsr
  .text.ResetADCEndIsr
-                0x0801c574       0x12 ./02_motor/main_public/MotorMain.o
-                0x0801c574                ResetADCEndIsr
+                0x0801c588       0x12 ./02_motor/main_public/MotorMain.o
+                0x0801c588                ResetADCEndIsr
  .text.SetADCEndIsr
-                0x0801c586        0xa ./02_motor/main_public/MotorMain.o
-                0x0801c586                SetADCEndIsr
+                0x0801c59a        0xa ./02_motor/main_public/MotorMain.o
+                0x0801c59a                SetADCEndIsr
  .text.SystemParChg2Ms
-                0x0801c590      0x43a ./02_motor/main_public/MotorParChange.o
-                0x0801c590                SystemParChg2Ms
+                0x0801c5a4      0x43a ./02_motor/main_public/MotorParChange.o
+                0x0801c5a4                SystemParChg2Ms
  .text.RunStateParChg2Ms
-                0x0801c9ca      0x586 ./02_motor/main_public/MotorParChange.o
-                0x0801c9ca                RunStateParChg2Ms
+                0x0801c9de      0x586 ./02_motor/main_public/MotorParChange.o
+                0x0801c9de                RunStateParChg2Ms
  .text.SystemParChg05Ms
-                0x0801cf50       0xe4 ./02_motor/main_public/MotorParChange.o
-                0x0801cf50                SystemParChg05Ms
+                0x0801cf64       0xe4 ./02_motor/main_public/MotorParChange.o
+                0x0801cf64                SystemParChg05Ms
  .text.ChangeMotorPar
-                0x0801d034      0x122 ./02_motor/main_public/MotorParChange.o
-                0x0801d034                ChangeMotorPar
+                0x0801d048      0x122 ./02_motor/main_public/MotorParChange.o
+                0x0801d048                ChangeMotorPar
  .text.InvCalcPower
-                0x0801d156      0x3b2 ./02_motor/main_public/MotorParChange.o
-                0x0801d156                InvCalcPower
+                0x0801d16a      0x3b2 ./02_motor/main_public/MotorParChange.o
+                0x0801d16a                InvCalcPower
  .text.RunCaseShortGnd
-                0x0801d508       0x2c ./02_motor/main_public/MotorPublicCal.o
-                0x0801d508                RunCaseShortGnd
+                0x0801d51c       0x2c ./02_motor/main_public/MotorPublicCal.o
+                0x0801d51c                RunCaseShortGnd
  .text.RunCaseLowPower
-                0x0801d534      0x26c ./02_motor/main_public/MotorPublicCal.o
-                0x0801d534                RunCaseLowPower
+                0x0801d548      0x26c ./02_motor/main_public/MotorPublicCal.o
+                0x0801d548                RunCaseLowPower
  .text.CBCLimitCurPrepare
-                0x0801d7a0      0x156 ./02_motor/main_public/MotorPublicCal.o
-                0x0801d7a0                CBCLimitCurPrepare
+                0x0801d7b4      0x156 ./02_motor/main_public/MotorPublicCal.o
+                0x0801d7b4                CBCLimitCurPrepare
  .text.OcCurrentInfo
-                0x0801d8f6       0x58 ./02_motor/main_public/MotorPublicCal.o
-                0x0801d8f6                OcCurrentInfo
+                0x0801d90a       0x58 ./02_motor/main_public/MotorPublicCal.o
+                0x0801d90a                OcCurrentInfo
  .text.HardWareOverUDCDeal
-                0x0801d94e       0xd0 ./02_motor/main_public/MotorPublicCal.o
-                0x0801d94e                HardWareOverUDCDeal
+                0x0801d962       0xd0 ./02_motor/main_public/MotorPublicCal.o
+                0x0801d962                HardWareOverUDCDeal
  .text.HardWareErrorDeal
-                0x0801da1e      0x17a ./02_motor/main_public/MotorPublicCal.o
-                0x0801da1e                HardWareErrorDeal
+                0x0801da32      0x17a ./02_motor/main_public/MotorPublicCal.o
+                0x0801da32                HardWareErrorDeal
  .text.RunCaseDcBrake
-                0x0801db98      0x148 ./02_motor/main_public/MotorPublicCal.o
-                0x0801db98                RunCaseDcBrake
+                0x0801dbac      0x148 ./02_motor/main_public/MotorPublicCal.o
+                0x0801dbac                RunCaseDcBrake
  .text.BrakeResControl
-                0x0801dce0      0x1aa ./02_motor/main_public/MotorPublicCal.o
-                0x0801dce0                BrakeResControl
+                0x0801dcf4      0x1aa ./02_motor/main_public/MotorPublicCal.o
+                0x0801dcf4                BrakeResControl
  .text.InitRtInterface
-                0x0801de8a       0xa0 ./02_motor/encoder/MotorEncoder.o
-                0x0801de8a                InitRtInterface
+                0x0801de9e       0xa0 ./02_motor/encoder/MotorEncoder.o
+                0x0801de9e                InitRtInterface
  .text.InitSetQEP
-                0x0801df2a       0xc2 ./02_motor/encoder/MotorEncoder.o
-                0x0801df2a                InitSetQEP
+                0x0801df3e       0xc6 ./02_motor/encoder/MotorEncoder.o
+                0x0801df3e                InitSetQEP
  .text.ReInitForPG
-                0x0801dfec      0x1b6 ./02_motor/encoder/MotorEncoder.o
-                0x0801dfec                ReInitForPG
+                0x0801e004      0x1b6 ./02_motor/encoder/MotorEncoder.o
+                0x0801e004                ReInitForPG
  .text.JudgeABDir
-                0x0801e1a2       0x66 ./02_motor/encoder/MotorEncoder.o
-                0x0801e1a2                JudgeABDir
+                0x0801e1ba       0x66 ./02_motor/encoder/MotorEncoder.o
+                0x0801e1ba                JudgeABDir
  .text.GetUvwPhase
-                0x0801e208      0x112 ./02_motor/encoder/MotorEncoder.o
-                0x0801e208                GetUvwPhase
+                0x0801e220      0x112 ./02_motor/encoder/MotorEncoder.o
+                0x0801e220                GetUvwPhase
  .text.JudgeUVWDir
-                0x0801e31a       0x92 ./02_motor/encoder/MotorEncoder.o
-                0x0801e31a                JudgeUVWDir
+                0x0801e332       0x92 ./02_motor/encoder/MotorEncoder.o
+                0x0801e332                JudgeUVWDir
  .text.GetRotorTransPos
-                0x0801e3ac      0x370 ./02_motor/encoder/MotorEncoder.o
-                0x0801e3ac                GetRotorTransPos
+                0x0801e3c4      0x370 ./02_motor/encoder/MotorEncoder.o
+                0x0801e3c4                GetRotorTransPos
  .text.IPMCalAbsPos
-                0x0801e71c       0x68 ./02_motor/encoder/MotorEncoder.o
-                0x0801e71c                IPMCalAbsPos
+                0x0801e734       0x68 ./02_motor/encoder/MotorEncoder.o
+                0x0801e734                IPMCalAbsPos
  .text.EncodeLineDiscProtect
-                0x0801e784       0xaa ./02_motor/encoder/MotorEncoder.o
-                0x0801e784                EncodeLineDiscProtect
- .text.FilterL  0x0801e82e       0x34 ./02_motor/encoder/MotorSpeed.o
-                0x0801e82e                FilterL
+                0x0801e79c       0xaa ./02_motor/encoder/MotorEncoder.o
+                0x0801e79c                EncodeLineDiscProtect
+ .text.FilterL  0x0801e846       0x34 ./02_motor/encoder/MotorSpeed.o
+                0x0801e846                FilterL
  .text.ResetSpeedGetReg
-                0x0801e862       0x40 ./02_motor/encoder/MotorSpeed.o
-                0x0801e862                ResetSpeedGetReg
+                0x0801e87a       0x40 ./02_motor/encoder/MotorSpeed.o
+                0x0801e87a                ResetSpeedGetReg
  .text.CalFeedSpeed
-                0x0801e8a2       0x84 ./02_motor/encoder/MotorSpeed.o
-                0x0801e8a2                CalFeedSpeed
+                0x0801e8ba       0x84 ./02_motor/encoder/MotorSpeed.o
+                0x0801e8ba                CalFeedSpeed
  .text.GetFeedSpeedQEP
-                0x0801e926      0x12c ./02_motor/encoder/MotorSpeed.o
-                0x0801e926                GetFeedSpeedQEP
+                0x0801e93e      0x12c ./02_motor/encoder/MotorSpeed.o
+                0x0801e93e                GetFeedSpeedQEP
  .text.GetFeedRotorSpeed
-                0x0801ea52      0x13a ./02_motor/encoder/MotorSpeed.o
-                0x0801ea52                GetFeedRotorSpeed
+                0x0801ea6a      0x13a ./02_motor/encoder/MotorSpeed.o
+                0x0801ea6a                GetFeedRotorSpeed
  .text.QEPGetRealPos
-                0x0801eb8c       0x92 ./02_motor/encoder/MotorSpeed.o
-                0x0801eb8c                QEPGetRealPos
+                0x0801eba4       0x92 ./02_motor/encoder/MotorSpeed.o
+                0x0801eba4                QEPGetRealPos
  .text.CalRTSpeed
-                0x0801ec1e       0x3a ./02_motor/encoder/MotorSpeed.o
-                0x0801ec1e                CalRTSpeed
+                0x0801ec36       0x3a ./02_motor/encoder/MotorSpeed.o
+                0x0801ec36                CalRTSpeed
  .text.ReadRTPos
-                0x0801ec58       0xbe ./02_motor/encoder/MotorSpeed.o
-                0x0801ec58                ReadRTPos
- .text.PMCsr2   0x0801ed16      0x274 ./02_motor/PMFluxWeakCsr2.o
-                0x0801ed16                PMCsr2
- .text.main     0x0801ef8a       0x92 ./01_system/main.o
-                0x0801ef8a                main
+                0x0801ec70       0xbe ./02_motor/encoder/MotorSpeed.o
+                0x0801ec70                ReadRTPos
+ .text.PMCsr2   0x0801ed2e      0x274 ./02_motor/PMFluxWeakCsr2.o
+                0x0801ed2e                PMCsr2
+ .text.main     0x0801efa2       0x90 ./01_system/main.o
+                0x0801efa2                main
  .text.ADC_Over_isr
-                0x0801f01c       0xfe ./01_system/main.o
-                0x0801f01c                ADC_Over_isr
+                0x0801f032       0xfe ./01_system/main.o
+                0x0801f032                ADC_Over_isr
  .text.EPWM1_TZ_isr
-                0x0801f11a       0xd8 ./01_system/main.o
-                0x0801f11a                EPWM1_TZ_isr
+                0x0801f130       0xd8 ./01_system/main.o
+                0x0801f130                EPWM1_TZ_isr
  .text.EPWM2_TZ_isr
-                0x0801f1f2       0x56 ./01_system/main.o
-                0x0801f1f2                EPWM2_TZ_isr
+                0x0801f208       0x56 ./01_system/main.o
+                0x0801f208                EPWM2_TZ_isr
  .text.InitInterrupt
-                0x0801f248       0x5e ./01_system/mainInit_2803x.o
-                0x0801f248                InitInterrupt
+                0x0801f25e       0x5e ./01_system/mainInit_2803x.o
+                0x0801f25e                InitInterrupt
  .text.SetInterruptEnable
-                0x0801f2a6       0x2a ./01_system/mainInit_2803x.o
-                0x0801f2a6                SetInterruptEnable
+                0x0801f2bc       0x2a ./01_system/mainInit_2803x.o
+                0x0801f2bc                SetInterruptEnable
  .text.InitCpuTimers
-                0x0801f2d0       0xa0 ./01_system/mainInit_2803x.o
-                0x0801f2d0                InitCpuTimers
- .text.KickDog  0x0801f370       0x60 ./01_system/mainInit_2803x.o
-                0x0801f370                KickDog
+                0x0801f2e6       0xa0 ./01_system/mainInit_2803x.o
+                0x0801f2e6                InitCpuTimers
+ .text.KickDog  0x0801f386       0x60 ./01_system/mainInit_2803x.o
+                0x0801f386                KickDog
  .text.DisableDog
-                0x0801f3d0        0xc ./01_system/mainInit_2803x.o
-                0x0801f3d0                DisableDog
+                0x0801f3e6        0xc ./01_system/mainInit_2803x.o
+                0x0801f3e6                DisableDog
  .text.InitSysCtrl
-                0x0801f3dc       0x12 ./01_system/mainInit_2803x.o
-                0x0801f3dc                InitSysCtrl
- .text.EnableDog
-                0x0801f3ee       0x32 ./01_system/mainInit_2803x.o
-                0x0801f3ee                EnableDog
+                0x0801f3f2       0x12 ./01_system/mainInit_2803x.o
+                0x0801f3f2                InitSysCtrl
  .text.InitSetGpio
-                0x0801f420       0x64 ./01_system/mainInit_2803x.o
-                0x0801f420                InitSetGpio
+                0x0801f404       0x64 ./01_system/mainInit_2803x.o
+                0x0801f404                InitSetGpio
  .text.InitSetAdc
-                0x0801f484      0x300 ./01_system/mainInit_2803x.o
-                0x0801f484                InitSetAdc
+                0x0801f468      0x300 ./01_system/mainInit_2803x.o
+                0x0801f468                InitSetAdc
  .text.InitPeripherals
-                0x0801f784       0x32 ./01_system/mainInit_2803x.o
-                0x0801f784                InitPeripherals
- .text          0x0801f7b6      0x3d4 C:/Users/Jianrong Lin/str/GS32 Studio/toolchain/gs-riscv-gcc/bin/../lib/gcc/riscv64-unknown-elf/13.2.0/rv32imafc_xgsdida/ilp32f\libgcc.a(_divdi3.o)
-                0x0801f7b6                __divdi3
- .text          0x0801fb8a      0x398 C:/Users/Jianrong Lin/str/GS32 Studio/toolchain/gs-riscv-gcc/bin/../lib/gcc/riscv64-unknown-elf/13.2.0/rv32imafc_xgsdida/ilp32f\libgcc.a(_udivdi3.o)
-                0x0801fb8a                __udivdi3
- .text.atexit   0x0801ff22       0x14 C:/Users/Jianrong Lin/str/GS32 Studio/toolchain/gs-riscv-gcc/bin/../lib/gcc/riscv64-unknown-elf/13.2.0/../../../../riscv64-unknown-elf/lib/rv32imafc_xgsdida/ilp32f\libg_nano.a(libc_a-atexit.o)
-                0x0801ff22                atexit
+                0x0801f768       0x36 ./01_system/mainInit_2803x.o
+                0x0801f768                InitPeripherals
+ .text          0x0801f79e      0x3d4 C:/Users/Jianrong Lin/str/GS32 Studio/toolchain/gs-riscv-gcc/bin/../lib/gcc/riscv64-unknown-elf/13.2.0/rv32imafc_xgsdida/ilp32f\libgcc.a(_divdi3.o)
+                0x0801f79e                __divdi3
+ .text          0x0801fb72      0x398 C:/Users/Jianrong Lin/str/GS32 Studio/toolchain/gs-riscv-gcc/bin/../lib/gcc/riscv64-unknown-elf/13.2.0/rv32imafc_xgsdida/ilp32f\libgcc.a(_udivdi3.o)
+                0x0801fb72                __udivdi3
+ .text.atexit   0x0801ff0a       0x14 C:/Users/Jianrong Lin/str/GS32 Studio/toolchain/gs-riscv-gcc/bin/../lib/gcc/riscv64-unknown-elf/13.2.0/../../../../riscv64-unknown-elf/lib/rv32imafc_xgsdida/ilp32f\libg_nano.a(libc_a-atexit.o)
+                0x0801ff0a                atexit
  .text.__libc_init_array
-                0x0801ff36       0x7a C:/Users/Jianrong Lin/str/GS32 Studio/toolchain/gs-riscv-gcc/bin/../lib/gcc/riscv64-unknown-elf/13.2.0/../../../../riscv64-unknown-elf/lib/rv32imafc_xgsdida/ilp32f\libg_nano.a(libc_a-init.o)
-                0x0801ff36                __libc_init_array
+                0x0801ff1e       0x7a C:/Users/Jianrong Lin/str/GS32 Studio/toolchain/gs-riscv-gcc/bin/../lib/gcc/riscv64-unknown-elf/13.2.0/../../../../riscv64-unknown-elf/lib/rv32imafc_xgsdida/ilp32f\libg_nano.a(libc_a-init.o)
+                0x0801ff1e                __libc_init_array
  .text.__libc_fini_array
-                0x0801ffb0       0x3c C:/Users/Jianrong Lin/str/GS32 Studio/toolchain/gs-riscv-gcc/bin/../lib/gcc/riscv64-unknown-elf/13.2.0/../../../../riscv64-unknown-elf/lib/rv32imafc_xgsdida/ilp32f\libg_nano.a(libc_a-fini.o)
-                0x0801ffb0                __libc_fini_array
- .text.memcpy   0x0801ffec      0x128 C:/Users/Jianrong Lin/str/GS32 Studio/toolchain/gs-riscv-gcc/bin/../lib/gcc/riscv64-unknown-elf/13.2.0/../../../../riscv64-unknown-elf/lib/rv32imafc_xgsdida/ilp32f\libg_nano.a(libc_a-memcpy.o)
-                0x0801ffec                memcpy
+                0x0801ff98       0x3c C:/Users/Jianrong Lin/str/GS32 Studio/toolchain/gs-riscv-gcc/bin/../lib/gcc/riscv64-unknown-elf/13.2.0/../../../../riscv64-unknown-elf/lib/rv32imafc_xgsdida/ilp32f\libg_nano.a(libc_a-fini.o)
+                0x0801ff98                __libc_fini_array
+ .text.memcpy   0x0801ffd4      0x128 C:/Users/Jianrong Lin/str/GS32 Studio/toolchain/gs-riscv-gcc/bin/../lib/gcc/riscv64-unknown-elf/13.2.0/../../../../riscv64-unknown-elf/lib/rv32imafc_xgsdida/ilp32f\libg_nano.a(libc_a-memcpy.o)
+                0x0801ffd4                memcpy
  .text.__register_exitproc
-                0x08020114       0xa0 C:/Users/Jianrong Lin/str/GS32 Studio/toolchain/gs-riscv-gcc/bin/../lib/gcc/riscv64-unknown-elf/13.2.0/../../../../riscv64-unknown-elf/lib/rv32imafc_xgsdida/ilp32f\libg_nano.a(libc_a-__atexit.o)
-                0x08020114                __register_exitproc
+                0x080200fc       0xa0 C:/Users/Jianrong Lin/str/GS32 Studio/toolchain/gs-riscv-gcc/bin/../lib/gcc/riscv64-unknown-elf/13.2.0/../../../../riscv64-unknown-elf/lib/rv32imafc_xgsdida/ilp32f\libg_nano.a(libc_a-__atexit.o)
+                0x080200fc                __register_exitproc
  --------------- input_sect 
  *(.gnu.linkonce.t.*)
- *fill*         0x080201b4        0x0   zero_fill
+ *fill*         0x0802019c        0x0   zero_fill
  .gnu.linkonce.t.trim
-                0x080201b4      0x440 ./gs32_driver/driverlib/sysctl/asysctl_v30.o
-                0x080201b4                anaTrimTable_v1
-                0x08020600                        . = ALIGN (0x20)
- *fill*         0x080205f4        0xc   zero_fill
+                0x0802019c      0x440 ./gs32_driver/driverlib/sysctl/asysctl_v30.o
+                0x0802019c                anaTrimTable_v1
+                0x080205e0                        . = ALIGN (0x20)
+ *fill*         0x080205dc        0x4   zero_fill
 
  -------------------------- 
-.fini           0x08020600        0x0   : output_sect 
+.fini           0x080205e0        0x0   : output_sect 
  --------------- input_sect 
  *(SORT_NONE(.fini))
-                0x08020600                        . = ALIGN (0x20)
+                0x080205e0                        . = ALIGN (0x20)
 
  -------------------------- 
-.preinit_array  0x08020600        0x0   : output_sect 
-                0x08020600                        PROVIDE (__preinit_array_start = .)
+.preinit_array  0x080205e0        0x0   : output_sect 
+                0x080205e0                        PROVIDE (__preinit_array_start = .)
  --------------- input_sect 
  *(.preinit_array)
-                0x08020600                        PROVIDE (__preinit_array_end = .)
-                0x08020600                        . = ALIGN (0x20)
+                0x080205e0                        PROVIDE (__preinit_array_end = .)
+                0x080205e0                        . = ALIGN (0x20)
 
  -------------------------- 
-.init_array     0x08020600        0x0   : output_sect 
-                0x08020600                        PROVIDE (__init_array_start = .)
+.init_array     0x080205e0        0x0   : output_sect 
+                0x080205e0                        PROVIDE (__init_array_start = .)
  --------------- input_sect 
  *(SORT_BY_INIT_PRIORITY(.init_array.*) SORT_BY_INIT_PRIORITY(.ctors.*))
  --------------- input_sect 
  *(.init_array EXCLUDE_FILE(*crtend?.o *crtend.o *crtbegin?.o *crtbegin.o) .ctors)
-                0x08020600                        PROVIDE (__init_array_end = .)
-                0x08020600                        . = ALIGN (0x20)
+                0x080205e0                        PROVIDE (__init_array_end = .)
+                0x080205e0                        . = ALIGN (0x20)
 
  -------------------------- 
-.fini_array     0x08020600        0x0   : output_sect 
-                0x08020600                        PROVIDE (__fini_array_start = .)
+.fini_array     0x080205e0        0x0   : output_sect 
+                0x080205e0                        PROVIDE (__fini_array_start = .)
  --------------- input_sect 
  *(SORT_BY_INIT_PRIORITY(.fini_array.*) SORT_BY_INIT_PRIORITY(.dtors.*))
  --------------- input_sect 
  *(.fini_array EXCLUDE_FILE(*crtend?.o *crtend.o *crtbegin?.o *crtbegin.o) .dtors)
-                0x08020600                        PROVIDE (__fini_array_end = .)
-                0x08020600                        . = ALIGN (0x20)
+                0x080205e0                        PROVIDE (__fini_array_end = .)
+                0x080205e0                        . = ALIGN (0x20)
 
  -------------------------- 
-.ctors          0x08020600        0x0   : output_sect 
+.ctors          0x080205e0        0x0   : output_sect 
  --------------- input_sect 
  *crtbegin.o(.ctors)
  --------------- input_sect 
@@ -6097,10 +6095,10 @@ END GROUP
  *(SORT_BY_NAME(.ctors.*))
  --------------- input_sect 
  *(.ctors)
-                0x08020600                        . = ALIGN (0x20)
+                0x080205e0                        . = ALIGN (0x20)
 
  -------------------------- 
-.dtors          0x08020600        0x0   : output_sect 
+.dtors          0x080205e0        0x0   : output_sect 
  --------------- input_sect 
  *crtbegin.o(.dtors)
  --------------- input_sect 
@@ -6111,16 +6109,16 @@ END GROUP
  *(SORT_BY_NAME(.dtors.*))
  --------------- input_sect 
  *(.dtors)
-                0x08020600                        . = ALIGN (0x20)
+                0x080205e0                        . = ALIGN (0x20)
 
  -------------------------- 
-.const.table    0x08020600      0x420   : output_sect 
-                0x08020600                        . = ALIGN (0x4)
-                0x08020600                        __cli_cmds_table_start__ = .
+.const.table    0x080205e0      0x420   : output_sect 
+                0x080205e0                        . = ALIGN (0x4)
+                0x080205e0                        __cli_cmds_table_start__ = .
  --------------- input_sect 
  *(.cli_cmds)
-                0x08020600                        __cli_cmds_table_end__ = .
-                0x08020600                        . = ALIGN (0x4)
+                0x080205e0                        __cli_cmds_table_end__ = .
+                0x080205e0                        . = ALIGN (0x4)
  --------------- input_sect 
  *(.rom_data)
  --------------- input_sect 
@@ -6128,85 +6126,85 @@ END GROUP
  --------------- input_sect 
  *(.rom_data_not_keep)
  .rom_data_not_keep
-                0x08020600      0x40c ./gs32_driver/driverlib/interrupt.o
-                0x08020600                dspIRQTriggerType
+                0x080205e0      0x40c ./gs32_driver/driverlib/interrupt.o
+                0x080205e0                dspIRQTriggerType
  --------------- input_sect 
  *(.rom_data_not_keep.*)
-                0x08020a20                        . = ALIGN (0x20)
- *fill*         0x08020a0c       0x14   zero_fill
+                0x08020a00                        . = ALIGN (0x20)
+ *fill*         0x080209ec       0x14   zero_fill
 
  -------------------------- 
-.copy.table     0x08020a20       0x40   : output_sect 
-                0x08020a20                        . = ALIGN (0x4)
-                0x08020a20                        __copy_table_start__ = .
-                0x08020a20        0x4 LONG 0x80215f0 LOADADDR (.data)
-                0x08020a24        0x4 LONG 0x20120000 ADDR (.data)
-                0x08020a28        0x4 LONG 0x1090 (SIZEOF (.data) / 0x4)
-                0x08020a2c        0x4 LONG 0x8020f00 LOADADDR (.ilm)
-                0x08020a30        0x4 LONG 0x20100410 ADDR (.ilm)
-                0x08020a34        0x4 LONG 0x1bc (SIZEOF (.ilm) / 0x4)
-                0x08020a38        0x4 LONG 0x8025830 LOADADDR (.gsram_data)
-                0x08020a3c        0x4 LONG 0x20038000 ADDR (.gsram_data)
-                0x08020a40        0x4 LONG 0x0 (SIZEOF (.gsram_data) / 0x4)
-                0x08020a44                        __copy_table_end__ = .
+.copy.table     0x08020a00       0x40   : output_sect 
+                0x08020a00                        . = ALIGN (0x4)
+                0x08020a00                        __copy_table_start__ = .
+                0x08020a00        0x4 LONG 0x80215d0 LOADADDR (.data)
+                0x08020a04        0x4 LONG 0x20120000 ADDR (.data)
+                0x08020a08        0x4 LONG 0x1090 (SIZEOF (.data) / 0x4)
+                0x08020a0c        0x4 LONG 0x8020ee0 LOADADDR (.ilm)
+                0x08020a10        0x4 LONG 0x20100410 ADDR (.ilm)
+                0x08020a14        0x4 LONG 0x1bc (SIZEOF (.ilm) / 0x4)
+                0x08020a18        0x4 LONG 0x8025810 LOADADDR (.gsram_data)
+                0x08020a1c        0x4 LONG 0x20038000 ADDR (.gsram_data)
+                0x08020a20        0x4 LONG 0x0 (SIZEOF (.gsram_data) / 0x4)
+                0x08020a24                        __copy_table_end__ = .
+                0x08020a40                        . = ALIGN (0x20)
+ *fill*         0x08020a24       0x1c   zero_fill
+                0x08020a00                        PROVIDE (__copy_table_start = __copy_table_start__)
+                0x08020a24                        PROVIDE (__copy_table_end = __copy_table_end__)
+
+ -------------------------- 
+.zero.table     0x08020a40       0x20   : output_sect 
+                0x08020a40                        . = ALIGN (0x4)
+                0x08020a40                        __zero_table_start__ = .
+                0x08020a40        0x4 LONG 0x20124240 ADDR (.bss)
+                0x08020a44        0x4 LONG 0x8ec (SIZEOF (.bss) / 0x4)
+                0x08020a48        0x4 LONG 0x20100b00 ADDR (.ilm_bss)
+                0x08020a4c        0x4 LONG 0x0 (SIZEOF (.ilm_bss) / 0x4)
+                0x08020a50        0x4 LONG 0x20038000 ADDR (.gsram_bss)
+                0x08020a54        0x4 LONG 0x0 (SIZEOF (.gsram_bss) / 0x4)
+                0x08020a58                        __zero_table_end__ = .
                 0x08020a60                        . = ALIGN (0x20)
- *fill*         0x08020a44       0x1c   zero_fill
-                0x08020a20                        PROVIDE (__copy_table_start = __copy_table_start__)
-                0x08020a44                        PROVIDE (__copy_table_end = __copy_table_end__)
+ *fill*         0x08020a58        0x8   zero_fill
 
  -------------------------- 
-.zero.table     0x08020a60       0x20   : output_sect 
-                0x08020a60                        . = ALIGN (0x4)
-                0x08020a60                        __zero_table_start__ = .
-                0x08020a60        0x4 LONG 0x20124240 ADDR (.bss)
-                0x08020a64        0x4 LONG 0x8ec (SIZEOF (.bss) / 0x4)
-                0x08020a68        0x4 LONG 0x20100b00 ADDR (.ilm_bss)
-                0x08020a6c        0x4 LONG 0x0 (SIZEOF (.ilm_bss) / 0x4)
-                0x08020a70        0x4 LONG 0x20038000 ADDR (.gsram_bss)
-                0x08020a74        0x4 LONG 0x0 (SIZEOF (.gsram_bss) / 0x4)
-                0x08020a78                        __zero_table_end__ = .
-                0x08020a80                        . = ALIGN (0x20)
- *fill*         0x08020a78        0x8   zero_fill
-
- -------------------------- 
-.RomFunc        0x08020a80      0x480   : output_sect 
+.RomFunc        0x08020a60      0x480   : output_sect 
  --------------- input_sect 
  *(.RomFunc)
  --------------- input_sect 
  *(.RomFunc.*)
  .RomFunc.ASysCtl_initConfig
-                0x08020a80      0x172 ./gs32_driver/driverlib/sysctl/asysctl_v30.o
-                0x08020a80                ASysCtl_initConfig
+                0x08020a60      0x172 ./gs32_driver/driverlib/sysctl/asysctl_v30.o
+                0x08020a60                ASysCtl_initConfig
  .RomFunc.ASysCtl_trim
-                0x08020bf2       0xc0 ./gs32_driver/driverlib/sysctl/asysctl_v30.o
-                0x08020bf2                ASysCtl_trim
+                0x08020bd2       0xc0 ./gs32_driver/driverlib/sysctl/asysctl_v30.o
+                0x08020bd2                ASysCtl_trim
  .RomFunc.ADC_setVREF
-                0x08020cb2       0xcc ./gs32_driver/driverlib/adc.o
-                0x08020cb2                ADC_setVREF
+                0x08020c92       0xcc ./gs32_driver/driverlib/adc.o
+                0x08020c92                ADC_setVREF
  .RomFunc.ADC_setINLTrim
-                0x08020d7e        0xc ./gs32_driver/driverlib/adc.o
-                0x08020d7e                ADC_setINLTrim
+                0x08020d5e        0xc ./gs32_driver/driverlib/adc.o
+                0x08020d5e                ADC_setINLTrim
  .RomFunc.CPUTimer_setPreScaler
-                0x08020d8a        0xc ./gs32_driver/driverlib/cputimer.o
-                0x08020d8a                CPUTimer_setPreScaler
+                0x08020d6a        0xc ./gs32_driver/driverlib/cputimer.o
+                0x08020d6a                CPUTimer_setPreScaler
  .RomFunc.CPUTimer_setTimerMode
-                0x08020d96       0x26 ./gs32_driver/driverlib/cputimer.o
-                0x08020d96                CPUTimer_setTimerMode
+                0x08020d76       0x26 ./gs32_driver/driverlib/cputimer.o
+                0x08020d76                CPUTimer_setTimerMode
  .RomFunc.CPUTimer_setTimerSize
-                0x08020dbc       0x16 ./gs32_driver/driverlib/cputimer.o
-                0x08020dbc                CPUTimer_setTimerSize
+                0x08020d9c       0x16 ./gs32_driver/driverlib/cputimer.o
+                0x08020d9c                CPUTimer_setTimerSize
  .RomFunc.ECAP_setEmulationModeState
-                0x08020dd2       0x1e ./gs32_driver/driverlib/ecap.o
-                0x08020dd2                ECAP_setEmulationModeState
+                0x08020db2       0x1e ./gs32_driver/driverlib/ecap.o
+                0x08020db2                ECAP_setEmulationModeState
  .RomFunc.Interrupt_register
-                0x08020df0       0xde ./gs32_driver/driverlib/interrupt.o
-                0x08020df0                Interrupt_register
+                0x08020dd0       0xde ./gs32_driver/driverlib/interrupt.o
+                0x08020dd0                Interrupt_register
  .RomFunc.Chip_revisionUpdate
-                0x08020ece       0x32 ./gs32_driver/driverlib/sysctl.o
-                0x08020ece                Chip_revisionUpdate
-                0x08020f00                        . = ALIGN (0x20)
-                0x08020a60                        PROVIDE (__zero_table_start = __zero_table_start__)
-                0x08020a78                        PROVIDE (__zero_table_end = __zero_table_end__)
+                0x08020eae       0x32 ./gs32_driver/driverlib/sysctl.o
+                0x08020eae                Chip_revisionUpdate
+                0x08020ee0                        . = ALIGN (0x20)
+                0x08020a40                        PROVIDE (__zero_table_start = __zero_table_start__)
+                0x08020a58                        PROVIDE (__zero_table_end = __zero_table_end__)
                 [!provide]                        PROVIDE (_text_lma = LOADADDR (.text))
                 [!provide]                        PROVIDE (_text = ADDR (.text))
                 [!provide]                        PROVIDE (_etext = .)
@@ -6224,7 +6222,7 @@ END GROUP
                 0x20100410                        PROVIDE (__vector_remap_end = __vector_remap_end__)
 
  -------------------------- 
-.ilm            0x20100410      0x6f0 load address 0x08020f00   : output_sect 
+.ilm            0x20100410      0x6f0 load address 0x08020ee0   : output_sect 
  --------------- input_sect 
  *(.RamFunc)
  .RamFunc       0x20100410       0x76 ./gs32_driver/driverlib/dsp/startup_dsp/intexc_gs32.o
@@ -6267,7 +6265,7 @@ END GROUP
  *fill*         0x20100af8        0x8   zero_fill
 
  -------------------------- 
-.ilm_bss        0x20100b00        0x0 load address 0x080215f0   : output_sect 
+.ilm_bss        0x20100b00        0x0 load address 0x080215d0   : output_sect 
  --------------- input_sect 
  *(.ilmbss)
  --------------- input_sect 
@@ -6289,7 +6287,7 @@ END GROUP
  *(.rela.data*)
 
  -------------------------- 
-.data           0x20120000     0x4240 load address 0x080215f0   : output_sect 
+.data           0x20120000     0x4240 load address 0x080215d0   : output_sect 
  --------------- input_sect 
  *(.data.ctest*)
  --------------- input_sect 
@@ -6692,7 +6690,7 @@ END GROUP
  *fill*         0x2012422c       0x14   zero_fill
 
  -------------------------- 
-.tdata          0x20124240        0x0 load address 0x08025830   : output_sect 
+.tdata          0x20124240        0x0 load address 0x08025810   : output_sect 
                 0x20124240                        PROVIDE (__tls_base = .)
  --------------- input_sect 
  *(.tdata .tdata.* .gnu.linkonce.td.*)
@@ -8312,7 +8310,7 @@ END GROUP
                 [!provide]                        PROVIDE (end = .)
 
  -------------------------- 
-.gsram_data     0x20038000        0x0 load address 0x08025830   : output_sect 
+.gsram_data     0x20038000        0x0 load address 0x08025810   : output_sect 
  --------------- input_sect 
  *(.gsram_data)
  --------------- input_sect 
@@ -8320,7 +8318,7 @@ END GROUP
                 0x20038000                        . = ALIGN (0x20)
 
  -------------------------- 
-.gsram_bss      0x20038000        0x0 load address 0x08025830   : output_sect 
+.gsram_bss      0x20038000        0x0 load address 0x08025810   : output_sect 
  --------------- input_sect 
  *(.gsram_bss)
  --------------- input_sect 
@@ -8427,7 +8425,7 @@ END GROUP
  .comment       0x00000044       0x45 C:/Users/Jianrong Lin/str/GS32 Studio/toolchain/gs-riscv-gcc/bin/../lib/gcc/riscv64-unknown-elf/13.2.0/../../../../riscv64-unknown-elf/lib/rv32imafc_xgsdida/ilp32f\libg_nano.a(libc_a-__call_atexit.o)
 
  -------------------------- 
-.debug_abbrev   0x00000000     0xb580   : output_sect 
+.debug_abbrev   0x00000000     0xb5a8   : output_sect 
  --------------- input_sect 
  *(.debug_abbrev)
  .debug_abbrev  0x00000000      0x226 ./gs32_driver/mathlib/IQMathLib.o
@@ -8449,51 +8447,51 @@ END GROUP
  .debug_abbrev  0x00002112      0x324 ./04_subprogram/SubPrg.o
  .debug_abbrev  0x00002436       0x43 ./03_function/f_canlink.o
  .debug_abbrev  0x00002479      0x1ca ./03_function/f_comm.o
- .debug_abbrev  0x00002643      0x471 ./03_function/f_eeprom.o
- .debug_abbrev  0x00002ab4      0x37a ./03_function/f_error.o
- .debug_abbrev  0x00002e2e      0x37b ./03_function/f_fcDeal.o
- .debug_abbrev  0x000031a9      0x3d0 ./03_function/f_frqSrc.o
- .debug_abbrev  0x00003579      0x3d4 ./03_function/f_frqSrc_pid.o
- .debug_abbrev  0x0000394d      0x217 ./03_function/f_funcCode.o
- .debug_abbrev  0x00003b64      0x243 ./03_function/f_funcCode_disp.o
- .debug_abbrev  0x00003da7      0x3c0 ./03_function/f_interface.o
- .debug_abbrev  0x00004167      0x3a1 ./03_function/f_invPara.o
- .debug_abbrev  0x00004508      0x4be ./03_function/f_io.o
- .debug_abbrev  0x000049c6      0x4c4 ./03_function/f_main.o
- .debug_abbrev  0x00004e8a      0x52b ./03_function/f_menu.o
- .debug_abbrev  0x000053b5      0x3d6 ./03_function/f_modbus.o
- .debug_abbrev  0x0000578b      0x297 ./03_function/f_motorFc.o
- .debug_abbrev  0x00005a22      0x160 ./03_function/f_osc.o
- .debug_abbrev  0x00005b82      0x3c4 ./03_function/f_runSrc.o
- .debug_abbrev  0x00005f46      0x3e1 ./03_function/f_runSrc_accDecFrq.o
- .debug_abbrev  0x00006327       0x70 ./03_function/f_table_eeprom2Fc.o
- .debug_abbrev  0x00006397      0x31c ./03_function/f_torqueCtrl.o
- .debug_abbrev  0x000066b3      0x3e6 ./03_function/f_ui.o
- .debug_abbrev  0x00006a99      0x2d9 ./03_function/f_vf.o
- .debug_abbrev  0x00006d72      0x2f0 ./02_motor/vf/MotorVF.o
- .debug_abbrev  0x00007062      0x296 ./02_motor/vc/PM_svc/MotorIPMSVC.o
- .debug_abbrev  0x000072f8      0x43d ./02_motor/vc/MotorPmsmMain.o
- .debug_abbrev  0x00007735      0x310 ./02_motor/vc/MotorVCMain.o
- .debug_abbrev  0x00007a45      0x31e ./02_motor/pwm/MotorPWM.o
- .debug_abbrev  0x00007d63      0x150 ./02_motor/pwm/Svpwm1.o
- .debug_abbrev  0x00007eb3      0x312 ./02_motor/para_estimation/MotorParEst.o
- .debug_abbrev  0x000081c5      0x448 ./02_motor/para_estimation/MotorPmsmParEst.o
- .debug_abbrev  0x0000860d      0x403 ./02_motor/main_public/MotorCarrier.o
- .debug_abbrev  0x00008a10       0x62 ./02_motor/main_public/MotorConstant.o
- .debug_abbrev  0x00008a72      0x216 ./02_motor/main_public/MotorCurrentTransform.o
- .debug_abbrev  0x00008c88      0x25e ./02_motor/main_public/MotorDataExchange.o
- .debug_abbrev  0x00008ee6      0x405 ./02_motor/main_public/MotorFlyingStart.o
- .debug_abbrev  0x000092eb      0x249 ./02_motor/main_public/MotorInfoCollect.o
- .debug_abbrev  0x00009534      0x3a3 ./02_motor/main_public/MotorInvProtect.o
- .debug_abbrev  0x000098d7      0x431 ./02_motor/main_public/MotorMain.o
- .debug_abbrev  0x00009d08      0x401 ./02_motor/main_public/MotorParChange.o
- .debug_abbrev  0x0000a109      0x3e4 ./02_motor/main_public/MotorPublicCal.o
- .debug_abbrev  0x0000a4ed      0x152 ./02_motor/main_public/MotorVar.o
- .debug_abbrev  0x0000a63f      0x3f1 ./02_motor/encoder/MotorEncoder.o
- .debug_abbrev  0x0000aa30      0x3bf ./02_motor/encoder/MotorSpeed.o
- .debug_abbrev  0x0000adef      0x122 ./02_motor/PMFluxWeakCsr2.o
- .debug_abbrev  0x0000af11      0x2c8 ./01_system/main.o
- .debug_abbrev  0x0000b1d9      0x3a7 ./01_system/mainInit_2803x.o
+ .debug_abbrev  0x00002643      0x493 ./03_function/f_eeprom.o
+ .debug_abbrev  0x00002ad6      0x37a ./03_function/f_error.o
+ .debug_abbrev  0x00002e50      0x37b ./03_function/f_fcDeal.o
+ .debug_abbrev  0x000031cb      0x3d0 ./03_function/f_frqSrc.o
+ .debug_abbrev  0x0000359b      0x3d4 ./03_function/f_frqSrc_pid.o
+ .debug_abbrev  0x0000396f      0x217 ./03_function/f_funcCode.o
+ .debug_abbrev  0x00003b86      0x243 ./03_function/f_funcCode_disp.o
+ .debug_abbrev  0x00003dc9      0x3c0 ./03_function/f_interface.o
+ .debug_abbrev  0x00004189      0x3a1 ./03_function/f_invPara.o
+ .debug_abbrev  0x0000452a      0x4be ./03_function/f_io.o
+ .debug_abbrev  0x000049e8      0x4b7 ./03_function/f_main.o
+ .debug_abbrev  0x00004e9f      0x52b ./03_function/f_menu.o
+ .debug_abbrev  0x000053ca      0x3d6 ./03_function/f_modbus.o
+ .debug_abbrev  0x000057a0      0x297 ./03_function/f_motorFc.o
+ .debug_abbrev  0x00005a37      0x160 ./03_function/f_osc.o
+ .debug_abbrev  0x00005b97      0x3c4 ./03_function/f_runSrc.o
+ .debug_abbrev  0x00005f5b      0x3e1 ./03_function/f_runSrc_accDecFrq.o
+ .debug_abbrev  0x0000633c       0x70 ./03_function/f_table_eeprom2Fc.o
+ .debug_abbrev  0x000063ac      0x31c ./03_function/f_torqueCtrl.o
+ .debug_abbrev  0x000066c8      0x3e6 ./03_function/f_ui.o
+ .debug_abbrev  0x00006aae      0x2d9 ./03_function/f_vf.o
+ .debug_abbrev  0x00006d87      0x2f0 ./02_motor/vf/MotorVF.o
+ .debug_abbrev  0x00007077      0x296 ./02_motor/vc/PM_svc/MotorIPMSVC.o
+ .debug_abbrev  0x0000730d      0x43d ./02_motor/vc/MotorPmsmMain.o
+ .debug_abbrev  0x0000774a      0x310 ./02_motor/vc/MotorVCMain.o
+ .debug_abbrev  0x00007a5a      0x31e ./02_motor/pwm/MotorPWM.o
+ .debug_abbrev  0x00007d78      0x150 ./02_motor/pwm/Svpwm1.o
+ .debug_abbrev  0x00007ec8      0x312 ./02_motor/para_estimation/MotorParEst.o
+ .debug_abbrev  0x000081da      0x448 ./02_motor/para_estimation/MotorPmsmParEst.o
+ .debug_abbrev  0x00008622      0x403 ./02_motor/main_public/MotorCarrier.o
+ .debug_abbrev  0x00008a25       0x62 ./02_motor/main_public/MotorConstant.o
+ .debug_abbrev  0x00008a87      0x216 ./02_motor/main_public/MotorCurrentTransform.o
+ .debug_abbrev  0x00008c9d      0x25e ./02_motor/main_public/MotorDataExchange.o
+ .debug_abbrev  0x00008efb      0x405 ./02_motor/main_public/MotorFlyingStart.o
+ .debug_abbrev  0x00009300      0x249 ./02_motor/main_public/MotorInfoCollect.o
+ .debug_abbrev  0x00009549      0x3a3 ./02_motor/main_public/MotorInvProtect.o
+ .debug_abbrev  0x000098ec      0x431 ./02_motor/main_public/MotorMain.o
+ .debug_abbrev  0x00009d1d      0x401 ./02_motor/main_public/MotorParChange.o
+ .debug_abbrev  0x0000a11e      0x3e4 ./02_motor/main_public/MotorPublicCal.o
+ .debug_abbrev  0x0000a502      0x152 ./02_motor/main_public/MotorVar.o
+ .debug_abbrev  0x0000a654      0x3f1 ./02_motor/encoder/MotorEncoder.o
+ .debug_abbrev  0x0000aa45      0x3bf ./02_motor/encoder/MotorSpeed.o
+ .debug_abbrev  0x0000ae04      0x122 ./02_motor/PMFluxWeakCsr2.o
+ .debug_abbrev  0x0000af26      0x2c8 ./01_system/main.o
+ .debug_abbrev  0x0000b1ee      0x3ba ./01_system/mainInit_2803x.o
 
  -------------------------- 
 .debug_aranges  0x00000000     0x3088   : output_sect 
@@ -8691,7 +8689,7 @@ END GROUP
  .debug_frame   0x00009164      0x144 ./01_system/mainInit_2803x.o
 
  -------------------------- 
-.debug_info     0x00000000   0x122ca3   : output_sect 
+.debug_info     0x00000000   0x122cb7   : output_sect 
  --------------- input_sect 
  *(.debug_info)
  .debug_info    0x00000000    0x117fb ./gs32_driver/mathlib/IQMathLib.o
@@ -8713,54 +8711,54 @@ END GROUP
  .debug_info    0x00057042      0x90b ./04_subprogram/SubPrg.o
  .debug_info    0x0005794d       0xb1 ./03_function/f_canlink.o
  .debug_info    0x000579fe      0x6fe ./03_function/f_comm.o
- .debug_info    0x000580fc     0x5d3a ./03_function/f_eeprom.o
- .debug_info    0x0005de36     0x3b91 ./03_function/f_error.o
- .debug_info    0x000619c7     0x3227 ./03_function/f_fcDeal.o
- .debug_info    0x00064bee     0x3dae ./03_function/f_frqSrc.o
- .debug_info    0x0006899c     0x382e ./03_function/f_frqSrc_pid.o
- .debug_info    0x0006c1ca     0x2b0c ./03_function/f_funcCode.o
- .debug_info    0x0006ecd6     0x3236 ./03_function/f_funcCode_disp.o
- .debug_info    0x00071f0c     0x42b1 ./03_function/f_interface.o
- .debug_info    0x000761bd     0x32b6 ./03_function/f_invPara.o
- .debug_info    0x00079473     0xc3d0 ./03_function/f_io.o
- .debug_info    0x00085843     0x3fda ./03_function/f_main.o
- .debug_info    0x0008981d     0x5755 ./03_function/f_menu.o
- .debug_info    0x0008ef72     0x31da ./03_function/f_modbus.o
- .debug_info    0x0009214c     0x2c96 ./03_function/f_motorFc.o
- .debug_info    0x00094de2      0x2d1 ./03_function/f_osc.o
- .debug_info    0x000950b3     0x418b ./03_function/f_runSrc.o
- .debug_info    0x0009923e     0x300c ./03_function/f_runSrc_accDecFrq.o
- .debug_info    0x0009c24a      0x100 ./03_function/f_table_eeprom2Fc.o
- .debug_info    0x0009c34a     0x2d24 ./03_function/f_torqueCtrl.o
- .debug_info    0x0009f06e     0x5fd3 ./03_function/f_ui.o
- .debug_info    0x000a5041     0x2f48 ./03_function/f_vf.o
- .debug_info    0x000a7f89     0x2123 ./02_motor/vf/MotorVF.o
- .debug_info    0x000aa0ac     0x51dc ./02_motor/vc/PM_svc/MotorIPMSVC.o
- .debug_info    0x000af288     0x5fe1 ./02_motor/vc/MotorPmsmMain.o
- .debug_info    0x000b5269     0x25b0 ./02_motor/vc/MotorVCMain.o
- .debug_info    0x000b7819     0x4d97 ./02_motor/pwm/MotorPWM.o
- .debug_info    0x000bc5b0      0x47d ./02_motor/pwm/Svpwm1.o
- .debug_info    0x000bca2d     0x2a78 ./02_motor/para_estimation/MotorParEst.o
- .debug_info    0x000bf4a5     0xd370 ./02_motor/para_estimation/MotorPmsmParEst.o
- .debug_info    0x000cc815     0x6648 ./02_motor/main_public/MotorCarrier.o
- .debug_info    0x000d2e5d      0x258 ./02_motor/main_public/MotorConstant.o
- .debug_info    0x000d30b5      0xd0b ./02_motor/main_public/MotorCurrentTransform.o
- .debug_info    0x000d3dc0     0x7cc9 ./02_motor/main_public/MotorDataExchange.o
- .debug_info    0x000dba89     0x7a0b ./02_motor/main_public/MotorFlyingStart.o
- .debug_info    0x000e3494     0x1bce ./02_motor/main_public/MotorInfoCollect.o
- .debug_info    0x000e5062     0xca38 ./02_motor/main_public/MotorInvProtect.o
- .debug_info    0x000f1a9a     0x9554 ./02_motor/main_public/MotorMain.o
- .debug_info    0x000fafee     0x89da ./02_motor/main_public/MotorParChange.o
- .debug_info    0x001039c8     0xb95d ./02_motor/main_public/MotorPublicCal.o
- .debug_info    0x0010f325     0x1152 ./02_motor/main_public/MotorVar.o
- .debug_info    0x00110477     0x5887 ./02_motor/encoder/MotorEncoder.o
- .debug_info    0x00115cfe     0x3211 ./02_motor/encoder/MotorSpeed.o
- .debug_info    0x00118f0f      0x476 ./02_motor/PMFluxWeakCsr2.o
- .debug_info    0x00119385     0x5d45 ./01_system/main.o
- .debug_info    0x0011f0ca     0x3bd9 ./01_system/mainInit_2803x.o
+ .debug_info    0x000580fc     0x5d5b ./03_function/f_eeprom.o
+ .debug_info    0x0005de57     0x3b91 ./03_function/f_error.o
+ .debug_info    0x000619e8     0x3227 ./03_function/f_fcDeal.o
+ .debug_info    0x00064c0f     0x3dae ./03_function/f_frqSrc.o
+ .debug_info    0x000689bd     0x382e ./03_function/f_frqSrc_pid.o
+ .debug_info    0x0006c1eb     0x2b0c ./03_function/f_funcCode.o
+ .debug_info    0x0006ecf7     0x3236 ./03_function/f_funcCode_disp.o
+ .debug_info    0x00071f2d     0x42b1 ./03_function/f_interface.o
+ .debug_info    0x000761de     0x32b6 ./03_function/f_invPara.o
+ .debug_info    0x00079494     0xc3d0 ./03_function/f_io.o
+ .debug_info    0x00085864     0x3fbe ./03_function/f_main.o
+ .debug_info    0x00089822     0x5755 ./03_function/f_menu.o
+ .debug_info    0x0008ef77     0x31da ./03_function/f_modbus.o
+ .debug_info    0x00092151     0x2c96 ./03_function/f_motorFc.o
+ .debug_info    0x00094de7      0x2d1 ./03_function/f_osc.o
+ .debug_info    0x000950b8     0x418b ./03_function/f_runSrc.o
+ .debug_info    0x00099243     0x300c ./03_function/f_runSrc_accDecFrq.o
+ .debug_info    0x0009c24f      0x100 ./03_function/f_table_eeprom2Fc.o
+ .debug_info    0x0009c34f     0x2d24 ./03_function/f_torqueCtrl.o
+ .debug_info    0x0009f073     0x5fd3 ./03_function/f_ui.o
+ .debug_info    0x000a5046     0x2f48 ./03_function/f_vf.o
+ .debug_info    0x000a7f8e     0x2123 ./02_motor/vf/MotorVF.o
+ .debug_info    0x000aa0b1     0x51dc ./02_motor/vc/PM_svc/MotorIPMSVC.o
+ .debug_info    0x000af28d     0x5fe1 ./02_motor/vc/MotorPmsmMain.o
+ .debug_info    0x000b526e     0x25b0 ./02_motor/vc/MotorVCMain.o
+ .debug_info    0x000b781e     0x4d97 ./02_motor/pwm/MotorPWM.o
+ .debug_info    0x000bc5b5      0x47d ./02_motor/pwm/Svpwm1.o
+ .debug_info    0x000bca32     0x2a78 ./02_motor/para_estimation/MotorParEst.o
+ .debug_info    0x000bf4aa     0xd370 ./02_motor/para_estimation/MotorPmsmParEst.o
+ .debug_info    0x000cc81a     0x6648 ./02_motor/main_public/MotorCarrier.o
+ .debug_info    0x000d2e62      0x258 ./02_motor/main_public/MotorConstant.o
+ .debug_info    0x000d30ba      0xd0b ./02_motor/main_public/MotorCurrentTransform.o
+ .debug_info    0x000d3dc5     0x7cc9 ./02_motor/main_public/MotorDataExchange.o
+ .debug_info    0x000dba8e     0x7a0b ./02_motor/main_public/MotorFlyingStart.o
+ .debug_info    0x000e3499     0x1bce ./02_motor/main_public/MotorInfoCollect.o
+ .debug_info    0x000e5067     0xca38 ./02_motor/main_public/MotorInvProtect.o
+ .debug_info    0x000f1a9f     0x9554 ./02_motor/main_public/MotorMain.o
+ .debug_info    0x000faff3     0x89da ./02_motor/main_public/MotorParChange.o
+ .debug_info    0x001039cd     0xb95d ./02_motor/main_public/MotorPublicCal.o
+ .debug_info    0x0010f32a     0x1152 ./02_motor/main_public/MotorVar.o
+ .debug_info    0x0011047c     0x5894 ./02_motor/encoder/MotorEncoder.o
+ .debug_info    0x00115d10     0x3211 ./02_motor/encoder/MotorSpeed.o
+ .debug_info    0x00118f21      0x476 ./02_motor/PMFluxWeakCsr2.o
+ .debug_info    0x00119397     0x5d35 ./01_system/main.o
+ .debug_info    0x0011f0cc     0x3beb ./01_system/mainInit_2803x.o
 
  -------------------------- 
-.debug_line     0x00000000    0x52b71   : output_sect 
+.debug_line     0x00000000    0x52b84   : output_sect 
  --------------- input_sect 
  *(.debug_line)
  .debug_line    0x00000000     0xc65b ./gs32_driver/mathlib/IQMathLib.o
@@ -8782,51 +8780,51 @@ END GROUP
  .debug_line    0x00014430      0xae2 ./04_subprogram/SubPrg.o
  .debug_line    0x00014f12       0x55 ./03_function/f_canlink.o
  .debug_line    0x00014f67      0x136 ./03_function/f_comm.o
- .debug_line    0x0001509d     0x1d3c ./03_function/f_eeprom.o
- .debug_line    0x00016dd9     0x16ab ./03_function/f_error.o
- .debug_line    0x00018484      0xada ./03_function/f_fcDeal.o
- .debug_line    0x00018f5e     0x2ce3 ./03_function/f_frqSrc.o
- .debug_line    0x0001bc41     0x1a08 ./03_function/f_frqSrc_pid.o
- .debug_line    0x0001d649       0x5e ./03_function/f_funcCode.o
- .debug_line    0x0001d6a7      0x621 ./03_function/f_funcCode_disp.o
- .debug_line    0x0001dcc8     0x18db ./03_function/f_interface.o
- .debug_line    0x0001f5a3      0xcbd ./03_function/f_invPara.o
- .debug_line    0x00020260     0x4a5b ./03_function/f_io.o
- .debug_line    0x00024cbb     0x18d3 ./03_function/f_main.o
- .debug_line    0x0002658e     0x534f ./03_function/f_menu.o
- .debug_line    0x0002b8dd     0x127a ./03_function/f_modbus.o
- .debug_line    0x0002cb57      0x200 ./03_function/f_motorFc.o
- .debug_line    0x0002cd57      0x16f ./03_function/f_osc.o
- .debug_line    0x0002cec6     0x4142 ./03_function/f_runSrc.o
- .debug_line    0x00031008     0x11f9 ./03_function/f_runSrc_accDecFrq.o
- .debug_line    0x00032201       0x55 ./03_function/f_table_eeprom2Fc.o
- .debug_line    0x00032256      0x73d ./03_function/f_torqueCtrl.o
- .debug_line    0x00032993     0x1485 ./03_function/f_ui.o
- .debug_line    0x00033e18      0x452 ./03_function/f_vf.o
- .debug_line    0x0003426a     0x2943 ./02_motor/vf/MotorVF.o
- .debug_line    0x00036bad      0xda5 ./02_motor/vc/PM_svc/MotorIPMSVC.o
- .debug_line    0x00037952     0x241a ./02_motor/vc/MotorPmsmMain.o
- .debug_line    0x00039d6c     0x1aa6 ./02_motor/vc/MotorVCMain.o
- .debug_line    0x0003b812      0xe0f ./02_motor/pwm/MotorPWM.o
- .debug_line    0x0003c621      0x737 ./02_motor/pwm/Svpwm1.o
- .debug_line    0x0003cd58      0x759 ./02_motor/para_estimation/MotorParEst.o
- .debug_line    0x0003d4b1     0x41ca ./02_motor/para_estimation/MotorPmsmParEst.o
- .debug_line    0x0004167b     0x138f ./02_motor/main_public/MotorCarrier.o
- .debug_line    0x00042a0a       0x55 ./02_motor/main_public/MotorConstant.o
- .debug_line    0x00042a5f      0x419 ./02_motor/main_public/MotorCurrentTransform.o
- .debug_line    0x00042e78     0x15c6 ./02_motor/main_public/MotorDataExchange.o
- .debug_line    0x0004443e     0x1c58 ./02_motor/main_public/MotorFlyingStart.o
- .debug_line    0x00046096      0x600 ./02_motor/main_public/MotorInfoCollect.o
- .debug_line    0x00046696     0x2df3 ./02_motor/main_public/MotorInvProtect.o
- .debug_line    0x00049489     0x2105 ./02_motor/main_public/MotorMain.o
- .debug_line    0x0004b58e     0x1ecd ./02_motor/main_public/MotorParChange.o
- .debug_line    0x0004d45b     0x1057 ./02_motor/main_public/MotorPublicCal.o
- .debug_line    0x0004e4b2       0x68 ./02_motor/main_public/MotorVar.o
- .debug_line    0x0004e51a     0x1960 ./02_motor/encoder/MotorEncoder.o
- .debug_line    0x0004fe7a      0xe45 ./02_motor/encoder/MotorSpeed.o
- .debug_line    0x00050cbf      0x59e ./02_motor/PMFluxWeakCsr2.o
- .debug_line    0x0005125d      0x65a ./01_system/main.o
- .debug_line    0x000518b7     0x12ba ./01_system/mainInit_2803x.o
+ .debug_line    0x0001509d     0x1d75 ./03_function/f_eeprom.o
+ .debug_line    0x00016e12     0x16ab ./03_function/f_error.o
+ .debug_line    0x000184bd      0xada ./03_function/f_fcDeal.o
+ .debug_line    0x00018f97     0x2ce3 ./03_function/f_frqSrc.o
+ .debug_line    0x0001bc7a     0x1a08 ./03_function/f_frqSrc_pid.o
+ .debug_line    0x0001d682       0x5e ./03_function/f_funcCode.o
+ .debug_line    0x0001d6e0      0x621 ./03_function/f_funcCode_disp.o
+ .debug_line    0x0001dd01     0x18db ./03_function/f_interface.o
+ .debug_line    0x0001f5dc      0xcbd ./03_function/f_invPara.o
+ .debug_line    0x00020299     0x4a5b ./03_function/f_io.o
+ .debug_line    0x00024cf4     0x18a2 ./03_function/f_main.o
+ .debug_line    0x00026596     0x534f ./03_function/f_menu.o
+ .debug_line    0x0002b8e5     0x127a ./03_function/f_modbus.o
+ .debug_line    0x0002cb5f      0x200 ./03_function/f_motorFc.o
+ .debug_line    0x0002cd5f      0x16f ./03_function/f_osc.o
+ .debug_line    0x0002cece     0x4142 ./03_function/f_runSrc.o
+ .debug_line    0x00031010     0x11f9 ./03_function/f_runSrc_accDecFrq.o
+ .debug_line    0x00032209       0x55 ./03_function/f_table_eeprom2Fc.o
+ .debug_line    0x0003225e      0x73d ./03_function/f_torqueCtrl.o
+ .debug_line    0x0003299b     0x1485 ./03_function/f_ui.o
+ .debug_line    0x00033e20      0x452 ./03_function/f_vf.o
+ .debug_line    0x00034272     0x2943 ./02_motor/vf/MotorVF.o
+ .debug_line    0x00036bb5      0xda5 ./02_motor/vc/PM_svc/MotorIPMSVC.o
+ .debug_line    0x0003795a     0x241a ./02_motor/vc/MotorPmsmMain.o
+ .debug_line    0x00039d74     0x1aa6 ./02_motor/vc/MotorVCMain.o
+ .debug_line    0x0003b81a      0xe0f ./02_motor/pwm/MotorPWM.o
+ .debug_line    0x0003c629      0x737 ./02_motor/pwm/Svpwm1.o
+ .debug_line    0x0003cd60      0x759 ./02_motor/para_estimation/MotorParEst.o
+ .debug_line    0x0003d4b9     0x41ca ./02_motor/para_estimation/MotorPmsmParEst.o
+ .debug_line    0x00041683     0x138f ./02_motor/main_public/MotorCarrier.o
+ .debug_line    0x00042a12       0x55 ./02_motor/main_public/MotorConstant.o
+ .debug_line    0x00042a67      0x419 ./02_motor/main_public/MotorCurrentTransform.o
+ .debug_line    0x00042e80     0x15c6 ./02_motor/main_public/MotorDataExchange.o
+ .debug_line    0x00044446     0x1c58 ./02_motor/main_public/MotorFlyingStart.o
+ .debug_line    0x0004609e      0x600 ./02_motor/main_public/MotorInfoCollect.o
+ .debug_line    0x0004669e     0x2df3 ./02_motor/main_public/MotorInvProtect.o
+ .debug_line    0x00049491     0x2105 ./02_motor/main_public/MotorMain.o
+ .debug_line    0x0004b596     0x1ecd ./02_motor/main_public/MotorParChange.o
+ .debug_line    0x0004d463     0x1057 ./02_motor/main_public/MotorPublicCal.o
+ .debug_line    0x0004e4ba       0x68 ./02_motor/main_public/MotorVar.o
+ .debug_line    0x0004e522     0x1962 ./02_motor/encoder/MotorEncoder.o
+ .debug_line    0x0004fe84      0xe45 ./02_motor/encoder/MotorSpeed.o
+ .debug_line    0x00050cc9      0x59e ./02_motor/PMFluxWeakCsr2.o
+ .debug_line    0x00051267      0x654 ./01_system/main.o
+ .debug_line    0x000518bb     0x12c9 ./01_system/mainInit_2803x.o
 
  -------------------------- 
 .debug_line_str
@@ -8892,7 +8890,7 @@ END GROUP
                                 0x236 (size before relaxing)
  .debug_line_str
                 0x000010ba       0x44 ./03_function/f_eeprom.o
-                                0x33a (size before relaxing)
+                                0x3a7 (size before relaxing)
  .debug_line_str
                 0x000010fe       0x55 ./03_function/f_error.o
                                 0x29f (size before relaxing)
@@ -9024,7 +9022,7 @@ END GROUP
                                 0x3ba (size before relaxing)
  .debug_line_str
                 0x000018c1       0x74 ./01_system/mainInit_2803x.o
-                                0x509 (size before relaxing)
+                                0x518 (size before relaxing)
 
  -------------------------- 
 .debug_loc                              : output_sect 
@@ -9329,7 +9327,7 @@ END GROUP
  .debug_str     0x0001c7dd      0x38b ./03_function/f_comm.o
                                 0x5bc (size before relaxing)
  .debug_str     0x0001cb68     0x2398 ./03_function/f_eeprom.o
-                               0x2e43 (size before relaxing)
+                               0x2e53 (size before relaxing)
  .debug_str     0x0001ef00      0x9c6 ./03_function/f_error.o
                                0x2acc (size before relaxing)
  .debug_str     0x0001f8c6      0x244 ./03_function/f_fcDeal.o
@@ -9407,14 +9405,14 @@ END GROUP
  .debug_str     0x000285b3      0x2da ./02_motor/main_public/MotorVar.o
                                0x10c4 (size before relaxing)
  .debug_str     0x0002888d       0x88 ./02_motor/encoder/MotorEncoder.o
-                               0x27cf (size before relaxing)
+                               0x27d9 (size before relaxing)
  .debug_str     0x00028915       0xe9 ./02_motor/encoder/MotorSpeed.o
                                0x16d4 (size before relaxing)
  .debug_str     0x000289fe      0x39f ./02_motor/PMFluxWeakCsr2.o
- .debug_str     0x000289fe       0x5f ./01_system/main.o
-                               0x25c0 (size before relaxing)
- .debug_str     0x00028a5d      0x54d ./01_system/mainInit_2803x.o
-                               0x1cd2 (size before relaxing)
+ .debug_str     0x000289fe       0x55 ./01_system/main.o
+                               0x25b6 (size before relaxing)
+ .debug_str     0x00028a53      0x557 ./01_system/mainInit_2803x.o
+                               0x1cdd (size before relaxing)
 
  -------------------------- 
 .debug_str_offsets                      : output_sect 

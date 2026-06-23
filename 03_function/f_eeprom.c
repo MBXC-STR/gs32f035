@@ -1068,19 +1068,21 @@ void InitSetI2ca(void)
 {
     // Initialize I2C
     I2caRegs.I2CMDR.all = 0x4000;    // reset I2C
+    SysCtl_resetI2c();
 
 #if (DSP_CLOCK == 100)      // DSP运行频率100MHz
-    I2caRegs.I2CPSC = 9;        // Prescaler - need 7-12 Mhz on module clk, I2C module clock = 10MHz
+    I2caRegs.I2CPSC.all = 9;        // Prescaler - need 7-12 Mhz on module clk, I2C module clock = 10MHz
 #elif (DSP_CLOCK == 60)      // DSP运行频率60MHz
-    I2caRegs.I2CPSC = 5;        // Prescaler - need 7-12 Mhz on module clk, I2C module clock = 10MHz
+//    I2caRegs.I2CPSC = 5;        // Prescaler - need 7-12 Mhz on module clk, I2C module clock = 10MHz
+    I2caRegs.I2CPSC = 0;        // Prescaler - need 7-12 Mhz on module clk, I2C module clock = 10MHz
 #endif
 
 #if 0
     I2caRegs.I2CCLKL = 55;          // NOTE: must be non zero, clk低电平设置为 (55+5)*0.1us = 6us
     I2caRegs.I2CCLKH = 55;          // NOTE: must be non zero, clk高电平设置为 (55+5)*0.1us = 6us
 #elif 1
-    I2caRegs.I2CCLKL = 25;          // clk低电平设置为 (25+5)*0.1us = 3us
-    I2caRegs.I2CCLKH = 25;
+    I2caRegs.I2CCLKL = 150;          // clk低电平设置为 (25+5)*0.1us = 3us
+    I2caRegs.I2CCLKH = 150;
 #elif 1     // 200KHz
     I2caRegs.I2CCLKL = 20;          // clk低电平设置为 (20+5)*0.1us = 2.5us
     I2caRegs.I2CCLKH = 20;

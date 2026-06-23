@@ -771,7 +771,7 @@ void TemperatureCheck(void)
 			m_Index = (m_IndexLow + m_IndexHigh)>>1;
 		}
 	}
-	if(mType - gTemperature.TempBak >= 8)			//锟铰度变化锟斤拷锟斤拷0.5锟饺才革拷值
+	if((u16)(mType - gTemperature.TempBak) >= 8)			//锟铰度变化锟斤拷锟斤拷0.5锟饺才革拷值
 	{
 		gTemperature.TempBak = mType;
 		gTemperature.Temp = mType>>4;

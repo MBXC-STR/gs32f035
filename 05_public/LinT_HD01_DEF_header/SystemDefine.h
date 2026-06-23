@@ -75,7 +75,7 @@ extern "C" {
 #endif
 #ifdef      DSP_CLOCK60
     #define     DSP_CLOCK           60                      //60MHz时钟
-    #define     PWM_CLK_DIV         0
+    #define     PWM_CLK_DIV         1
     #define     PWM_CLOCK           60                      //PWM模块时钟周期
     #define     DBTIME_1140V         30                     //1140V死区时间
     #define     DCTIME_1140V         8                     //1140V死区补偿

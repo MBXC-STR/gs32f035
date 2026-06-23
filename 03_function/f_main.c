@@ -1602,9 +1602,9 @@ void CheckEeprom2Fc(void)
 // 获得任意内存地址值
 void getMomeryValue(void)
 {
-	Uint16* a;
-	a = (Uint16*)MEMORY_ADDRESS;
-    memoryValue = *a;
+//	Uint16* a;
+//	a = (Uint16*)MEMORY_ADDRESS;
+//    memoryValue = *a;
 }
 
 

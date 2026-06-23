@@ -16,7 +16,7 @@
     <stringAttribute key="ilg.gnumcueclipse.debug.gdbjtag.openocd.gdbServerExecutable" value="${openocd_path}/${openocd_executable}"/>
     <intAttribute key="ilg.gnumcueclipse.debug.gdbjtag.openocd.gdbServerGdbPortNumber" value="3355"/>
     <stringAttribute key="ilg.gnumcueclipse.debug.gdbjtag.openocd.gdbServerLog" value=""/>
-    <stringAttribute key="ilg.gnumcueclipse.debug.gdbjtag.openocd.gdbServerOther" value="-c &quot;set dsp_gport 3355&quot; -c &quot;set gs32_telnet_port 4444&quot; -c &quot;set gs32_tcl_port 6666&quot; -c &quot;set cJTAG 0&quot; -c &quot;set gs32_model GS32F035&quot; -f &quot;cs30_ftdi_dsp.cfg&quot;"/>
+    <stringAttribute key="ilg.gnumcueclipse.debug.gdbjtag.openocd.gdbServerOther" value="-c &quot;set dsp_gport 3355&quot; -c &quot;set gs32_telnet_port 4444&quot; -c &quot;set gs32_tcl_port 6666&quot; -c &quot;set cJTAG 0&quot; -c &quot;set gs32_model GS32F035P&quot; -f &quot;cs30_ftdi_dsp.cfg&quot;"/>
     <stringAttribute key="ilg.gnumcueclipse.debug.gdbjtag.openocd.gdbServerTclPortNumber" value="6666"/>
     <intAttribute key="ilg.gnumcueclipse.debug.gdbjtag.openocd.gdbServerTelnetPortNumber" value="4444"/>
     <stringAttribute key="ilg.gnumcueclipse.debug.gdbjtag.openocd.otherInitCommands" value=""/>

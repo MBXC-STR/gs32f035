@@ -166,7 +166,7 @@ void InitPeripherals(void)
    	InitSetGpio();  
    	InitSetPWM();
    	InitSetAdc();
-	//InitSetQEP();			                //初始化QEP(默认是ABZ编码器，所以在此初始化)
+	InitSetQEP();			                //初始化QEP(默认是ABZ编码器，所以在此初始化)
 
    	InitCpuTimers();
    	//ConfigCpuTimer(&CpuTimer0, DSP_CLOCK, 1000000L);//100MHz CPU, 1 millisecond Period
@@ -548,7 +548,7 @@ void InitSetAdc(void)
 //    AdcRegs.ADCSAMPLEMODE.all = 0;          // 采样模式为0: 顺序采样(非同时采样)
 //	AdcRegs.ADCCTL1.bit.INTPULSEPOS	= 1;	//ADCINT1 trips after AdcResults latch
     ADC_clearInterruptStatus(ADCA_BASE, ADC_INT_NUMBER1);
-	ADC_setInterruptSource(ADCA_BASE, ADC_INT_NUMBER1, ADC_INT_TRIGGER_EOC5);
+	ADC_setInterruptSource(ADCA_BASE, ADC_INT_NUMBER1, ADC_INT_TRIGGER_EOC3);
 	ADC_enableContinuousMode(ADCA_BASE,ADC_INT_NUMBER1);
 	ADC_enableInterrupt(ADCA_BASE,ADC_INT_NUMBER1);
 

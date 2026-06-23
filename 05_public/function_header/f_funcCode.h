@@ -38,7 +38,7 @@
 
 // 请不要随意修改这两个值，否则EEPROM中的值会全部(包括P0组、P1组、各种记录)恢复出厂值。
 
-#define EEPROM_CHECK1       (0x0020)                        // EEPROM校验字1
+#define EEPROM_CHECK1       (0x002A)                        // EEPROM校验字1
 #define EEPROM_CHECK2       (0xFFFF - EEPROM_CHECK1)        // EEPROM校验字2
 
 

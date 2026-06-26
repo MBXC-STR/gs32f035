@@ -143,7 +143,7 @@
 
 // 功能码定义
 #define		CAN_LINK_S_ADDR			(funcCode.code.commSlaveAddress & CANLINK_ID_MASK) // 本站地址
-#define		CAN_LINK_BAUD_SEL		(funcCode.code.commBaudRate/1000)    // 波特率设置
+#define    CAN_LINK_BAUD_SEL          (funcCode.code.commBaudRate/1000)    // 波特率设置
 
 
 

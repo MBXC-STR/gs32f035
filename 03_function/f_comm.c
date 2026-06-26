@@ -1,7 +1,7 @@
 //======================================================================
 //
 // 通讯锟斤拷锟斤拷锟斤拷ModBus协锟介。
-// 
+//
 // Time-stamp: <2008-11-23 11:40:25  Shisheng.Zhi, 0354>
 //
 //======================================================================
@@ -15,7 +15,7 @@
 #if F_DEBUG_RAM                     // 锟斤拷锟斤拷锟皆癸拷锟杰ｏ拷锟斤拷CCS锟斤拷build option锟叫讹拷锟斤拷暮锟�
 #define DEBUG_F_MODBUS          0   // 锟角凤拷使锟斤拷通讯锟斤拷锟斤拷
 #elif 1
-#define DEBUG_F_MODBUS          0
+#define DEBUG_F_MODBUS          1
 #endif
 
 enum COMM_STATUS commStatus;    // 锟斤拷锟节筹拷始锟斤拷为锟饺达拷锟斤拷锟斤拷状态
@@ -26,7 +26,7 @@ Uint16 commBaudRate;
 Uint16 commType;                 // 锟斤拷锟斤拷通讯协锟斤拷锟斤拷锟斤拷
 Uint16 commProtocol;             // 通讯协锟斤拷锟斤拷锟捷革拷式
 Uint32 commTicker;               // *_0.5ms
-Uint32 commSendTicker;                  
+Uint32 commSendTicker;
 Uint32 canLinkTicker;            // *_0.5ms
 Uint16 commRunCmd;               // 通讯锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷
 Uint16 aoComm[AO_NUMBER+1];      // 通讯AO锟斤拷锟斤拷. 0-HDO, 锟斤拷锟斤拷为AO
@@ -188,7 +188,7 @@ extern Uint16 ValidateInvType(void);
 const protocolDeal protocolFunc[PROTOCOL_NUM] =
 {
 // MODBUS
-    { ModbusRcvDataDeal,       ModbusStartDeal,      
+    { ModbusRcvDataDeal,       ModbusStartDeal,
       UpdateModbusCommFormat,  ModbusSendDataDeal,
       ModbusCommErrCheck,
     },
@@ -255,11 +255,15 @@ interrupt void SCI_RXD_isr(void)
     Uint16 tmp;
 
 #if DSP_2803X
+#ifdef TARGET_GS32
+    LIN_UartGetCharData(LINA_BASE, &tmp);
+#else
     tmp = LinaRegs.SCIRD;
+#endif
 #else
     tmp = SciaRegs.SCIRXBUF.all;
 #endif
-    
+
     // 锟斤拷锟捷斤拷锟斤拷帧头锟叫讹拷
     if (protocolFunc[commType].StartDeal(tmp))
     {
@@ -270,10 +274,10 @@ interrupt void SCI_RXD_isr(void)
 	        CommDataReRcv(tmp);
 		}
     }
-    
+
     commTicker = 0;                     // 锟叫斤拷锟斤拷锟斤拷锟捷ｏ拷锟斤拷锟铰硷拷时
 #ifdef TARGET_GS32
-    
+
 #else
     PieCtrlRegs.PIEACK.bit.ACK9 = 1;    // Issue PIE ACK
 #endif
@@ -303,11 +307,11 @@ interrupt void SCI_TXD_isr(void)
 #ifdef TARGET_GS32
     SAVE_IRQ_CSR_CONTEXT();
 #endif
-	// 通讯锟斤拷锟斤拷锟斤拷锟斤拷
-    CommDataSend();   
-    commTicker = 0;                     // 锟斤拷锟斤拷一锟斤拷锟街凤拷锟斤拷桑锟斤拷锟斤拷录锟绞�
+	// 通讯发送数据
+    CommDataSend();
+    commTicker = 0;                     // 发送一个字符完成，重新计时
 #ifdef TARGET_GS32
-    
+
 #else
     PieCtrlRegs.PIEACK.bit.ACK9 = 1;    // Issue PIE ACK
 #endif
@@ -325,8 +329,25 @@ __interrupt void Lina_Level0_ISR(void)
 interrupt void Lina_Level0_ISR(void)
 #endif
 {
-	Uint32 LinL0IntVect;  
+#ifdef TARGET_GS32
+    SAVE_IRQ_CSR_CONTEXT();
+#endif
 
+	Uint32 LinL0IntVect;
+#ifdef TARGET_GS32
+    LIN_getStatus(LINA_BASE, &LinL0IntVect);
+
+    /* RXRDY 中断 */
+    if(LinL0IntVect & LIN_USART_CHANNEL_RXRDY)
+    {
+            SCI_RXD_isr();
+    }
+    /* TXRDY 中断 */
+    else if(LinL0IntVect & LIN_USART_CHANNEL_TXRDY)
+    {
+            SCI_TXD_isr();
+    }
+#else
 	LinL0IntVect = LinaRegs.SCIINTVECT0.all;
 
 	// 锟斤拷锟斤拷锟叫讹拷
@@ -339,15 +360,19 @@ interrupt void Lina_Level0_ISR(void)
 	{
 		SCI_TXD_isr();
 	}
+#endif
     // other
     else
     {
         #ifdef TARGET_GS32
-    
+
         #else
         PieCtrlRegs.PIEACK.bit.ACK9 = 1;
         #endif
     }
+#ifdef TARGET_GS32
+    RESTORE_IRQ_CSR_CONTEXT();
+#endif
 }
 
 //Low priority BLIN ISR.  Just a placeholder.
@@ -358,9 +383,9 @@ interrupt void Lina_Level1_ISR(void)
 #endif
 {
 #ifdef TARGET_GS32
-    
+
 #else
-	PieCtrlRegs.PIEACK.bit.ACK9 = 1; 
+	PieCtrlRegs.PIEACK.bit.ACK9 = 1;
 #endif
 }
 #endif
@@ -370,7 +395,7 @@ interrupt void Lina_Level1_ISR(void)
 //
 // 通讯锟斤拷锟秸碉拷锟斤拷锟捷达拷锟斤拷锟斤拷锟斤拷
 //
-//=====================================================================  
+//=====================================================================
 LOCALD void CommRcvDataDeal(void)
 {
     Uint16 writeErr;
@@ -384,12 +409,12 @@ LOCALD void CommRcvDataDeal(void)
 
     // CRC校锟斤拷
     if (commRcvData.crcRcv != CrcValueByteCalc(rcvFrame, commRcvData.crcSize))  // CRC校锟斤拷锟斤拷锟斤拷卸锟�
-    {         
+    {
         sciFlag.bit.crcChkErr = 1;                      // 锟斤拷位锟斤拷CRCErr锟斤拷send
 		commRcvData.rcvCrcErrCounter++;                 // 锟斤拷录CRC校锟斤拷锟斤拷锟斤拷锟斤拷锟�
     }
      // 锟姐播模式
-    else if (!commRcvData.slaveAddr)  
+    else if (!commRcvData.slaveAddr)
     {
 		// 锟姐播写锟斤拷锟斤拷
         if ((SCI_CMD_WRITE == commRcvData.commCmd)
@@ -401,7 +426,7 @@ LOCALD void CommRcvDataDeal(void)
             sciFlag.bit.write = 1;
         }
         else
-        {   
+        {
             sciFlag.bit.cmdErr = 1;                                                 // 锟斤拷锟斤拷锟斤拷锟�
         }
     }
@@ -411,14 +436,14 @@ LOCALD void CommRcvDataDeal(void)
         {
             sciFlag.bit.read = 1;                           // 锟斤拷位锟斤拷read锟斤拷send
         }
-        else if ((SCI_CMD_WRITE == commRcvData.commCmd) 
+        else if ((SCI_CMD_WRITE == commRcvData.commCmd)
                 || (SCI_CMD_WRITE_RAM == commRcvData.commCmd)
                 || (SCI_CMD_WRITE_MORE == commRcvData.commCmd))      // 写锟斤拷锟斤拷锟斤拷锟�
         {
-            sciFlag.bit.write = 1;			                        
+            sciFlag.bit.write = 1;
         }
         else
-        {   
+        {
             sciFlag.bit.cmdErr = 1;                                                 // 锟斤拷锟斤拷锟斤拷锟�
         }
     }
@@ -435,7 +460,7 @@ LOCALD void CommRcvDataDeal(void)
         }
 #endif
         if(SCI_CMD_WRITE_MORE == commRcvData.commCmd)
-        {	
+        {
             if(((commRcvData.commData*2) != commRcvData.moreWriteNum)
                 ||(commRcvData.commData > RTU_WRITE_DATA_NUM_MAX))
             {
@@ -458,14 +483,14 @@ LOCALD void CommRcvDataDeal(void)
         }
         else
         {
-            writeErr = CommWrite(commRcvData.commAddr, commRcvData.commData);  
+            writeErr = CommWrite(commRcvData.commAddr, commRcvData.commData);
         }
         // 写失锟斤拷
         if (writeErr)
         {
 			// 锟斤拷示写失锟杰癸拷锟斤拷
             sciFlag.all |= (0x0001 << COMM_ERR_INDEX[writeErr - 1]);
-        }  
+        }
     }
 }
 
@@ -478,10 +503,10 @@ Uint16 SciErrCheck(void)
 {
     Uint16 readErr;
 	Uint16 operateErr;
-	
+
 	// 锟斤拷值锟斤拷锟睫癸拷锟斤拷
 	operateErr = COMM_ERR_NONE;
-    
+
     // 通讯锟斤拷锟斤拷锟斤拷
     if (sciFlag.bit.read)               // 通讯锟斤拷锟斤拷锟斤拷取锟斤拷锟斤拷
     {
@@ -495,7 +520,7 @@ Uint16 SciErrCheck(void)
             if (readErr)
             {
 				// 锟斤拷锟捷讹拷取. 锟斤拷锟斤拷锟斤拷锟斤拷霉锟斤拷锟轿伙拷锟斤拷锟斤拷锟揭拷锟斤拷锟斤拷亩锟饺�
-                sciFlag.all |= (0x0001 << COMM_ERR_INDEX[readErr - 1]);                  
+                sciFlag.all |= (0x0001 << COMM_ERR_INDEX[readErr - 1]);
             }
         }
     }
@@ -583,7 +608,7 @@ Uint16 ConmmWriteAtribte(Uint16 addr, Uint16 data)
         }
     }
 // 通讯锟斤拷锟斤拷锟斤拷锟筋处锟斤拷
-    else if (COMM_CMD1_ADDR == addr)                 
+    else if (COMM_CMD1_ADDR == addr)
     {
         if ((data == 0)||(data > 8))
         {
@@ -592,7 +617,7 @@ Uint16 ConmmWriteAtribte(Uint16 addr, Uint16 data)
         }
     }
 // DO锟斤拷锟斤拷
-    else if ((COMM_DO_ADDR == addr) 
+    else if ((COMM_DO_ADDR == addr)
             ||(COMM_KEYBORD_TEST == addr)) // 锟斤拷锟斤拷锟斤拷锟斤拷
     {
         //  锟斤拷锟斤拷锟斤拷锟叫讹拷
@@ -648,7 +673,7 @@ Uint16 ConmmWriteAtribte(Uint16 addr, Uint16 data)
             {
                 errType = COMM_ERR_ADDR;
             }
-            
+
             if(dataL >= funcCodeGradeAll[IndexTmp])
             {
                 errType = COMM_ERR_ADDR;
@@ -667,7 +692,7 @@ Uint16 ConmmWriteAtribte(Uint16 addr, Uint16 data)
              || (high == 0x6000)   // Cx-RAM
              || ((addr & 0xFF00) == 0x1F00)          // FP锟斤拷1Fxx
              || ((addr & 0xFF00) == 0x7300)   // U3
-        ) 
+        )
     {
         errType = CommRwFuncodeAtrrib(addr,data,COMM_WRITE_FC);
     }
@@ -681,7 +706,7 @@ Uint16 ConmmWriteAtribte(Uint16 addr, Uint16 data)
     {
         errType = COMM_ERR_ADDR;
     }
-    return errType;  
+    return errType;
 }
 /*******************************************************************************
 // 锟斤拷锟斤拷锟斤拷锟斤拷         : Uint16 CommWrite(Uint16 addr, Uint16 data)
@@ -698,7 +723,7 @@ Uint16 CommWrite(Uint16 addr, Uint16 data)
    errType = ConmmWriteAtribte(addr, data);
    if(errType) // 锟斤拷锟皆癸拷锟较ｏ拷直锟斤拷锟剿筹拷
    {
-       return errType; 
+       return errType;
    }
    else
    {
@@ -725,7 +750,7 @@ Uint16 CommReadAtribte(Uint16 addr, Uint16 data)
     Uint16 high = (addr & 0xF000);
     Uint16 low = (addr & 0x00FF);
     Uint16 errType = COMM_ERR_NONE;
-	
+
 // 通讯锟斤拷取停锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷示锟斤拷锟斤拷
 // 锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷取锟斤拷锟斤拷锟斤拷锟�
     if ((addr & 0xFF00) == 0x1000)      // 停锟斤拷/锟斤拷锟叫诧拷锟斤拷
@@ -750,7 +775,7 @@ Uint16 CommReadAtribte(Uint16 addr, Uint16 data)
 	else if(((addr & 0xFF00) == 0x7100)) //  &&(LcdKeyFlag == 1)
 	{
 
-	} 
+	}
 #endif
 // 锟斤拷取锟斤拷锟斤拷锟斤拷
     else if ((high == 0xF000) ||     // Fx, 锟斤拷取锟斤拷锟斤拷锟斤拷值
@@ -764,7 +789,7 @@ Uint16 CommReadAtribte(Uint16 addr, Uint16 data)
         errType = CommRwFuncodeAtrrib(addr, data, COMM_READ_FC);
     }
 // 锟斤拷址越锟斤拷
-    else    
+    else
     {
         errType = COMM_ERR_ADDR;
     }
@@ -791,7 +816,7 @@ LOCALD Uint16 CommRead(Uint16 addr, Uint16 data)
    {
        errType = CommRwFuncCode(addr, data, COMM_READ_FC); // 锟斤拷取
    }
-   
+
    return errType;
 }
 
@@ -845,8 +870,8 @@ LOCALD Uint16 CommRwFuncodeAtrrib(Uint16 addr, Uint16 data, Uint16 rwMode)
        }
 
     index = GetGradeIndex(group, grade);    // 锟斤拷锟姐功锟斤拷锟斤拷锟斤拷锟�
-    
-#if FC_KEY_CONTROL_EN 
+
+#if FC_KEY_CONTROL_EN
    if(LcdKeyFlag !=1)   //锟斤拷锟斤拷1时锟斤拷示液锟斤拷锟斤拷锟教斤拷锟斤拷
 #endif
    {
@@ -864,7 +889,7 @@ LOCALD Uint16 CommRwFuncodeAtrrib(Uint16 addr, Uint16 data, Uint16 rwMode)
         ((COMM_READ_FC == rwMode) &&
          ((COMM_NO_R_FC_0 == index)         // 某些锟斤拷锟斤拷锟诫，通讯锟斤拷锟杰斤拷锟斤拷R
           )
-         ) 
+         )
            )
        {
            errType = COMM_ERR_ADDR;            // 锟斤拷效锟斤拷址
@@ -934,7 +959,7 @@ LOCALD Uint16 CommRwFuncodeAtrrib(Uint16 addr, Uint16 data, Uint16 rwMode)
                {
                 errType = COMM_ERR_PWD;
             }
-            
+
             return errType;
         }
       }
@@ -1064,7 +1089,7 @@ Uint16 CommRwFuncCode(Uint16 addr, Uint16 data, Uint16 rwMode)
     // 锟斤拷取锟斤拷锟杰诧拷锟斤拷锟斤拷锟斤拷锟斤拷锟�
     CommGetFuncCodeGroupGrade(addr,&group,&grade);
     // 锟斤拷取锟铰憋拷
-    Index = GetGradeIndex(group, grade); 
+    Index = GetGradeIndex(group, grade);
     if(COMM_WRITE_FC==rwMode)
     {
     // 锟斤拷锟斤拷锟斤拷锟斤拷
@@ -1085,7 +1110,7 @@ Uint16 CommRwFuncCode(Uint16 addr, Uint16 data, Uint16 rwMode)
             dpFrqAim = (int32)(int16)funcCode.code.frqComm * maxFrq / 10000;
         }
     // 通讯锟斤拷锟斤拷锟斤拷锟筋处锟斤拷
-        else if (COMM_CMD1_ADDR == addr)                 
+        else if (COMM_CMD1_ADDR == addr)
         {
             if (data == 8)
             {
@@ -1097,34 +1122,34 @@ Uint16 CommRwFuncCode(Uint16 addr, Uint16 data, Uint16 rwMode)
                 else
                 {
                     commRunCmd = 2;
-                    canOpen = 0;                
+                    canOpen = 0;
                 }
             }else if ((1 <= data) && (data <= 7)) // 锟斤拷0001-0007锟斤拷锟斤拷
             {
                 commRunCmd = data;
-            } 
+            }
 
         }
     // DO锟斤拷锟斤拷
-        else if (COMM_DO_ADDR == addr)            
+        else if (COMM_DO_ADDR == addr)
         {
 
             doComm.all = data;
-            
+
         }
     // HDO锟斤拷锟斤拷
-        else if (COMM_HDO_ADDR == addr)            
+        else if (COMM_HDO_ADDR == addr)
         {
 
             aoComm[0] = data;
         }
     // AO1锟斤拷锟斤拷
-        else if (COMM_AO1_ADDR == addr)            
+        else if (COMM_AO1_ADDR == addr)
         {
             aoComm[1] = data;
         }
     // AO2锟斤拷锟斤拷
-        else if (COMM_AO2_ADDR == addr)            
+        else if (COMM_AO2_ADDR == addr)
         {
             aoComm[2] = data;
         }
@@ -1137,7 +1162,7 @@ Uint16 CommRwFuncCode(Uint16 addr, Uint16 data, Uint16 rwMode)
 		)
 		{
 			errType = COMM_ERR_NONE;
-		} 
+		}
         else if (Index == GetCodeIndex(funcCode.code.checkDigitalTube))  //F7-00锟斤拷锟斤拷锟斤拷EEPROM
         {
             funcCode.all[Index] = data;   //RAM
@@ -1204,7 +1229,7 @@ Uint16 CommRwFuncCode(Uint16 addr, Uint16 data, Uint16 rwMode)
                 else
                 {
                     data = IndexTmp*100+dataL;
-                    ModifyFunccodeEnter(Index, data); 
+                    ModifyFunccodeEnter(Index, data);
                 }
             }
             else if (COMM_ERR_PARA == ModifyFunccodeEnter(Index, data))
@@ -1227,11 +1252,11 @@ Uint16 CommRwFuncCode(Uint16 addr, Uint16 data, Uint16 rwMode)
                     }
                 }
             }
-        }     
+        }
 
     }
     // 通讯锟斤拷锟斤拷锟斤拷锟斤拷
-    else 
+    else
     {
     // 通讯锟斤拷取停锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷示锟斤拷锟斤拷
     // 锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷取锟斤拷锟斤拷锟斤拷锟�
@@ -1240,7 +1265,7 @@ Uint16 CommRwFuncCode(Uint16 addr, Uint16 data, Uint16 rwMode)
             for (i = 0; i < data; i++)
             {
                 commReadData[i] = funcCode.group.u0[commDispIndex[i + low]];
-                
+
                 // 为通讯锟斤拷取锟斤拷锟斤拷
                 if ((i + low) == DISP_OUT_CURRENT)
                 {
@@ -1256,7 +1281,7 @@ Uint16 CommRwFuncCode(Uint16 addr, Uint16 data, Uint16 rwMode)
             }
         }
     // 锟斤拷取锟斤拷频锟斤拷锟斤拷锟斤拷状态
-        else if (COMM_STATUS_ADDR == addr)         
+        else if (COMM_STATUS_ADDR == addr)
         {
 
 #if FC_KEY_CONTROL_EN
@@ -1265,13 +1290,13 @@ Uint16 CommRwFuncCode(Uint16 addr, Uint16 data, Uint16 rwMode)
     		   if (runFlag.bit.run)
     		   {
     		       commReadData[0] = 0x0005;
-    		   }		   
+    		   }
     		   else
     		   {
     		   	   commReadData[0] = 0x0004;
     		   }
-    		} 
-    		else  
+    		}
+    		else
 #endif
              if (runFlag.bit.run)
             {
@@ -1288,16 +1313,16 @@ Uint16 CommRwFuncCode(Uint16 addr, Uint16 data, Uint16 rwMode)
             {
                 commReadData[0] = 0x0003;
             }
-            
+
         }
     // 锟斤拷取锟斤拷锟斤拷
-        else if (COMM_INV_ERROR == addr)     
+        else if (COMM_INV_ERROR == addr)
         {
             commReadData[0] = errorCode;
 
         }
     // 锟斤拷取锟斤拷锟斤拷锟斤拷锟斤拷值
-        else if (COMM_KEYBORD_TEST == addr)    
+        else if (COMM_KEYBORD_TEST == addr)
         {
             if (keyBordValue == 0x01FF)
             {
@@ -1313,37 +1338,37 @@ Uint16 CommRwFuncCode(Uint16 addr, Uint16 data, Uint16 rwMode)
     	//锟斤拷取LCDJ锟斤拷锟斤拷DI锟斤拷锟斤拷状态
     	else if(((addr & 0xFF00) == 0x7100)) //  &&(LcdKeyFlag == 1)
     	{
-          
+
              switch(low)
              {
     	         case 0:
-    			     commReadData[0] =(diStatus.a.all>>16) & 0x0000FFFF;   
+    			     commReadData[0] =(diStatus.a.all>>16) & 0x0000FFFF;
     	             break;
     			 case 1:
-    			      commReadData[0] = diStatus.a.all & 0x0000FFFF;  
+    			      commReadData[0] = diStatus.a.all & 0x0000FFFF;
     	             break;
     			 case 2:
-    			      commReadData[0] = 0; 
+    			      commReadData[0] = 0;
     	             break;
     			 case 3:
-    			      commReadData[0] = doStatus.a.all & 0x0000FFFF;  
+    			      commReadData[0] = doStatus.a.all & 0x0000FFFF;
     	             break;
     			case 4:
-    			     commReadData[0] = (diFunc.f1.all>>16) & 0x0000FFFF;  
+    			     commReadData[0] = (diFunc.f1.all>>16) & 0x0000FFFF;
     	             break;
     			case 5:
-    			     commReadData[0] = diFunc.f1.all & 0x0000FFFF;  
+    			     commReadData[0] = diFunc.f1.all & 0x0000FFFF;
     	             break;
     			case 6:
-    			     commReadData[0] = (diFunc.f2.all>>16) & 0x0000FFFF;   
+    			     commReadData[0] = (diFunc.f2.all>>16) & 0x0000FFFF;
     	             break;
     			 case 7:
-    			      commReadData[0] = diFunc.f2.all & 0x0000FFFF;   
+    			      commReadData[0] = diFunc.f2.all & 0x0000FFFF;
     	             break;
     			default:break;
-             } 
-            
-    	} 
+             }
+
+    	}
 #endif
     // 锟斤拷取锟斤拷锟斤拷锟斤拷
         else if ((highH == 0xF000) ||     // Fx, 锟斤拷取锟斤拷锟斤拷锟斤拷值
@@ -1365,7 +1390,7 @@ Uint16 CommRwFuncCode(Uint16 addr, Uint16 data, Uint16 rwMode)
                     if ((funcCode.code.commReadCurrentPoint)
                         ||(funcCode.code.commProtocolSec == EXTEND_COM_CAR)  // DP || CANOPEN 锟教伙拷1锟斤拷小锟斤拷锟斤拷
                         )
-                    {   
+                    {
                         if (invPara.type <= invPara.pointLimit) // 小锟斤拷锟斤拷2小锟斤拷锟斤拷
                         commReadData[i] = commReadData[i] / 10;
                     }
@@ -1373,12 +1398,12 @@ Uint16 CommRwFuncCode(Uint16 addr, Uint16 data, Uint16 rwMode)
             }
 //锟斤拷取FE锟介，锟斤拷实锟斤拷锟斤拷FE锟斤拷锟斤拷锟斤拷锟斤拷取FE锟斤拷锟斤拷映锟斤拷牟锟斤拷锟斤拷锟斤拷锟街� by modfied yz1990 2014-07-15
 			if((addr & 0xFF00) == 0xFE00)
-			{ 		
+			{
                 for (i = 0; i < data; i++)
-                {				
+                {
                     FEHigh_group = (funcCode.group.fe[(addr & 0xFF)+i] / 100); //去FE锟斤拷映锟斤拷锟街凤拷锟轿伙拷锟阶拷锟斤拷锟斤拷锟紽E锟斤拷映锟斤拷锟街凤拷锟轿拷锟斤拷锟� 锟斤拷FE-02=uF3-04 锟斤拷锟斤拷锟斤拷FE02锟斤拷值为304锟斤拷锟斤拷锟斤拷0xF304;A1-05,1805,目锟侥猴拷funcCodeGradeSum[FUNCCODE_GROUP_NUM]锟斤拷哦锟接�
 			        FELow_grade  = (funcCode.group.fe[(addr & 0xFF)+i] % 100);
-           
+
                     commReadData[i] = funcCode.all[GetGradeIndex(FEHigh_group, FELow_grade)];  // U0锟斤拷也锟斤拷锟斤拷
 
                    // 为通讯锟斤拷取锟斤拷锟斤拷
@@ -1388,18 +1413,18 @@ Uint16 CommRwFuncCode(Uint16 addr, Uint16 data, Uint16 rwMode)
                        if ((funcCode.code.commReadCurrentPoint)
                           ||(funcCode.code.commProtocolSec == EXTEND_COM_CAR)  // DP || CANOPEN 锟教伙拷1锟斤拷小锟斤拷锟斤拷
                           )
-                       {   
+                       {
                            if (invPara.type <= invPara.pointLimit) // 小锟斤拷锟斤拷2小锟斤拷锟斤拷
                            commReadData[i] = commReadData[i] / 10;
                        }
                    }
-               
+
              	}
 			}
         }
-    }	
+    }
         return errType;
-        
+
 }
 
 /*******************************************************************************
@@ -1440,7 +1465,7 @@ void CommGetFuncCodeGroupGrade(Uint16 addr, Uint16 *group, Uint16 *grade)
     {
         *group = FUNCCODE_GROUP_FE;
     }
-    
+
     if ((0xA000 == highH) || (0x4000 == highH))       // Ax
     {
         *group += FUNCCODE_GROUP_A0;
@@ -1473,9 +1498,13 @@ void CommGetFuncCodeGroupGrade(Uint16 addr, Uint16 *group, Uint16 *grade)
 LOCALF void inline CommStartSend(void)
 {
 #if DSP_2803X
-    LinaRegs.SCITD = sendFrame[0];     // 锟斤拷锟酵碉拷一锟斤拷锟斤拷锟斤拷
+	#ifdef TARGET_GS32
+	LIN_UartPutCharData(LINA_BASE, sendFrame[0]);        // 发送第一个数据
+	#else
+    LinaRegs.SCITD = sendFrame[0];     // 发送第一个数据
+	#endif
 #else
-    SciaRegs.SCITXBUF = sendFrame[0];     // 锟斤拷锟酵碉拷一锟斤拷锟斤拷锟斤拷
+    SciaRegs.SCITXBUF = sendFrame[0];     // 发送第一个数据
 #endif
 }
 
@@ -1488,30 +1517,54 @@ LOCALF void inline CommStartSend(void)
 #if DSP_2803X
 void resetLinSci(void)
 {
+#ifdef TARGET_GS32
+	LIN_resetModule(LINA_BASE);
+#else
     LinaRegs.SCIGCR0.bit.RESET = 0;
     LinaRegs.SCIGCR0.bit.RESET = 1;
-    LinaRegs.SCIGCR1.bit.SWnRST = 0; 
+    LinaRegs.SCIGCR1.bit.SWnRST = 0;
+#endif
 }
 
 
 void closeRTX(void)
 {
+#ifdef TARGET_GS32
+    LIN_enableReceiver((uint32)&LinaRegs, false);
+    LIN_enableTransmitter((uint32)&LinaRegs, false);
+    LIN_InterruptDisable((uint32)&LinaRegs, 0xFFFFFFFF);
+#else
     LinaRegs.SCIGCR1.bit.RXENA = 0;
     LinaRegs.SCIGCR1.bit.TXENA = 0;
+#endif
 }
 
 
 void setRxConfig(void)
 {
+#ifdef TARGET_GS32
+	LIN_enableReceiver((uint32)&LinaRegs, true);
+	LIN_enableTransmitter((uint32)&LinaRegs, false);
+	LIN_InterruptDisable((uint32)&LinaRegs, 0xFFFFFFFF);
+	LIN_InterruptEnable((uint32)&LinaRegs, LIN_LIN_MODULE_INTR_RXRDY);
+#else
     LinaRegs.SCIGCR1.bit.RXENA = 1;
     LinaRegs.SCIGCR1.bit.TXENA = 0;
+#endif
 }
 
 
 void setTxConfig(void)
-{ 
+{
+#ifdef TARGET_GS32
+    LIN_enableTransmitter((uint32)&LinaRegs, true);
+    LIN_enableReceiver((uint32)&LinaRegs, false);
+    LIN_InterruptDisable((uint32)&LinaRegs, 0xFFFFFFFF);
+	LIN_InterruptEnable((uint32)&LinaRegs, LIN_LIN_MODULE_INTR_TXRDY);
+#else
     LinaRegs.SCIGCR1.bit.TXENA = 1;
     LinaRegs.SCIGCR1.bit.RXENA = 0;
+#endif
 }
 #endif
 
@@ -1527,9 +1580,9 @@ void commErrorDeal(void)
     commErrInfo = COMM_ERROR_MODBUS;
     commStatus = SCI_RECEIVE_DATA;        // 锟斤拷为锟斤拷锟斤拷状态
     SET_RTS_R;  // RTS = RS485_R;         // RTS锟斤拷为锟斤拷锟斤拷
-    
+
     #if DSP_2803X
-    EALLOW;        
+    EALLOW;
     setRxConfig();
     EDIS;
     #else
@@ -1552,7 +1605,7 @@ void commStatusDeal(void)
         case SCI_RECEIVE_DATA:
             SET_RTS_R;             // RTS = RS485_R;   // RTS锟斤拷为锟斤拷锟斤拷,锟斤拷止状态锟斤拷锟斤拷
             break;
-			
+
         case SCI_RECEIVE_OK:
             CommRcvDataDeal();
             // 锟斤拷锟斤拷锟斤拷锟斤拷
@@ -1579,23 +1632,24 @@ void commStatusDeal(void)
                 break;
             }
 
-        // 锟斤拷锟斤拷锟斤拷锟斤拷准锟斤拷
+            // 发送数据准备
         case SCI_SEND_DATA_PREPARE:
-            if ((commTicker >= commRcvData.delay)               // 应锟斤拷锟接筹拷
-                && (commTicker > commRcvData.frameSpaceTime))   // MODBUS为3.5锟斤拷锟街凤拷时锟斤拷
+            if ((commTicker >= commRcvData.delay)               // 应答延迟
+                && (commTicker > commRcvData.frameSpaceTime))   // MODBUS为3.5个字符时间
             {
-                SET_RTS_T;  // RTS = RS485_T;                          // RTS锟斤拷为锟斤拷锟斤拷
+                SET_RTS_T;  // RTS = RS485_T;                          // RTS置为发送
+                commStatus = SCI_SEND_DATA;
+				commSendData.sendNum = 0;               // 当前发送数据个数置为0
+				CommStartSend();                        // 开始发送
                 #if DSP_2803X
-                EALLOW;            
+                EALLOW;
                 setTxConfig();
                 EDIS;
-                #else                    
-                SciaRegs.SCICTL1.all = 0x0022;          // 锟斤拷锟斤拷
-                SciaRegs.SCICTL2.all = 0x00C1;          // 锟斤拷锟斤拷锟斤拷锟斤拷锟叫讹拷
+                #else
+                SciaRegs.SCICTL1.all = 0x0022;          // 发送
+                SciaRegs.SCICTL2.all = 0x00C1;          // 开启发送中断
                 #endif
-                commStatus = SCI_SEND_DATA;
-                commSendData.sendNum = 1;               // 锟斤拷前锟斤拷锟斤拷锟斤拷锟捷革拷锟斤拷锟斤拷为1
-                CommStartSend();                        // 锟斤拷始锟斤拷锟斤拷
+
                 commSendTicker = 0;
             }
             break;
@@ -1613,11 +1667,17 @@ void commStatusDeal(void)
             {
                 break;
             }
-            
+
         // 锟斤拷锟斤拷锟斤拷锟斤拷OK
         case SCI_SEND_OK:
             #if DSP_2803X
+			#ifdef TARGET_GS32
+        	uint32_t status;
+			LIN_getStatus(LINA_BASE, &status);
+			if (status & LIN_USART_CHANNEL_TXEMPTY)
+			#else
 			if (LinaRegs.SCIFLR.bit.TXEMPTY)
+			#endif
             #else
             if (SciaRegs.SCICTL2.bit.TXEMPTY)   // Transmitter empty flag, 锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟�
             #endif
@@ -1670,7 +1730,7 @@ void CommDataReRcv(Uint16 tmp)
         else
         {
             #if 1
-            commRcvData.dpOrModbus = DP; // 1:dp 
+            commRcvData.dpOrModbus = DP; // 1:dp
             commRcvData.rcvNumMax = 34;
             #endif
         }
@@ -1684,13 +1744,13 @@ void CommDataReRcv(Uint16 tmp)
         {
             commRcvData.rcvNumMax = rcvFrame[6] + 9;
         }
-        
+
     }
     if (commRcvData.rcvNum >= commRcvData.rcvNumMax) // 锟斤拷锟斤拷一帧锟斤拷锟斤拷锟斤拷锟�
     {
         // PROFIBUS锟斤拷帧头锟叫断憋拷志
         commRcvData.rcvDataJuageFlag = 0;
-        
+
         if (2 == commRcvData.rcvFlag)                // 锟斤拷锟斤拷锟斤拷址锟脚凤拷锟斤拷(DSP锟叫伙拷锟缴凤拷锟斤拷状态)
         {
             #if DSP_2803X
@@ -1702,7 +1762,7 @@ void CommDataReRcv(Uint16 tmp)
             SciaRegs.SCICTL2.all = 0x00C0;      // 锟截闭斤拷锟秸凤拷锟斤拷锟叫讹拷
             #endif
         }
-        
+
         commStatus = SCI_RECEIVE_OK;            // 锟斤拷志锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟�
         commRcvData.rcvFlag = 0;
     }
@@ -1711,66 +1771,105 @@ void CommDataReRcv(Uint16 tmp)
 
 //====================================================================
 //
-// 通讯锟斤拷锟捷凤拷锟酵达拷锟斤拷
+// 通讯数据发送处理
 //
 //===================================================================
 void CommDataSend(void)
 {
-	 // 锟斤拷锟斤拷一帧锟斤拷锟斤拷没锟斤拷锟斤拷锟�
-    if (commSendData.sendNum< commSendData.sendNumMax)          
+	// 发送一帧数据没有完成
+    if (commSendData.sendNum< commSendData.sendNumMax)
     {
 #if DSP_2803X
+#ifdef TARGET_GS32
+    	LIN_UartPutCharData(LINA_BASE, sendFrame[commSendData.sendNum++]);
+#else
         LinaRegs.SCITD = sendFrame[commSendData.sendNum++];
+#endif
 #else
         SciaRegs.SCITXBUF = sendFrame[commSendData.sendNum++];
 #endif
     }
-	// 锟斤拷锟斤拷一帧锟斤拷锟斤拷全锟斤拷锟斤拷锟�
-    else if (commSendData.sendNum >= commSendData.sendNumMax)     
+    // 发送一帧数据全部完成
+    else if (commSendData.sendNum >= commSendData.sendNumMax)
     {
-		// 锟斤拷志锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟�
-        commStatus = SCI_SEND_OK;      
+    	LIN_InterruptDisable(LINA_BASE, LIN_LIN_MODULE_INTR_TXRDY);
+    	// 标志发送数据完成
+        commStatus = SCI_SEND_OK;
     }
 }
 
 
 //=====================================================================
 //
-// 通讯锟斤拷始锟斤拷
+// 通讯初始化
 //
 //=====================================================================
+/**
+	0：无校验（8-N-2）
+	1：偶校验（8-E-1）
+	2：奇校验（8-O-1）
+	3：无校验（8-N-1）
+	*/
+#define COMFORMAT_8N2	0
+#define COMFORMAT_8E1	1
+#define COMFORMAT_8O1	2
+#define COMFORMAT_8N1	3
 void InitSetScia(void)
 {
-    // 应锟矫凤拷锟斤拷前锟斤拷
-    commStatus = SCI_RECEIVE_DATA;              // 锟斤拷锟斤拷状态
-    SET_RTS_R;  // RTS = RS485_R;               // RTS锟斤拷为锟斤拷锟斤拷
+	// 应该放在前面
+    commStatus = SCI_RECEIVE_DATA;              // 接收状态
+    SET_RTS_R;  // RTS = RS485_R;               // RTS置为接收
 #if DSP_2803X
     EALLOW;
     // reset
 	resetLinSci();
 
-	LinaRegs.SCIGCR1.bit.SLEEP = 0;
-    LinaRegs.SCIFLR.bit.TXWAKE = 0;  
-    LinaRegs.SCIFLR.bit.TXEMPTY = 1;
-    LinaRegs.SCIFLR.bit.TXRDY = 1;
-	// 锟斤拷锟斤拷为锟斤拷锟捷斤拷锟斤拷
-    setRxConfig(); 
+    LIN_initParam_t initParam = {0};
 
-	LinaRegs.SCIGCR1.bit.TIMINGMODE = 1; //Asynchronous Timing
-	LinaRegs.SCIGCR1.bit.CLK_MASTER = 1; //Enable SCI Clock
-	LinaRegs.SCIGCR1.bit.CONT = 1;		 //Continue on Suspend
-	if (funcCode.code.commProtocolSec == EXTEND_COM_CAR)          // 锟斤拷校锟斤拷(8-N-1)
-        LinaRegs.SCIGCR1.all = (LinaRegs.SCIGCR1.all&0xFFFFFFE3)^commParitys[3];
-    else
-        LinaRegs.SCIGCR1.all = (LinaRegs.SCIGCR1.all&0xFFFFFFE3)^commParitys[funcCode.code.commParity];
-    LinaRegs.SCISETINT.bit.SETRXINT = 1;
-    LinaRegs.SCISETINT.bit.SETTXINT = 1;
-    LinaRegs.SCIFORMAT.bit.CHAR = 0x7;
-    LinaRegs.SCIGCR1.bit.SWnRST = 1; 
-       
-EDIS;
+    volatile uint32 Lin_ClkDiv = SysCtl_getLinClkDiv();
+	Lin_ClkDiv *= 2;
+
+	SysCtl_enablePeripheral(SYSCTL_PERIPH_CLK_LIN);
+	SysCtl_resetLin();
+
+	initParam.bit_order = LIN_TRANSFER_LSB;
+    initParam.opmode = LIN_UART_MODE;               // UART模式（非LIN协议）
+    initParam.char_length = LIN_CHAR_LENGTH_8BITS;   // 8数据位
+    initParam.sync_mode = LIN_OP_ASYNC_MODE;         // 异步通信
+    initParam.chl_mode = LIN_CHAL_NORMAL_MODE;       // 普通模式（非回环/回声）
+//    initParam.stopbit = LIN_STOP_BIT_2;
+    LIN_setBaudRate((uint32)&LinaRegs, DEVICE_PLLCLK_FREQ/Lin_ClkDiv, 9600,
+					LIN_OP_ASYNC_MODE, LIN_OVERSAMP_16);
+
+    switch(funcCode.code.commParity)
+	{
+		case COMFORMAT_8N2:
+			initParam.stopbit = LIN_STOP_BIT_2;
+			initParam.parity = LIN_PARITY_NONE;
+		break;
+		case COMFORMAT_8E1:
+			initParam.stopbit = LIN_STOP_BIT_1;
+			initParam.parity = LIN_PARITY_EVEN;
+		break;
+		case COMFORMAT_8O1:
+			initParam.stopbit = LIN_STOP_BIT_1;
+			initParam.parity = LIN_PARITY_ODD;
+		break;
+		case COMFORMAT_8N1:
+			initParam.stopbit = LIN_STOP_BIT_1;
+			initParam.parity = LIN_PARITY_NONE;
+		break;
+	}
+
+
+	LIN_initModule((uint32)&LinaRegs, &initParam);
+	setRxConfig();
+	LIN_InterruptDisable((uint32)&LinaRegs, 0xFFFFFFFF);
+	LIN_InterruptEnable((uint32)&LinaRegs, LIN_LIN_MODULE_INTR_RXRDY);
+
+	EDIS;
 #else
-    SciaRegs.SCICTL1.all = 0x0001;              // SCI锟斤拷锟斤拷锟斤拷位锟斤拷锟斤拷锟斤拷效
+    SciaRegs.SCICTL1.all = 0x0001;              // SCI软件复位，低有效
     SciaRegs.SCICTL2.all = 0x00C2;
     SciaRegs.SCICCR.all = 0x0087;               // 2 stop bit, No loopback, No parity,8 bits,async mode,idle-line
     SciaRegs.SCIPRI.bit.FREE = 1;
@@ -1781,78 +1880,114 @@ EDIS;
 
 //=====================================================================
 //
-// SCI通讯锟斤拷锟斤拷锟睫改猴拷锟斤拷
+// SCI通讯参数修改函数
 //
 //=====================================================================
+
+
 void UpdateSciFormat(void)
 {
     Uint16 digit[5];
     Uint16 tmp;
     static Uint16 commParityBak = 0;
-	// 锟斤拷锟酵ㄑ讹拷锟斤拷锟斤拷锟�
+    static Uint16 commBaudRateBak = 0;
+	// 获得通讯波特率
     GetNumberDigit1(digit, funcCode.code.commBaudRate);
-    //commType = MODBUS;     // 通讯锟斤拷锟斤拷
-    commType = 0;     // 通讯锟斤拷锟斤拷 MD DP CANOPEN 锟斤拷锟斤拷
+    //commType = MODBUS;     // 通讯类型
+    commType = 0;     // 通讯类型 MD DP CANOPEN 共用
     // 为PROFIBUS
-    if (funcCode.code.commProtocolSec == EXTEND_COM_CAR)          // CANOPEN锟斤拷Modbus锟斤拷锟斤拷
+    if (funcCode.code.commProtocolSec == EXTEND_COM_CAR)          // CANOPEN与Modbus兼容
     {
-		tmp = digit[1] + 9;  // 锟斤拷锟斤拷锟斤拷
+		tmp = digit[1] + 9;  // 波特率
     }
     // 为MODBUS
-    else 
+    else
     {
-		tmp = digit[commType]; // 锟斤拷锟斤拷锟斤拷
+		tmp = digit[commType]; // 波特率
     }
-    
-    // 锟斤拷锟酵ㄑ讹拷锟斤拷荽锟斤拷透锟绞�
+
+    // 获得通讯数据传送格式
     GetNumberDigit1(digit, funcCode.code.commProtocol);
     commProtocol = digit[commType];
-    
-	// 锟斤拷锟斤拷通讯锟斤拷锟斤拷锟侥硷拷
+
+    // 更新通讯配置文件
     protocolFunc[commType].UpdateCommFormat(dspBaudRegData[tmp].baudRate);
 
     commBaudRate = dspBaudRegData[tmp].baudRate;
-    
- // 锟斤拷锟街斤拷锟秸癸拷锟斤拷时锟斤拷锟斤拷
+
+    // 出现接收故障时处理
 #if DSP_2803X
+#ifdef TARGET_GS32
+    uint32_t nLinStatus;
+	LIN_getStatus(LINA_BASE, &nLinStatus);
+	/** 通讯模块出现故障复位 */
+	if ( (nLinStatus & LIN_USART_CHANNEL_NACK) ||
+		 (nLinStatus & LIN_USART_CHANNEL_PARE) ||
+		 (nLinStatus & LIN_USART_CHANNEL_FRAME_ERR) )
+#else
 	if ( LinaRegs.SCIFLR.bit.BRKDT
-        || LinaRegs.SCIFLR.bit.PE 
+        || LinaRegs.SCIFLR.bit.PE
         || LinaRegs.SCIFLR.bit.OE
         || LinaRegs.SCIFLR.bit.FE)
+#endif
 #else
-    if (SciaRegs.SCIRXST.bit.RXERROR)      
+    if (SciaRegs.SCIRXST.bit.RXERROR)
 #endif
     {
-        InitSetScia();   // 锟斤拷始锟斤拷SCI锟侥达拷锟斤拷
+        InitSetScia();   // 初始化SCI寄存器
     }
-#if DSP_2803X
+	if (funcCode.code.commProtocolSec == EXTEND_COM_CAR)
+	    {
+	    	// 无校验(8-N-1)
+	    }
+	    else
+	    {
+	    	if( (commParityBak != funcCode.code.commParity) ||
+	    		(commBaudRateBak != funcCode.code.commBaudRate)
+	    	)
+	    	{
+	    		LIN_initParam_t nLINinitParam = {0};
 
-EALLOW;
-    if (funcCode.code.commProtocolSec == EXTEND_COM_CAR)          // 锟斤拷校锟斤拷(8-N-1)
-        LinaRegs.SCIGCR1.all = (LinaRegs.SCIGCR1.all&0xFFFFFFE3)^commParitys[3];
-    else
-        LinaRegs.SCIGCR1.all = (LinaRegs.SCIGCR1.all&0xFFFFFFE3)^commParitys[funcCode.code.commParity];
-    
-    LinaRegs.BRSR.bit.SCI_LIN_PSH = dspBaudRegData[tmp].high;
-    LinaRegs.BRSR.bit.SCI_LIN_PSL = dspBaudRegData[tmp].low;
-    LinaRegs.BRSR.bit.M = dspBaudRegData[tmp].M;
-EDIS;
-    if(commParityBak != funcCode.code.commParity ) // 锟斤拷锟捷革拷式锟斤拷锟斤拷锟侥憋拷锟斤拷要锟斤拷始锟斤拷锟斤拷锟斤拷锟斤拷 8-N-1 锟叫伙拷锟斤拷8-E/O-1锟斤拷锟斤拷锟斤拷
-    {
-        InitSetScia();   // 锟斤拷始锟斤拷SCI锟侥达拷锟斤拷
-    }
-    commParityBak = funcCode.code.commParity;
-#else
-    if (funcCode.code.commProtocolSec == EXTEND_COM_CAR)
-        SciaRegs.SCICCR.all = commParitys[3];               // 锟斤拷校锟斤拷(8-N-1)
-    else
-        SciaRegs.SCICCR.all = commParitys[funcCode.code.commParity];
-    
-    SciaRegs.SCIHBAUD = dspBaudRegData[tmp].high;
-    SciaRegs.SCILBAUD = dspBaudRegData[tmp].low;
-    SciaRegs.SCICTL1.bit.SWRESET = 1;
-#endif
+	    		nLINinitParam.bit_order = LIN_TRANSFER_LSB;
+	    		nLINinitParam.char_length = LIN_CHAR_LENGTH_8BITS;
+	    		nLINinitParam.opmode = LIN_UART_MODE;
+	    		nLINinitParam.chl_mode = LIN_CHAL_NORMAL_MODE;
 
+	    		switch(funcCode.code.commParity)
+	    		{
+	    			case COMFORMAT_8N2:
+	    				nLINinitParam.stopbit = LIN_STOP_BIT_2;
+	    				nLINinitParam.parity = LIN_PARITY_NONE;
+					break;
+	    			case COMFORMAT_8E1:
+	    				nLINinitParam.stopbit = LIN_STOP_BIT_1;
+	    				nLINinitParam.parity = LIN_PARITY_EVEN;
+					break;
+	    			case COMFORMAT_8O1:
+	    				nLINinitParam.stopbit = LIN_STOP_BIT_1;
+	    				nLINinitParam.parity = LIN_PARITY_ODD;
+					break;
+	    			case COMFORMAT_8N1:
+	    				nLINinitParam.stopbit = LIN_STOP_BIT_1;
+	    				nLINinitParam.parity = LIN_PARITY_NONE;
+					break;
+	    		}
+	    	    volatile uint32 Lin_ClkDiv = SysCtl_getLinClkDiv();
+	    	    Lin_ClkDiv *= 2;
+
+	    		SysCtl_resetLin();
+
+	    		LIN_setBaudRate((uint32)&LinaRegs, DEVICE_PLLCLK_FREQ/Lin_ClkDiv, dspBaudRegData[tmp].baudRate * 100,
+	    						LIN_OP_ASYNC_MODE, LIN_OVERSAMP_16);
+
+	    	   	LIN_initModule((uint32)&LinaRegs, &nLINinitParam);
+
+	    		setRxConfig();
+
+	    	    commParityBak = funcCode.code.commParity;
+	    	    commBaudRateBak = funcCode.code.commBaudRate;
+	    	}
+	    }
 }
 
 
@@ -1865,10 +2000,12 @@ void InitSciaGpio(void)
     GpioCtrlRegs.GPAPUD.bit.GPIO15 = 0;		// Enable pull-up for GPIO15 (LIN RX)
     GpioCtrlRegs.GPAQSEL1.bit.GPIO15 = 3;  // Asynch input GPIO15 (LINRXA)
     GpioCtrlRegs.GPAQSEL1.bit.GPIO15 = 0x01;  // No qualification for all group A GPIO 0-15
-    GpioCtrlRegs.GPACTRL.bit.QUALPRD1 = 0x03;
+//    GpioCtrlRegs.GPACTRL.bit.QUALPRD1 = 0x03;
+    GpioCtrlRegs.GPACTRL.all &= ~(0xFF << 8);
+    GpioCtrlRegs.GPACTRL.all |= (0x03 << 8);
     GpioCtrlRegs.GPAMUX1.bit.GPIO14 = 2;   // Configure GPIO14 for LIN TX operation (2-Enable,0-Disable)
     GpioCtrlRegs.GPAMUX1.bit.GPIO15 = 2;   // Configure GPIO15 for LIN RX operation (2-Enable,0-Disable)
-    GpioCtrlRegs.GPBPUD.bit.GPIO39 = 0;    
+    GpioCtrlRegs.GPBPUD.bit.GPIO39 = 0;
     GpioCtrlRegs.GPBMUX1.bit.GPIO39 = 0;        // Configure GPIO39, RTS
     GpioCtrlRegs.GPBDIR.bit.GPIO39 = 1;         // output
     GpioDataRegs.GPBDAT.bit.GPIO39 = RS485_R;   // Receive
@@ -1877,7 +2014,8 @@ void InitSciaGpio(void)
     EALLOW;
     #ifdef TARGET_GS32
     Interrupt_register(INT_LINA, &Lina_Level0_ISR);
-    Interrupt_register(INT_LINB, &Lina_Level1_ISR);
+    Interrupt_SetPriority(INT_LINA, 3, 2);
+//    Interrupt_register(INT_LINB, &Lina_Level1_ISR);
     #else
     PieVectTable.LIN0INTA = &Lina_Level0_ISR;
     PieVectTable.LIN1INTA = &Lina_Level1_ISR;
@@ -1886,19 +2024,19 @@ void InitSciaGpio(void)
 	// IER |= M_INT9;   	                 // Enable interrupts:
     #ifdef TARGET_GS32
     Interrupt_enable(INT_LINA);
-    Interrupt_enable(INT_LINB);
+//    Interrupt_enable(INT_LINB);
     #else
 	PieCtrlRegs.PIEIER9.bit.INTx3=1;     // PIE Group 9, INT3
-	PieCtrlRegs.PIEIER9.bit.INTx4=1;     // PIE Group 9, INT4	
+	PieCtrlRegs.PIEIER9.bit.INTx4=1;     // PIE Group 9, INT4
     #endif
 #else
-    EALLOW;    
+    EALLOW;
     GpioCtrlRegs.GPAPUD.bit.GPIO28 = 0;    // Enable pull-up for GPIO28 (SCIRXDA)
     GpioCtrlRegs.GPAPUD.bit.GPIO29 = 0;    // Enable pull-up for GPIO29 (SCITXDA)
     GpioCtrlRegs.GPAQSEL2.bit.GPIO28 = 3;  // Asynch input GPIO28 (SCIRXDA)
     GpioCtrlRegs.GPAMUX2.bit.GPIO28 = 1;   // Configure GPIO28 for SCIRXDA operation
     GpioCtrlRegs.GPAMUX2.bit.GPIO29 = 1;   // Configure GPIO29 for SCITXDA operation
-    GpioCtrlRegs.GPAPUD.bit.GPIO27 = 0;    
+    GpioCtrlRegs.GPAPUD.bit.GPIO27 = 0;
     GpioCtrlRegs.GPAMUX2.bit.GPIO27 = 0;        // Configure GPIO27, RTS
     GpioCtrlRegs.GPADIR.bit.GPIO27 = 1;         // output
     GpioDataRegs.GPADAT.bit.GPIO27 = RS485_R;   // Receive
@@ -1921,8 +2059,8 @@ void InitSciaGpio(void)
 	PieCtrlRegs.PIEIER9.bit.INTx1 = 1;
 	PieCtrlRegs.PIEIER9.bit.INTx2 = 1;
     #endif
- #endif   
-	
+ #endif
+
 }
 #endif  // #if F_DEBUG_RAM
 

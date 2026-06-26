@@ -20,9 +20,7 @@
 #include "f_plc.h"
 #include "f_p2p.h"
 
-
-
-#define DEBUG_F_CANLINK              0
+#define DEBUG_F_CANLINK              1
 
 
 #if DEBUG_F_CANLINK
@@ -168,7 +166,7 @@ Uint32 canTxSucc;
 Uint16 CanlinkDataTran(CANlinkDataBuf *dataPi, Uint16 len, Uint16 timeOut)
 {
 	Uint16 stat, i;
-    timeOut = timeOut;
+    timeOut = timeOut<<0;
     
 	for (i=0; i<TRAN_MBOX_NUM; i++)
 	{
@@ -545,6 +543,10 @@ void CanlinkFun(void)
         return;
 #endif
 	
+#ifdef TARGET_GS32
+        ErroCountReset();
+#endif
+
 #if DEBUG_F_PLC_CTRL
     if (funcCode.code.plcEnable)                            // 使用PLC卡
     {
@@ -712,8 +714,11 @@ void CanlinkFun(void)
     if (++recCanCountTime >=  (1000/2)) // 1s
    	{
         funcCode.group.u3[0] = recCanCout;
+#ifdef TARGET_GS32
+#else
 		funcCode.group.u3[1] = ECanaRegs.CANTEC.bit.TEC; //发送错误计数器
 		funcCode.group.u3[2] = ECanaRegs.CANREC.bit.REC; //接收错误计数器
+#endif
 		recCanCout = 0;
 		recCanCountTime = 0;
 	}
@@ -751,7 +756,10 @@ void CanLlinkDataDeal(CANlinkDataBuf *dataPi)
 			break;
             
 		case CAN_PLC_DATA_FRAME:						    // PLC卡数据帧处理
+#ifdef TARGET_GS32
+#else
 			PlcDataFramDeal(dataPi);
+#endif
 			break;
             
 		case CANLINK_DATA_FRAME:						    // CANlink数据帧处理
@@ -1071,11 +1079,17 @@ void CanLinkCommDeal(CANlinkDataBuf *dataPi)
     // PLC卡CAN相关命令
 
     		case CAN_TRAN_TAB_CFG:								// PLC卡发送表配置
+#ifdef TARGET_GS32
+#else
     			err = InvTranTabCfg(dataPi);
+#endif
     //			len = 4;
     			break;
     		case CAN_REC_TAB_CFG:								// PLC卡接收表配置
+#ifdef TARGET_GS32
+#else
     			err = InvRecTabCfg(dataPi);
+#endif
     //			len = 4;
     			break;
     /*
@@ -1576,9 +1590,8 @@ void CANlinkReset(void)
     ClrCanSendBuf();                                        // 清空发送缓存
 #if DEBUG_F_MSC_CTRL
     if(!MasterSlaveCtrl.MSCEnable)
-#endif 
     CANlinkRunMode = CANLINK_SAFE_MODE;                     // 复位运行模式
-
+#endif 
 }
 
 

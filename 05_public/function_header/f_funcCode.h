@@ -300,7 +300,7 @@ union PG_PARA
 //=================================
 
 //=================================
-enum MOTOR_SN	: uint16_t
+enum MOTOR_SN	:uint16_t
 {
     MOTOR_SN_1,     // 第1电机
     MOTOR_SN_2      // 第2电机

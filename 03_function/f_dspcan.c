@@ -3,14 +3,14 @@
 * Author             : Yanyi	
 * Version            : V0.0.1
 * Date               : 08/09/2010
-* Description        : DSP CAN锟斤拷锟竭底诧拷锟斤拷锟斤拷锟斤拷
+* Description        : DSP CAN���ߵײ�������
 *                    : 2013/02/27
-                                锟睫改底诧拷硬锟斤拷为锟叫断斤拷锟秸凤拷式
-* 锟睫革拷                 1012 20130301 V3.02 锟睫改碉拷远锟斤拷锟斤拷锟街★拷锟斤拷卸锟斤拷诠锟斤拷耍锟斤拷锟街癸拷锟皆讹拷锟斤拷锟斤拷锟斤拷锟�
+                                �޸ĵײ�Ӳ��Ϊ�жϽ��շ�ʽ
+* �޸�                 1012 20130301 V3.02 �޸ĵ�Զ�����֡���ж��ڹ��ˣ���ֹ��Զ��������
                                 
 ********************************************************************************/
 //#include "DSP28x_Project.h"     							// DSP2803x Headerfile Include File	
-//#include "main.h"											// 锟斤拷锟斤拷头锟侥硷拷
+//#include "main.h"											// ����ͷ�ļ�
 
 #include "f_funcCode.h"
 #include "f_dspcan.h"
@@ -18,497 +18,593 @@
 
 
 
-#define DEBUG_F_CAN              0
-
+#define DEBUG_F_CAN              1
 
 
 #if DEBUG_F_CAN
 
-#if (DSP_CLOCK == 100)                                      // CAN锟斤拷锟斤拷锟斤拷使锟斤拷锟斤拷时锟接ｏ拷KHz锟斤拷位
-	#define		DSPCAN_CLK		100000                      // 2808   100M
-#else
-	#define		DSPCAN_CLK		30000                       // 28035   30M
-#endif
+transmit_mailbox tran_mail_inst[TRAN_SIZE] = {0};
+MCAN_TxMessage_t tran_buffer   [TRAN_SIZE] = {0};
+receive_mailbox  rec_mail_inst [REC_SIZE]  = {0};
+MCAN_RxMessage_t rec_buffer    [REC_SIZE]  = {0};
+
+// ȫ�ֱ���
+volatile uint32_t mcan_bus_off_flag;  // MCAN Bus Off ״̬��־
+volatile uint32_t mailbox_flag;       // bit 0:1 = ����/���� ��־
+volatile uint32_t rec_mailbox_en;     // ��������ʹ��λͼ
+volatile uint32_t tran_mailbox_en;    // ��������ʹ��λͼ
+
+uint32_t swap_uint32(uint32_t vlaue); // ���� uint32_t �ֽ���
+void pre_init_mailbox_buffer(void);   // Ԥ�ȳ�ʼ�����仺����
+__interrupt void eCanRxIsr(void);                  // can�����ж�
+
+RAM_FUNC_T
+uint32_t swap_uint32(uint32_t vlaue){
+        return  ((vlaue & 0x000000FF) << 24) |
+                        ((vlaue & 0x0000FF00) << 8)  |
+                        ((vlaue & 0x00FF0000) >> 8)  |
+                        ((vlaue & 0xFF0000FF) >> 24) ;
+}
+
+void pre_init_mailbox_buffer(void){
+        for(uint32_t i = 0; i < TRAN_SIZE; i++){
+                tran_mail_inst[i].mailbox_id = TRAN_BOX_N - i;
+                tran_mail_inst[i].inst = &tran_buffer[i];
+        }
+
+        for(uint32_t i = 0; i < REC_SIZE; i++){
+                rec_mail_inst [i].mailbox_id = REC_BOX_N - i;
+                rec_mail_inst [i].rec_flag = 0;
+                rec_mail_inst [i].inst = &rec_buffer[i];
+        }
+}
+
+// MCAN ��Ϣ RAM ���� (�� 4096 �ֽ�)
+/******************************* START DEFINES ***********************************/
+#define M_CAN_MSG_MAX_LENGTH                MCAN_ELEM_SIZE_8BYTES
+#define M_CAN_MSG_BUFFER_SIZE                (MCAN_getMsgObjSize(M_CAN_MSG_MAX_LENGTH) + 12U)
+
+#define M_CAN_RAM_BASE_ADDR                                0U
+#define M_CAN_STANDARD_FILTER_BASE_ADDR        M_CAN_RAM_BASE_ADDR
+#define M_CAN_STANDARD_FILTER_NUM                (4U)
+#define M_CAN_STANDARD_FILTER_SIZE                (4U)
+
+/* Note: The size of all memory regions cannot exceed 4096 bytes. */
+#define M_CAN_EXTENDED_FILTER_BASE_ADDR        (M_CAN_STANDARD_FILTER_BASE_ADDR + \
+                                                (M_CAN_STANDARD_FILTER_NUM * \
+                                                 M_CAN_STANDARD_FILTER_SIZE))
+#define M_CAN_EXTENDED_FILTER_NUM                (1U)
+#define M_CAN_EXTENDED_FILTER_SIZE                (8U)
+
+#define M_CAN_RXFIFO0_BASE_ADDR                    (M_CAN_EXTENDED_FILTER_BASE_ADDR + \
+                                                    (M_CAN_EXTENDED_FILTER_NUM * \
+                                                     M_CAN_EXTENDED_FILTER_SIZE))
+#define M_CAN_RXFIFO0_NUM                            (8U)
+#define M_CAN_RXFIFO0_SIZE                           (M_CAN_MSG_BUFFER_SIZE)
+
+#define M_CAN_RXFIFO1_BASE_ADDR                    (M_CAN_RXFIFO0_BASE_ADDR + \
+                                                    (M_CAN_RXFIFO0_NUM * \
+                                                     M_CAN_RXFIFO0_SIZE))
+#define M_CAN_RXFIFO1_NUM                                (8U)
+#define M_CAN_RXFIFO1_SIZE                                (M_CAN_MSG_BUFFER_SIZE)
+
+#define M_CAN_RXBUFFER_BASE_ADDR                (M_CAN_RXFIFO1_BASE_ADDR + \
+                                                (M_CAN_RXFIFO1_NUM * \
+                                                 M_CAN_RXFIFO1_SIZE))
+#define M_CAN_RXBUFFER_NUM                                (8U)
+#define M_CAN_RXBUFFER_SIZE                                (M_CAN_MSG_BUFFER_SIZE)
+
+#define M_CAN_TXEVENTFIFO_BASE_ADDR                (M_CAN_RXBUFFER_BASE_ADDR + \
+                                                    (M_CAN_RXBUFFER_NUM * \
+                                                     M_CAN_RXBUFFER_SIZE))
+#define M_CAN_TXEVENTFIFO_NUM                        (10U)
+#define M_CAN_TXEVENTFIFO_SIZE                        (M_CAN_TX_EVENT_FIFO_SIZE)
+
+#define M_CAN_TXBUFFER_BASE_ADDR                (M_CAN_TXEVENTFIFO_BASE_ADDR + \
+                                                    (M_CAN_TXEVENTFIFO_NUM * \
+                                                     M_CAN_TXEVENTFIFO_SIZE))
+#define M_CAN_TXBUFFER_NUM                                (4U)
+#define M_CAN_TXBUFFER_SIZE                                (M_CAN_MSG_BUFFER_SIZE)
+
+#define M_CAN_TXFIFOQUEUE_BASE_ADDR                (M_CAN_TXBUFFER_BASE_ADDR + \
+                                                    (M_CAN_TXBUFFER_NUM * \
+                                                     M_CAN_TXBUFFER_SIZE))
+#define M_CAN_TXFIFOQUEUE_NUM                        (6U)
+#define M_CAN_TXFIFOQUEUE_SIZE                        (M_CAN_MSG_BUFFER_SIZE)
+// �ܼ�: 784 �ֽ� / 4096 �ֽ�
 
 const	CAN_BAUD	eCanBaud[CAN_BAUD_SUM] = {
-									{(DSPCAN_CLK/20/20)-1, 2, 15},	// 20Kbps	
-									{(DSPCAN_CLK/20/50)-1, 2, 15},	// 50Kbps		
-									{(DSPCAN_CLK/20/100)-1, 2, 15},	// 100Kbps	
-									{(DSPCAN_CLK/20/125)-1, 2, 15},	// 125Kbps		3+14+ 2 +1 = 20
-									{(DSPCAN_CLK/20/250)-1, 2, 15},	// 250Kbps		3+14+ 2 +1 = 20
-									{(DSPCAN_CLK/20/500)-1, 2, 15},	// 500Kbps		2+15+ 2 +1 = 20  85%
-								#if (DSPCAN_CLK == 100000)
-                                    {(DSPCAN_CLK/20/1000)-1, 2, 15}
-                                #else
-									{(DSPCAN_CLK/15/1000)-1, 1, 11} //  1Mbps		1+11+ 2 +1 = 15  86.67%
-					    		#endif
-								};
+										// GS32: CAN ģ��ʱ�ӹ̶� 40MHz (�� SysCtl_setCanClkDiv ����)const CAN_BAUD eCanBaud[CAN_BAUD_SUM] = {
+											{50,  7, 30},   // 20Kbps  (40MHz/50/40 = 20K)
+											{20,  7, 30},   // 50Kbps  (40MHz/20/40 = 50K)
+											{10,  7, 30},   // 100Kbps (40MHz/10/40 = 100K)
+											{8,   7, 30},   // 125Kbps (40MHz/8/40  = 125K)
+											{4,   7, 30},   // 250Kbps (40MHz/4/40  = 250K)
+											{2,   7, 30},   // 500Kbps (40MHz/2/40  = 500K)
+											{1,   7, 30},   // 1Mbps   (40MHz/1/40  = 1M)
+									};
+				// ��ʽ: 40MHz / BRP / (TSEG1+TSEG2+3)// NBRP = BRP-1 = 49, 19, 9, 7, 3, 1, 0// TSEG1=30, TSEG2=7 �� SyncSeg(1) + TSEG1(30) + TSEG2(7) = 38 TQ �� ������Լ 81.6%
 
 Uint32 eCanTranEnFlag;// = 0;
 Uint32 eCanReEnFlag;// = 0;
 
 /*******************************************************************************
-* 锟斤拷锟斤拷锟斤拷锟斤拷          : interrupt void eCanRxIsr(void)
-* 锟斤拷诓锟斤拷锟�			: 锟斤拷
-* 锟斤拷锟斤拷				锟斤拷
-* 锟斤拷锟斤拷	            : 	
-* 锟芥本		        : V0.0.1
-* 时锟斤拷              : 01/30/2013
-* 说锟斤拷				: eCan锟叫断凤拷式锟斤拷锟斤拷锟斤拷锟捷碉拷锟斤拷锟斤拷
+* ��������          : interrupt void eCanRxIsr(void)
+* ��ڲ���                        : ��
+* ����                                ��
+* ����                    :
+* �汾                        : V0.0.1
+* ʱ��              : 01/30/2013
+* ˵��                                : eCan�жϷ�ʽ�������ݵ�����
 ********************************************************************************/
 Uint32 recCanCout;
-#ifdef TARGET_GS32
+volatile DspCanDataStru temp_buf;
+RAM_FUNC_T
 __interrupt void eCanRxIsr(void)
-#else
-interrupt void eCanRxIsr(void)
-#endif
 {
-#ifdef TARGET_GS32
-    SAVE_IRQ_CSR_CONTEXT();
-#endif
-    Uint16 i, mbox, dataTy;
-    Uint32 *pi;
+        SAVE_IRQ_CSR_CONTEXT();
+        uint16_t i, dataTy;
     DspCanDataStru *data;
 
-    mbox = ECanaRegs.CANGIF0.bit.MIV0;                      // 锟斤拷取锟叫讹拷锟斤拷锟斤拷锟�
+        uint32_t interrupt_status;
+        MCAN_RxMessage_t RxMessageBuf;
+        MCAN_RxNewDataStatus_t new_dat;
+        MCAN_RxFIFOStatus_t fifoStatus;
+        MCAN_ErrCntStatus_t errCounter;
+        MCAN_ProtocolStatus_t protocolStatus;
+
+        interrupt_status = MCAN_getIntrStatus(CAN_BASE);
 
     for (i=0; i<REC_MBOX_NUM-1; i++)
     {
-        if ( (CanlinkRecBuf.bufFull & (1<<i) ) == 0)        // 锟叫断碉拷前锟斤拷锟斤拷眨锟斤拷锟斤拷锟�
+        if ( (CanlinkRecBuf.bufFull & (1<<i) ) == 0)        // �жϵ�ǰ����գ�����
             break;
     }
-    recCanCout++;
-    data = (DspCanDataStru *)(& (CanlinkRecBuf.buf[i]) );   
 
-    pi = (Uint32 *)(&ECANMBOXES.MBOX0.MSGID);			
-    data->msgid = pi[mbox<<2];							    //  锟斤拷ID锟斤拷锟斤拷锟斤拷锟斤拷
-    data->data.mdl= pi[(mbox<<2) + 2];	
-    data->data.mdh = pi[(mbox<<2) + 3];
-    data->len= pi[(mbox<<2) + 1] & 0xf;                     // 锟斤拷取锟斤拷锟斤拷锟斤拷锟捷筹拷锟斤拷
+    recCanCout++;
+    data = (DspCanDataStru *)(& (CanlinkRecBuf.buf[i]) );
+
+        if (interrupt_status & MCAN_INT_SRC_RxFIFO0_NEW_MSG) {
+                MCAN_receiveMsgFromFifo0(CAN_BASE, &RxMessageBuf);
+
+                fifoStatus.num = MCAN_RX_FIFO_NUM_0;
+                MCAN_getRxFIFOStatus(CAN_BASE, &fifoStatus);
+
+                if (fifoStatus.fillLvl == 0)
+                        MCAN_clearIntrStatus(CAN_BASE, MCAN_INT_SRC_RxFIFO0_NEW_MSG);
+        }
+
+        if (interrupt_status & MCAN_INT_SRC_BUS_OFF_STATUS) {
+                MCAN_getErrCounters(CAN_BASE, &errCounter);
+                MCAN_getProtocolStatus(CAN_BASE, &protocolStatus);
+                mcan_bus_off_flag = 1;
+                MCAN_clearIntrStatus(CAN_BASE, MCAN_INT_SRC_BUS_OFF_STATUS);
+        }
+
+        // ��MCAN ��ȡ������ ��װ�� user �ṹ��
+        temp_buf.len =          RxMessageBuf.dlc;
+        temp_buf.msgid = RxMessageBuf.id;
+        memcpy(&temp_buf.data.mdl, &RxMessageBuf.data[0], 4);
+        memcpy(&temp_buf.data.mdh, &RxMessageBuf.data[4], 4);
+
+    data->msgid = temp_buf.msgid;                                   //  ��ID��������
+    data->data.mdl = swap_uint32(temp_buf.data.mdl);
+    data->data.mdh = swap_uint32(temp_buf.data.mdh);
+    data->len= temp_buf.len & 0xf;                                 // ��ȡ�������ݳ���
 
     dataTy = P2bFilte(data->msgid);
-    if (dataTy)                                             // 锟秸碉拷锟斤拷远锟斤拷锟斤拷锟�
+    if (dataTy)                                                     // �յ���Զ�����
     {
         if (dataTy == 0xcc)
-            CanlinkRecBuf.bufFull |= (1<<i);                // 锟矫斤拷锟秸伙拷锟斤拷 
+            CanlinkRecBuf.bufFull |= (1<<i);                        // �ý��ջ���
     }
     else
-        CanlinkRecBuf.bufFull |= (1<<i);                    // 锟矫斤拷锟秸伙拷锟斤拷
+        CanlinkRecBuf.bufFull |= (1<<i);                            // �ý��ջ���
 
-    ECANREGS.CANRMP.all = 1ul<<mbox;				        // 锟斤拷锟斤拷锟较拷锟斤拷锟侥达拷锟斤拷
-
-    ECANREGS.CANGIF0.all = 0xffffffff;                      // 锟斤拷锟斤拷锟斤拷锟斤拷卸媳锟街�
-    ECANREGS.CANGIF1.all = 0xffffffff;    
-#ifdef TARGET_GS32
-    
-#else
-    PieCtrlRegs.PIEACK.bit.ACK9 = 1;                        // Issue PIE ACK
-#endif
-#ifdef TARGET_GS32
     RESTORE_IRQ_CSR_CONTEXT();
-#endif
 }
-
 /*******************************************************************************
-* 锟斤拷锟斤拷锟斤拷锟斤拷          : void DisableDspCAN(void)
-* 锟斤拷诓锟斤拷锟�			: 锟斤拷
-* 锟斤拷锟斤拷				锟斤拷
-* 锟斤拷锟斤拷	            : 	
-* 锟芥本		        : V0.0.1
-* 时锟斤拷              : 07/29/2010
-* 说锟斤拷				: 锟斤拷止DSP Ecan锟接匡拷
+* ��������          : void DisableDspCAN(void)
+* ��ڲ���			: ��
+* ����				��
+* ����	            :
+* �汾		        : V0.0.1
+* ʱ��              : 07/29/2010
+* ˵��				: ��ֹDSP Ecan�ӿ�
 ********************************************************************************/
 void DisableDspCAN(void)
 {
-	struct ECAN_REGS ECanaShadow;							// 锟斤拷锟斤拷一锟斤拷影锟接寄达拷锟斤拷锟斤拷某些锟侥达拷锟斤拷只锟斤拷使锟斤拷32位锟斤拷锟斤拷
-    ECANREGS.CANTRR.all	= 0xFFFFFFFF;                       // 取锟斤拷锟斤拷锟节斤拷锟叫的凤拷锟斤拷
-    EALLOW;
-	ECanaShadow.CANMC.all = ECANREGS.CANMC.all;			    // 锟斤拷取CAN锟斤拷锟斤拷锟狡寄达拷锟斤拷
-	ECanaShadow.CANMC.bit.CCR = 1;						    // CPU锟斤拷锟斤拷锟睫改诧拷锟斤拷锟绞伙拷全锟斤拷锟斤拷锟轿寄达拷锟斤拷
-	ECANREGS.CANMC.all = ECanaShadow.CANMC.all;			    // 锟斤拷写锟斤拷锟狡寄达拷锟斤拷
-	EDIS;
+	SysCtl_disablePeripheral(SYSCTL_PERIPH_CLK_CAN);
 }
 
 /*******************************************************************************
-* 锟斤拷锟斤拷锟斤拷锟斤拷          : Uint16 InitdspECan(Uint16 baud)
-* 锟斤拷诓锟斤拷锟�			: CAN锟接口诧拷锟斤拷锟绞憋拷锟� (eCanBaud锟斤拷锟斤拷)
-* 锟斤拷锟斤拷				锟斤拷CAN_INIT_TIME	 锟斤拷始锟斤拷锟斤拷锟斤拷锟斤拷
-*					  CAN_INIT_SUCC  锟斤拷始锟斤拷锟缴癸拷
-*					  CAN_INIT_TIMEOUT 锟斤拷始锟斤拷锟斤拷时
-*					  CAN_INIT_BAUD_ERR 锟斤拷锟斤拷锟绞筹拷锟斤拷
-* 锟斤拷锟斤拷	            : 	
-* 锟芥本		        : V0.0.1
-* 时锟斤拷              : 07/29/2010
-* 说锟斤拷				: 锟斤拷始锟斤拷DSP Ecan锟接匡拷
+* ��������          : Uint16 InitdspECan(Uint16 baud)
+* ��ڲ���                        : CAN�ӿڲ����ʱ�� (eCanBaud����)
+* ����                                ��CAN_INIT_TIME         ��ʼ��������
+*                                          CAN_INIT_SUCC  ��ʼ���ɹ�
+*                                          CAN_INIT_TIMEOUT ��ʼ����ʱ
+*                                          CAN_INIT_BAUD_ERR �����ʳ���
+* ����                    :
+* �汾                        : V0.0.1
+* ʱ��              : 07/29/2010
+* ˵��                                : ��ʼ��DSP Ecan�ӿ�
 ********************************************************************************/
-#define		IINIT_CAN_TIME				3
-Uint16 InitdspECan(Uint16 baud)		// Initialize eCAN-A module
+#define                IINIT_CAN_TIME                                3
+Uint16 InitdspECan(Uint16 baud)                // Initialize eCAN-A module
 {
-	struct ECAN_REGS ECanaShadow;							// 锟斤拷锟斤拷一锟斤拷影锟接寄达拷锟斤拷锟斤拷某些锟侥达拷锟斤拷只锟斤拷使锟斤拷32位锟斤拷锟斤拷
-	Uint32 *MsgCtrlPi;										// 锟斤拷始锟斤拷锟斤拷锟斤拷指锟斤拷
-	Uint16	i;												// 循锟斤拷锟斤拷锟斤拷
-	static	Uint16 con = 0;
-	static	Uint16 count = 0;								// 锟斤拷时锟斤拷锟斤拷锟斤拷
-	
-	if (baud >= CAN_BAUD_SUM)
-		return CAN_INIT_BAUD_ERR;							// 锟斤拷锟斤拷锟绞筹拷锟斤拷
-	if (count > IINIT_CAN_TIME)								// 锟斤拷始锟斤拷锟斤拷时锟斤拷锟斤拷
-    {
-    	con = 0;
-    	count = 0;
-		return  CAN_INIT_TIMEOUT;        
-    }
-
-	
-	EALLOW;
-	if (con == 0)
-	{
-		GpioCtrlRegs.GPAPUD.bit.GPIO30 = 0;	    // Enable pull-up for GPIO30 (CANRXA)
-		GpioCtrlRegs.GPAPUD.bit.GPIO31 = 0;	    // Enable pull-up for GPIO31 (CANTXA)
-
-	/* Set qualification for selected CAN pins to asynch only */
-	// Inputs are synchronized to SYSCLKOUT by default.  
-	// This will select asynch (no qualification) for the selected pins.
-
-		GpioCtrlRegs.GPAQSEL2.bit.GPIO30 = 3;   // Asynch qual for GPIO30 (CANRXA)   
-
-	/* Configure eCAN-A pins using GPIO regs*/
-	// This specifies which of the possible GPIO pins will be eCAN functional pins.
-
-		GpioCtrlRegs.GPAMUX2.bit.GPIO30 = 1;	// Configure GPIO30 for CANTXA operation
-		GpioCtrlRegs.GPAMUX2.bit.GPIO31 = 1;	// Configure GPIO31 for CANRXA operation
-	
-	/* Configure eCAN RX and TX pins for eCAN transmissions using eCAN regs*/  
-		ECANREGS.CANTIOC.bit.TXFUNC = 1;
-		ECANREGS.CANRIOC.bit.RXFUNC = 1;  
-
-	/* Configure eCAN for HECC mode - (reqd to access mailboxes 16 thru 31) */
-										// HECC mode also enables time-stamping feature
-		ECanaShadow.CANMC.all = 0;
-		ECanaShadow.CANMC.bit.SRES = 1;
-		ECANREGS.CANMC.all = ECanaShadow.CANMC.all;			// 锟斤拷锟斤拷锟斤拷位CAN模锟斤拷
-		
-		ECanaShadow.CANMC.all = ECANREGS.CANMC.all;			// 锟斤拷取CAN锟斤拷锟斤拷锟狡寄达拷锟斤拷
-		ECanaShadow.CANMC.bit.SCB = 1;						// eCAN模式				
-		ECanaShadow.CANMC.bit.SUSP = 1;						// 锟斤拷锟借不锟杰碉拷锟斤拷影锟斤拷
-//		ECanaShadow.CANMC.bit.DBO = 1;						// 锟斤拷锟斤拷 锟斤拷锟斤拷锟叫� 锟斤拷锟街斤拷锟斤拷前 使锟矫达拷锟侥Ｊ�
-		ECanaShadow.CANMC.bit.CCR = 1;						// CPU锟斤拷锟斤拷锟睫改诧拷锟斤拷锟绞伙拷全锟斤拷锟斤拷锟轿寄达拷锟斤拷
-		ECanaShadow.CANMC.bit.ABO = 1;						// 锟皆讹拷锟街革拷锟斤拷锟斤拷使锟斤拷
-		ECANREGS.CANMC.all = ECanaShadow.CANMC.all;			// 锟斤拷写锟斤拷锟狡寄达拷锟斤拷
-		
-	/* Initialize all bits of 'Master Control Field' to zero */
-	// Some bits of MSGCTRL register come up in an unknown state. For proper operation,
-	// all bits (including reserved bits) of MSGCTRL must be initialized to zero
-		MsgCtrlPi = (Uint32 *)(&ECANMBOXES.MBOX0.MSGCTRL);	// 锟斤拷息锟斤拷锟斤拷锟斤拷指锟斤拷
-		for (i=0; i<32; i++)
-		{
-			MsgCtrlPi[i<<2] = 0x00000000;					// 锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷息锟斤拷锟狡寄达拷锟斤拷
-		}
-		MsgCtrlPi = (Uint32 *)(&ECANLAMS.LAM0);				// 息锟斤拷锟斤拷锟斤拷指锟斤拷
-		for (i=0; i<32; i++)								// 锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷渭拇锟斤拷锟�
-		{
-			MsgCtrlPi[i] = 0x00000000;						// 
-		}
-		
-	/* 
-		ECanaMboxes.MBOX0.MSGCTRL.all = 0x00000000;
-		..........
-		ECanaMboxes.MBOX31.MSGCTRL.all = 0x00000000;
-	*/    
-	// TAn, RMPn, GIFn bits are all zero upon reset and are cleared again
-	//	as a matter of precaution. 
-		ECANREGS.CANTRR.all	= 0xFFFFFFFF;					// 锟斤拷位锟斤拷锟斤拷锟斤拷锟斤拷取锟斤拷锟斤拷锟节斤拷锟叫的凤拷锟斤拷
-		ECANREGS.CANTA.all	= 0xFFFFFFFF;					// 锟斤拷锟姐发锟斤拷锟斤拷应锟侥达拷锟斤拷/* Clear all TAn bits */      
-		ECANREGS.CANRMP.all = 0xFFFFFFFF;					// 锟斤拷锟斤拷锟斤拷息锟斤拷锟斤拷拇锟斤拷锟�/* Clear all RMPn bits */      
-		ECANREGS.CANGIF0.all = 0xFFFFFFFF;					// 全锟斤拷锟叫断憋拷志/* Clear all interrupt flag bits */ 
-		ECANREGS.CANGIF1.all = 0xFFFFFFFF;
-		ECANREGS.CANOPC.all = 0;							// 锟斤拷锟斤拷锟斤拷锟斤拷杀锟斤拷锟斤拷锟�
-	/* Configure bit timing parameters for eCANA
-		ECanaShadow.CANMC.all = ECANREGS.CANMC.all;
-		ECanaShadow.CANMC.bit.CCR = 1 ;            			// CPU锟斤拷锟斤拷锟睫改诧拷锟斤拷锟绞伙拷全锟斤拷锟斤拷锟轿寄达拷锟斤拷
-		ECANREGS.CANMC.all = ECanaShadow.CANMC.all;
-	*/	
-		con = 1;											// 锟斤拷一锟阶讹拷锟斤拷锟�
-	}
-    if (con == 1)
-	{
-		ECanaShadow.CANES.all = ECANREGS.CANES.all;
-		if (ECanaShadow.CANES.bit.CCE == 0 ) 				// Wait for CCE bit to be set..
-		{
-			count++;
-			EDIS;
-			return CAN_INIT_TIME;							// 锟斤拷始锟斤拷锟斤拷锟斤拷锟斤拷
-		}
-		else
-			con = 2;
-	}
-	
-    if (con == 2)
-	{
-		ECanaShadow.CANBTC.all = 0;                         // 锟斤拷始锟斤拷锟斤拷锟斤拷锟斤拷
-		ECanaShadow.CANBTC.bit.BRPREG = eCanBaud[baud].BRPREG;
-		ECanaShadow.CANBTC.bit.TSEG2REG = eCanBaud[baud].TSEG2REG;
-		ECanaShadow.CANBTC.bit.TSEG1REG = eCanBaud[baud].TSEG1REG; 
-		ECanaShadow.CANBTC.bit.SAM = 0;                     // 锟斤拷位锟斤拷锟斤拷
-		ECANREGS.CANBTC.all = ECanaShadow.CANBTC.all;
-		
-		ECanaShadow.CANMC.all = ECANREGS.CANMC.all;
-		ECanaShadow.CANMC.bit.CCR = 0 ;            			// 锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟� Set CCR = 0
-		ECANREGS.CANMC.all = ECanaShadow.CANMC.all;
-		con = 3;
-    }
-	if (con == 3)
-	{
-		ECanaShadow.CANES.all = ECANREGS.CANES.all;
-		if (ECanaShadow.CANES.bit.CCE != 0 ) 				// Wait for CCE bit to be  cleared..
-		{
-			count++;
-			EDIS;
-			return CAN_INIT_TIME;		
-		}
-	}
-    ECANREGS.CANAA.all = 0xffffffff;
-/* Disable all Mailboxes  */
-
-	con = 0;
-	count = 0;
- 	ECANREGS.CANME.all = 0;									// Required before writing the MSGIDs
-
-    EDIS;
-
-// 锟斤拷锟斤拷锟叫断筹拷始锟斤拷
     EALLOW;
-	#ifdef TARGET_GS32
-	interrupt_disable(INT_CANA0);
-	#else
-    PieCtrlRegs.PIEIER9.bit.INTx5 = 0;                      // 锟斤拷止锟叫讹拷
-    #endif
-	ECanaRegs.CANGIM.all = 0;
-    ECanaRegs.CANMIM.all = 0;                               // 锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟叫讹拷
-    
-    ECanaRegs.CANGIF0.all = 0xffffffff;
-    ECanaRegs.CANGIF1.all = 0xffffffff;                     // 锟斤拷锟斤拷卸锟
+    static        Uint16 con = 0;                                                                        // �����ʶ
+    static        Uint16 count = 0;                                                                // ��ʱ������
 
-    ECanaRegs.CANMIL.all = 0;                               // 选锟斤拷EcanA锟叫讹拷0
-    ECanaRegs.CANGIM.all = 1;                               // 使锟斤拷锟叫讹拷0
+    MCAN_InitParams_t                    init_param    = { 0 };
+    MCAN_ConfigParams_t                  configParams  = { 0 };
+    MCAN_MsgRAMConfigParams_t            RAMConfig     = { 0 };
+    MCAN_BitTimingParams_t               configBitrate = { 0 };
+    MCAN_StdMsgIDFilterElement_t         std_filter    = { 0 };
+    MCAN_ExtMsgIDFilterElement_t         ext_filter    = { 0 };
 
-	#ifdef TARGET_GS32
-	Interrupt_register(INT_CANA0, &eCanRxIsr);
-	#else
-	PieVectTable.ECAN0INTA = &eCanRxIsr;                    // CANA 0卸
-	#endif
+    if (baud >= CAN_BAUD_SUM)                                                                // �����ʳ���
+        return CAN_INIT_BAUD_ERR;
+
+    if (count > IINIT_CAN_TIME)                                                                // ��ʼ����ʱ����
+    {
+        con   = 0;
+        count = 0;
+        return  CAN_INIT_TIMEOUT;
+    }
+
+    if (con == 0)
+    {        // ��ʼ��CAN���Ÿ���
+        GPIO_setPinConfig(CAN_TX_PIN);
+        GPIO_setPinConfig(CAN_RX_PIN);
+        con = 1;                                                                                        // ��һ�׶����
+    }
+
+    if (con == 1)
+    {  // ��ʼ��CAN�������
+        /* Select the MCAN clock source. */
+        SysCtl_enablePeripheral(SYSCTL_PERIPH_CLK_CAN);
+        SysCtl_setCanClkSrcSel(CAN_CLK_TYPE_PLL);
+        SysCtl_setCanClkDiv(DEVICE_PLLCLK_FREQ / 40000000U);
+        SysCtl_resetCana();
+/**************************** init_param ****************************/
+        /* CAN mode configuration. */
+        init_param.fdMode = false;
+        init_param.fdFormat = MCAN_FD_ISO_11898_1;
+        init_param.brsEnable = false;
+        init_param.txpEnable = false;
+        init_param.efbi = false;
+        init_param.pxhddisable = false;
+        /* Enable the auto retransmission. */
+        init_param.darEnable = true;
+        init_param.wkupReqEnable = false;
+        init_param.autoWkupEnable = false;
+        init_param.emulationEnable = false;
+        init_param.wdcPreload = false;
+        init_param.wmMarker = MCAN_WMM_8BIT_MODE;
+        init_param.tdcEnable = false;
+        init_param.tdcConfig.tdcf = 0U;
+        init_param.tdcConfig.tdco = 0U;
+/**************************** configParams ****************************/
+        /* Set CAN extended feature. */
+        configParams.asmEnable = false;
+        configParams.monEnable = false;
+        configParams.timeoutCntEnable = false;
+        configParams.timeoutPreload = 1;
+        configParams.timeoutSelect = MCAN_TIMEOUT_SELECT_CONT;
+
+        configParams.tsClock = MCAN_INTERNAL_TIMESTAMP;
+        configParams.tsSelect = MCAN_TSCNTVAL_ALWAYS0;
+        configParams.tsPrescalar = 1;
+
+        /* Set global configuration. */
+        configParams.filterConfig.rrfs = true;
+        configParams.filterConfig.rrfe = true;
+        configParams.filterConfig.anfs = MCAN_NON_MATCH_REJECT_ACCEPT;
+        configParams.filterConfig.anfe = MCAN_NON_MATCH_REJECT_ACCEPT;
+/**************************** RAMConfig ****************************/
+        /* Set standard ID filter. */
+        RAMConfig.lss = M_CAN_STANDARD_FILTER_NUM;
+        RAMConfig.flssa = M_CAN_STANDARD_FILTER_BASE_ADDR;
+
+        /* Set extended ID filter. */
+        RAMConfig.lse = M_CAN_EXTENDED_FILTER_NUM;
+        RAMConfig.flesa = M_CAN_EXTENDED_FILTER_BASE_ADDR;
+
+        /* Set Rx fifo 0. */
+        RAMConfig.rxFIFO0OpMode = MCAN_RXFIFO_OP_MODE_BLOCKING;
+        RAMConfig.rxFIFO0startAddr = M_CAN_RXFIFO0_BASE_ADDR;
+        RAMConfig.rxFIFO0size = M_CAN_RXFIFO0_NUM;
+        RAMConfig.rxFIFO0waterMark = 0;
+        RAMConfig.rxFIFO0ElemSize  = M_CAN_MSG_MAX_LENGTH;
+
+        /* Set Rx fifo 1. */
+        RAMConfig.rxFIFO1OpMode = MCAN_RXFIFO_OP_MODE_BLOCKING;
+        RAMConfig.rxFIFO1startAddr = M_CAN_RXFIFO1_BASE_ADDR;
+        RAMConfig.rxFIFO1size = M_CAN_RXFIFO1_NUM;
+        RAMConfig.rxFIFO1waterMark = 0;
+        RAMConfig.rxFIFO1ElemSize = M_CAN_MSG_MAX_LENGTH;
+
+        /* Set Rx buffer. */
+        RAMConfig.rxBufStartAddr = M_CAN_RXBUFFER_BASE_ADDR;
+        RAMConfig.rxBufElemSize = M_CAN_MSG_MAX_LENGTH;
+
+        /* Set Tx buffer */
+        RAMConfig.txBufMode = MCAN_TXBUF_OP_IN_FIFO_MODE;
+        RAMConfig.txStartAddr = M_CAN_TXBUFFER_BASE_ADDR;
+        RAMConfig.txFIFOSize = M_CAN_TXFIFOQUEUE_NUM;
+        RAMConfig.txBufNum = M_CAN_TXBUFFER_NUM;
+        RAMConfig.txBufElemSize = M_CAN_MSG_MAX_LENGTH;
+
+        /* Set Tx event fifo. */
+        RAMConfig.txEventFIFOStartAddr = M_CAN_TXEVENTFIFO_BASE_ADDR;
+        RAMConfig.txEventFIFOSize = M_CAN_TXEVENTFIFO_NUM;
+        RAMConfig.txEventFIFOWaterMark = 1;
+        con = 2;
+    }
+
+    if (con == 2)
+    {
+        // ��ʼ��������
+        configBitrate.nomRatePrescalar =  (eCanBaud[baud].BRPREG - 1) < 0 ? 1 : (eCanBaud[baud].BRPREG - 1);
+        configBitrate.nomTimeSeg1 =           eCanBaud[baud].TSEG1REG;
+        configBitrate.nomTimeSeg2 =           eCanBaud[baud].TSEG2REG;
+        configBitrate.nomSynchJumpWidth = 2;
+        con = 3;
+    }
+    if (con == 3)
+    {
+        /* Reset the MCAN module. */
+        while (MCAN_isInReset(CAN_BASE));
+
+        /* Check if the MCAN RAM is ready. */
+        while (!MCAN_isMemInitDone(CAN_BASE));
+
+        /* Set the MCAN mode to init mode. */
+        if (!MCAN_setOpMode(CAN_BASE, MCAN_OPERATION_SW_INIT_MODE))
+                while (1);
+
+        /* Initialize the MCAN. */
+        if (!MCAN_init(CAN_BASE, &init_param))
+                while (1);
+
+        if (!MCAN_config(CAN_BASE, &configParams))
+                while (1);
+
+        if (!MCAN_setBitTime(CAN_BASE, &configBitrate))
+                while (1);
+
+        if (!MCAN_msgRAMConfig(CAN_BASE, &RAMConfig))
+                while (1);
+/***************************** standard ID filter *****************************/
+        /* Add a new standard ID filter(Use Rx buffer 0). */
+#if 0
+        std_filter.sfid1 = 0x123;
+        std_filter.sfid2 = 0x0;
+        std_filter.ssync = MCAN_STDIDF_SYNC_MSG_DISABLE;
+        std_filter.sfec = MCAN_STDIDF_ELE_STORE_IN_RXB_OR_DMSG;
+        std_filter.sft = MCAN_STDIDF_RANGE_FROM_SFID1_TO_SFID2;
+        if (!MCAN_addStdMsgIDFilter(CAN_BASE, 0, &std_filter))
+                while (1);
+#endif
+
+/***************************** extended ID filter *****************************/
+        /* Add a new extended ID filter(Use Rx fifo 0). */
+        ext_filter.efid1 = 0x0;
+        ext_filter.efid2 = 0x1fffff;
+        ext_filter.esync = MCAN_EXTIDF_SYNC_MSG_DISABLE;
+        ext_filter.efec = MCAN_EXTIDF_ELE_PRIO_STORE_IN_FO0_OF_MATCH_ID;
+        ext_filter.eft = MCAN_EXTIDF_RANGE_FROM_EFID1_TO_EFID2;
+        if (!MCAN_addExtMsgIDFilter(CAN_BASE, 0, &ext_filter))
+                while (1);
+
+        /* The received extension frame will be subjected to AND operation with Ext_mask. */
+        if (!MCAN_setExtIDAndMask(CAN_BASE, 0x1FFFFF))
+                while (1);
+
+        /* Enable/Disable Loopback mode. */
+        if (!MCAN_lpbkModeEnable(CAN_BASE, MCAN_LPBK_MODE_INTERNAL, false))
+                while (1);
+
+        /* Enable MCAN. */
+        if (!MCAN_setOpMode(CAN_BASE, MCAN_OPERATION_NORMAL_MODE))
+                while (1);
+
+         /* Configuration the external timestamp clock source. */
+         if (!MCAN_extTSCounterConfig(CAN_BASE, 0xffff))
+                 while (1);
+
+         /* Enable/Disable external timestamp clock source. */
+         if (!MCAN_extTSCounterEnable(CAN_BASE, true))
+                 while (1);
+
+         /* Enable/Disable external timestamp overflow interrupt. */
+         if (!MCAN_extTSEnableIntr(CAN_BASE, false))
+                 while (1);
+
+        /* Select MCAN interrupt route to interrupt line 0 or 1. */
+        if (!MCAN_selectIntrLine(CAN_BASE, MCAN_INT_SRC_MESSAGE_STORED_TO_RXBUF |
+                                                                           MCAN_INT_SRC_RxFIFO0_NEW_MSG,
+                                                                           MCAN_INTERRUPT_LINE_0))
+                while (1);
+
+        /* Enable MCAN interrupt. */
+        if (!MCAN_enableIntr(CAN_BASE, MCAN_INT_SRC_MESSAGE_STORED_TO_RXBUF |
+                                                                   MCAN_INT_SRC_RxFIFO0_NEW_MSG, true))
+                while (1);
+
+        if (!MCAN_enableIntrLine(CAN_BASE, MCAN_INTERRUPT_LINE_0, true))
+                while (1);
+
+        Interrupt_register(CAN_IRQ_LINE0, eCanRxIsr);
+        Interrupt_enable(CAN_IRQ_LINE0);
+    }
+
+    pre_init_mailbox_buffer();
+
+/* Disable all Mailboxes  */
+    con = 0;
+    count = 0;
     EDIS;
-	#ifdef TARGET_GS32
-	Interrupt_enable(INT_CANA0);
-	#else
-    PieCtrlRegs.PIEIER9.bit.INTx5 = 1;                      // 使锟斤拷ECAN1锟叫讹拷
-    #endif
-    // IER |= M_INT9; 											// Enable CPU INT9
-	eCanTranEnFlag = 0;                                     // 锟斤拷锟斤拷锟斤拷锟斤拷始锟斤拷锟斤拷志
-	eCanReEnFlag = 0;
-	return CAN_INIT_SUCC;									// 锟斤拷始锟斤拷锟缴癸拷 
-}	
 
+    eCanTranEnFlag = 0;                                     // ��������ʼ����־
+    eCanReEnFlag = 0;
+
+    return CAN_INIT_SUCC;                                                                        // ��ʼ���ɹ�
+}
 /*******************************************************************************
-* 锟斤拷锟斤拷锟斤拷锟斤拷          : void ErroCountReset(void)
-* 锟斤拷诓锟斤拷锟�			: 锟斤拷
-* 锟斤拷锟斤拷				锟斤拷0  CAN锟斤拷锟斤拷锟斤拷锟斤拷状态
-*                     1  CAN锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷位锟斤拷
-* 锟斤拷锟斤拷	            : 	
-* 锟芥本		        : V0.0.1
-* 时锟斤拷              : 05/16/2012
-* 说锟斤拷				: 锟街讹拷锟斤拷位CAN锟斤拷锟竭达拷锟斤拷锟斤拷锟斤拷锟�
+* ��������          : void ErroCountReset(void)
+* ��ڲ���                        : ��
+* ����                                ��0  CAN��������״̬
+*                     1  CAN����������λ��
+* ����                    :
+* �汾                        : V0.0.1
+* ʱ��              : 05/16/2012
+* ˵��                                : �ֶ���λCAN���ߴ��������
 ********************************************************************************/
 Uint16 ErroCountReset(void)
 {
     static Uint16 stat = 0;
-    struct ECAN_REGS ECanaShadow;							// 锟斤拷锟斤拷一锟斤拷影锟接寄达拷锟斤拷锟斤拷某些锟侥达拷锟斤拷只锟斤拷使锟斤拷32位锟斤拷锟斤拷
-    Uint32 canIf;
-    
-    if (0 == stat)
-    {
-        canIf = ECANREGS.CANGIF0.all;                       // 锟斤拷取锟叫断憋拷志锟侥达拷锟斤拷
-        if (canIf & (7ul<<8) )                              // 锟斤拷锟斤拷锟斤拷锟�>96锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟竭关憋拷
-        {
-            EALLOW;
-            ECANREGS.CANGIF0.all = canIf;                   // 锟斤拷锟斤拷卸媳锟绞�
-            ECanaShadow.CANMC.all = ECANREGS.CANMC.all;
-            ECanaShadow.CANMC.bit.CCR = 1 ;
-            ECANREGS.CANMC.all = ECanaShadow.CANMC.all;
-            EDIS;
-            stat = 1;                                       // 锟斤拷锟斤拷锟斤拷一状态
+        if (mcan_bus_off_flag) {
+                mcan_bus_off_flag = 0;
+                MCAN_setOpMode(CAN_BASE, MCAN_OPERATION_NORMAL_MODE);
         }
-    }
-    else
-    {
-        EALLOW;
-        ECanaShadow.CANMC.all = ECANREGS.CANMC.all;
-		ECanaShadow.CANMC.bit.CCR = 0 ;            			// Set CCR = 0  锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷
-		ECANREGS.CANMC.all = ECanaShadow.CANMC.all;
-        EDIS;
-        stat = 0;
-    }
     return (stat);
 }
 
 
 /*******************************************************************************
-* 锟斤拷锟斤拷锟斤拷锟斤拷          : void InitTranMbox(Uint16 mbox)
-* 锟斤拷诓锟斤拷锟�			: mbox      锟斤拷锟斤拷锟斤拷 0~31锟斤拷 
-*					  *datapi   锟斤拷锟斤拷锟绞硷拷锟斤拷锟斤拷萁峁�
-*                     msgid     bit0~bit28  29位帧ID
-*                               bit31       锟斤拷展帧锟斤拷识
-* 锟斤拷锟斤拷				锟斤拷锟斤拷
-* 锟斤拷锟斤拷	            : 	
-* 锟芥本		        : V0.0.1
-* 时锟斤拷              : 07/29/2010
-* 说锟斤拷				: 锟斤拷锟斤拷CAN锟斤拷锟斤拷锟斤拷锟戒，锟缴筹拷始锟斤拷为锟皆讹拷应锟斤拷锟斤拷锟斤拷
+* ��������          : void InitTranMbox(Uint16 mbox)
+* ��ڲ���                        : mbox      ������ 0~31��
+*                                          *datapi   �����ʼ�����ݽṹ
+*                     msgid     bit0~bit28  29λ֡ID
+*                               bit31       ��չ֡��ʶ
+* ����                                ����
+* ����                    :
+* �汾                        : V0.0.1
+* ʱ��              : 07/29/2010
+* ˵��                                : ����CAN�������䣬�ɳ�ʼ��Ϊ�Զ�Ӧ������
 ********************************************************************************/
 void InitTranMbox(Uint16 mbox, DspCanDataStru *datapi)//Uint32 msgid, Uint32 *dataPi)
 {
-	Uint16 id;
-	Uint32 ECanaShadow, *msgIdPi;	                        //指锟诫赋值锟斤拷息ID锟斤拷址
+        msg_pack user_msg;
+        user_msg.all  = datapi->msgid;
 
-	id = mbox & 0x1f;
-	eCanTranEnFlag |= 1ul <<mbox;							// 锟斤拷锟斤拷锟绞硷拷锟斤拷锟斤拷捅锟街�
+        Uint16 mbox_id = mbox & 0x1f;
 
-	msgIdPi = (Uint32 *)(&ECANMBOXES.MBOX0.MSGID);
-	msgIdPi[id<<2] = datapi->msgid; 					    // 写锟斤拷息锟斤拷志锟斤拷确锟斤拷锟角凤拷为锟皆讹拷应锟斤拷锟斤拷锟斤拷
-	msgIdPi[(id<<2) +1] = 8;
-	
-	ECanaShadow = ECANREGS.CANMD.all;
-	ECanaShadow &= ~(1ul<<id);
-	ECANREGS.CANMD.all = ECanaShadow;						// 锟斤拷锟斤拷锟斤拷锟斤拷为锟斤拷锟斤拷锟斤拷锟斤拷
+        eCanTranEnFlag  |= 1ul << mbox;                                                        // �����ʼ�����ͱ�־
+        mailbox_flag    &= ~(1ul<<mbox_id);                                          // ��������Ϊ��������
+        tran_mailbox_en |= 1ul<<mbox_id;                                                // ʹ�ܶ�Ӧ����
 
-	ECanaShadow = ECANREGS.CANME.all;
-	ECanaShadow |= 1ul<<id;
-	ECANREGS.CANME.all = ECanaShadow;						// 使锟杰讹拷应锟斤拷锟斤拷
-
-	msgIdPi[(id<<2) + 2] = datapi->data.mdl;			    // 写锟皆讹拷应锟斤拷锟斤拷息锟斤拷
-	msgIdPi[(id<<2) + 3] = datapi->data.mdl;	
-	
+        for(uint8_t i = 0; i < TRAN_SIZE; i++){
+                if(mbox_id == tran_mail_inst[i].mailbox_id){
+                        tran_mail_inst[i].inst->brs  = 0;
+                        tran_mail_inst[i].inst->dlc  = MCAN_DATA_LENGTH_8;
+                        tran_mail_inst[i].inst->efc  = 0;
+                        tran_mail_inst[i].inst->esi  = 0;
+                        tran_mail_inst[i].inst->fdf  = 0;
+                        tran_mail_inst[i].inst->id   = M_CAN_EXTENDED_ID_W(user_msg.all);
+                        tran_mail_inst[i].inst->mm   = 0x0;
+                        tran_mail_inst[i].inst->mm1  = 0x0;
+                        tran_mail_inst[i].inst->rtr  = 0;
+                        tran_mail_inst[i].inst->tsce = 0;
+                        tran_mail_inst[i].inst->xtd  = 1;
+                }
+        }
 }
-
 /*******************************************************************************
-* 锟斤拷锟斤拷锟斤拷锟斤拷          : void InitReMbox(Uint16 mbox, union CANMSGID_REG msgid, union CANLAM_REG lam)
-* 锟斤拷诓锟斤拷锟�			: mbox 锟斤拷锟斤拷锟斤拷 0~31锟斤拷bit7 锟斤拷1锟斤拷 锟斤拷锟斤拷远锟斤拷帧 锟斤拷0锟斤拷锟斤拷通帧	    bit6 "1"锟斤拷锟角憋拷锟斤拷(锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷)
-*					  msgid	锟斤拷息锟斤拷识ID
-*					  lam	锟斤拷锟斤拷锟斤拷锟轿寄达拷锟斤拷锟斤拷写"0"锟斤拷锟斤拷锟斤拷锟秸癸拷锟斤拷位
-* 锟斤拷锟斤拷				锟斤拷锟斤拷
-* 锟斤拷锟斤拷	            : 	
-* 锟芥本		        : V0.0.1
-* 时锟斤拷              : 07/29/2010
-* 说锟斤拷				: 锟斤拷锟斤拷CAN锟斤拷锟斤拷锟斤拷锟斤拷
+* ��������          : void InitReMbox(Uint16 mbox, union CANMSGID_REG msgid, union CANLAM_REG lam)
+* ��ڲ���			: mbox ������ 0~31��bit7 ��1�� ����Զ��֡ ��0����ͨ֡	    bit6 "1"���Ǳ���(����������)
+*					  msgid	��Ϣ��ʶID
+*					  lam	�������μĴ�����д"0"�������չ���λ
+* ����				����
+* ����	            :
+* �汾		        : V0.0.1
+* ʱ��              : 07/29/2010
+* ˵��				: ����CAN��������
 ********************************************************************************/
 void InitRecMbox(Uint16 mbox, Uint32 msgid, Uint32 lam)
 {
-	Uint16 id;
-	Uint32 ECanaShadow,  *pi;								// = (Uint32 *)(&ECANMBOXES.MBOX0.MSGID);
 	
-	id = mbox & 0x1f;
-	eCanReEnFlag |= 1ul << id;
-	
-	pi = (Uint32 *)(&ECANMBOXES.MBOX0.MSGID);
-	pi[id<<2] = msgid | 1ul<<30;  							// 锟斤拷息锟斤拷识锟侥达拷锟斤拷锟斤拷使锟矫癸拷锟剿癸拷锟斤拷
-	if ((mbox & 0x80) == 0x80)								// 锟斤拷锟斤拷远锟斤拷帧锟斤拷锟斤拷锟绞硷拷锟�
-		pi[(id<<2) +1] = 1<<4 | 8;							// 锟斤拷息锟斤拷锟狡寄达拷锟斤拷
-	else
-		pi[(id<<2) +1] = 8;
-		
-	ECanaShadow = ECANREGS.CANOPC.all;
-	if ( (mbox & 0x40) == 0x40 )							// 使锟杰革拷锟角憋拷锟斤拷锟斤拷椋拷锟斤拷锟绞硷拷锟斤拷锟斤拷丫锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷止锟斤拷锟角憋拷锟斤拷
-		ECanaShadow |= 1ul<<id;
-	else
-		ECanaShadow &= ~(1ul<<id);
-	ECANREGS.CANOPC.all = ECanaShadow;
-		
-	ECanaShadow = ECANREGS.CANMD.all;						// 锟矫★拷1锟斤拷锟斤拷锟斤拷为锟斤拷锟斤拷锟斤拷锟斤拷
-	ECanaShadow |= 1ul<<id;
-	ECANREGS.CANMD.all = ECanaShadow;						// 
-	
-	ECanaShadow = ECANREGS.CANME.all;
-	ECanaShadow |= 1ul<<id;
-	ECANREGS.CANME.all = ECanaShadow;						// 使锟杰讹拷应锟斤拷锟斤拷
-	
-	pi = (Uint32 *)(&ECANLAMS.LAM0);						// 锟斤拷锟矫斤拷锟斤拷锟斤拷锟轿寄达拷锟斤拷
-	pi[id] = lam;
-
-    EALLOW;
-    ECanaShadow = ECANREGS.CANMIM.all;
-	ECanaShadow |= 1ul<<id;
-    ECANREGS.CANMIM.all = ECanaShadow;                      // 使锟杰斤拷锟斤拷锟叫讹拷
-    EDIS;
 }
 
 
 /*******************************************************************************
-* 锟斤拷锟斤拷锟斤拷锟斤拷          : Uint16 eCanDataTran(Uint16 mbox, Uint16 len, Uint32 msgid, Uint32 *dataPi)
-* 锟斤拷诓锟斤拷锟�			: mbox      锟斤拷锟斤拷锟斤拷 0~31锟斤拷
-*                     len       锟斤拷锟斤拷锟斤拷锟捷筹拷锟斤拷锟街斤拷锟斤拷
-*					  msgid     锟斤拷息锟斤拷识ID			只锟斤拷锟斤拷锟斤拷效ID位
-*                     dataPi    锟斤拷锟捷伙拷锟斤拷锟斤拷
-* 锟斤拷锟斤拷				锟斤拷CAN_MBOX_NUM_ERROR		锟斤拷锟斤拷懦锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟轿达拷锟斤拷锟绞硷拷锟轿拷锟斤拷锟斤拷锟斤拷锟�
-*					  CAN_MBOX_BUSY				锟斤拷锟斤拷忙
-*					  CAN_MBOX_TRAN_SUCC		锟斤拷锟酵成癸拷
-* 锟斤拷锟斤拷	            : 	
-* 锟芥本		        : V0.0.1
-* 时锟斤拷              : 08/25/2010
-* 说锟斤拷				: 指锟斤拷锟斤拷锟戒发锟斤拷锟斤拷锟捷ｏ拷锟斤拷锟斤拷锟斤拷氡伙拷锟绞硷拷锟轿拷锟斤拷锟斤拷锟斤拷锟�
+* ��������: Uint16 eCanDataTran(Uint16 mbox, Uint16 len, Uint32 msgid, Uint32 *dataPi)
+* ��ڲ��� : mbox      ������ 0~31��
+*           len       �������ݳ����ֽ���
+*            msgid     ��Ϣ��ʶID           ֻ������ЧIDλ
+*        dataPi    ���ݻ�����
+* ���ڣ�CAN_MBOX_NUM_ERROR                ����ų�����������δ����ʼ��Ϊ��������
+*      CAN_MBOX_BUSY                                ����æ
+*      CAN_MBOX_TRAN_SUCC                ���ͳɹ�
+* ���� :
+* �汾 : V0.0.1
+* ʱ�� : 08/25/2010
+* ˵��   : ָ�����䷢�����ݣ�������뱻��ʼ��Ϊ��������
 ********************************************************************************/
+uint32_t mailbox_busy = 0;
+RAM_FUNC_T
 Uint16 eCanDataTran(Uint16 mbox, Uint16 len, DspCanDataStru *data)
 {
-	Uint32 ECanaShadow, *pi;
     Uint32 msgid;
-    
+        uint8_t DATA[8] = {0x0};
+        uint16_t mbox_id =  mbox & 0x1f;
 
-	if ( (eCanTranEnFlag & (1ul << mbox)) != (1ul << mbox) )
-	{
-		return (CAN_MBOX_NUM_ERROR);						// CAN锟斤拷锟斤拷懦锟斤拷锟斤拷锟斤拷锟斤拷锟轿达拷锟绞硷拷锟�
-	}
-	
-	if (ECANREGS.CANTRS.all & (1ul << mbox))				// 锟斤拷锟斤拷洗畏锟斤拷锟斤拷欠锟斤拷锟缴ｏ拷锟斤拷锟斤拷锟斤拷锟斤拷锟街撅拷锟轿�
-	{
-		return (CAN_MBOX_BUSY);								// CAN锟斤拷锟斤拷忙
-	}
+        if ( (eCanTranEnFlag & (1ul << mbox)) != (1ul << mbox) )
+        {
+                return (CAN_MBOX_NUM_ERROR);                                                // CAN����ų���������δ��ʼ��
+        }
+
+        // ��ȡ������æ��״̬�����ʶ
+        mailbox_busy = MCAN_getTxBufReqPend(CAN_BASE);
 
     msgid = data->msgid;
-	mbox &= 0x1f;
-   
-	ECANREGS.CANTA.all = 1ul << mbox;						// 锟斤拷辗锟斤拷锟斤拷锟接︼拷锟街�
-	
-	pi = (Uint32 *)(&ECANMBOXES.MBOX0.MSGID);				// 锟斤拷取锟斤拷锟斤拷锟侥达拷锟斤拷锟斤拷址锟斤拷写ID锟斤拷写锟斤拷锟斤拷
-	
-	msgid &= ~(0x7ul<<29);									// 锟斤拷锟斤拷锟斤拷锟轿�
-	msgid |= pi[mbox<<2] & (0x7ul << 29);					// 锟斤拷锟睫革拷ID锟斤拷锟斤拷位
-	
-	ECanaShadow = ECANREGS.CANME.all;
-	ECanaShadow &= ~(1ul<<mbox);
-	ECANREGS.CANME.all = ECanaShadow;						// 锟斤拷止锟斤拷应锟斤拷锟斤拷
-	
-	pi[mbox<<2] = msgid;									// 锟斤拷写ID
-	pi[(mbox<<2) + 1] = len & 0xf;
-	pi[(mbox<<2) + 2] = data->data.mdl;			            // 写锟斤拷锟斤拷
-	pi[(mbox<<2) + 3] = data->data.mdh;
-	
-	ECanaShadow |= 1ul<<mbox;
-	ECANREGS.CANME.all = ECanaShadow;						// 使锟杰讹拷应锟斤拷锟斤拷	
+        mbox &= 0x1f;
 
-	ECANREGS.CANTRS.all = 1ul << mbox;						// 使锟杰凤拷锟斤拷
-	return (CAN_MBOX_TRAN_SUCC);
+
+        // ѡ���Ӧ�ķ�������
+        for(uint8_t mailbox_i = 0; mailbox_i < TRAN_SIZE; mailbox_i++){
+            if(mbox_id == tran_mail_inst[mailbox_i].mailbox_id){
+                // �жϵ�ǰ�����Ƿ���æ
+                if( mailbox_busy & (0x01 << mailbox_i)){
+                        return (CAN_MBOX_BUSY);
+                }
+                // дid
+                tran_mail_inst[mailbox_i].inst->id  = M_CAN_EXTENDED_ID_W(msgid);
+                // д����
+                tran_mail_inst[mailbox_i].inst->dlc = len;
+                // �����ֽ���ת��
+                volatile uint32_t temp;
+                temp =  swap_uint32(data->data.mdl);
+                memcpy(&DATA,    &temp,  4);
+                temp =  swap_uint32(data->data.mdh);
+//                        temp = mbox;
+                memcpy(&DATA[4], &temp,  4);
+                // �������
+                for(uint32_t data_i = 0; data_i < len; data_i++){
+                        tran_mail_inst[mailbox_i].inst->data[data_i] = DATA[data_i];
+                }
+                tran_mail_inst[mailbox_i].send_couter++;
+                // ʹ�ܷ���
+                MCAN_transmitMsgBuffer(CAN_BASE, tran_mail_inst[mailbox_i].inst, mailbox_i);                // ʹ�ܷ���
+            }
+        }
+
+        return (CAN_MBOX_TRAN_SUCC);
 }
-
 /*******************************************************************************
-* 锟斤拷锟斤拷锟斤拷锟斤拷          : Uint16 eCanDataRec(Uint16 mbox, Uint32 *dataPi)
-* 锟斤拷诓锟斤拷锟�			: mbox      锟斤拷锟斤拷锟斤拷 0~31锟斤拷
-*					  *	data    锟斤拷锟秸伙拷锟斤拷
-* 锟斤拷锟斤拷				锟斤拷CAN_MBOX_NUM_ERROR		锟斤拷锟斤拷懦锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟轿达拷锟斤拷锟绞硷拷锟轿拷锟斤拷锟斤拷锟斤拷锟�
-*					  CAN_MBOX_EMPTY			锟斤拷锟斤拷锟斤拷锟斤拷锟�
-*					  CAN_MBOX_REC_SUCC			锟斤拷锟斤拷锟斤拷锟捷成癸拷
-*					  CAN_MBOX_REC_OVER			锟斤拷锟斤拷锟斤拷锟斤拷锟叫革拷锟斤拷
-* 锟斤拷锟斤拷	            : 	
-* 锟芥本		        : V0.0.1
-* 时锟斤拷              : 08/25/2010
-* 说锟斤拷				: 锟斤拷锟斤拷锟斤拷锟捷斤拷锟秸伙拷锟斤拷锟斤拷
+* ��������          : Uint16 eCanDataRec(Uint16 mbox, Uint32 *dataPi)
+* ��ڲ���			: mbox      ������ 0~31��
+*					  *	data    ���ջ���
+* ����				��CAN_MBOX_NUM_ERROR		����ų�����������δ����ʼ��Ϊ��������
+*					  CAN_MBOX_EMPTY			���������
+*					  CAN_MBOX_REC_SUCC			�������ݳɹ�
+*					  CAN_MBOX_REC_OVER			���������и���
+* ����	            :
+* �汾		        : V0.0.1
+* ʱ��              : 08/25/2010
+* ˵��				: �������ݽ��ջ�����
 ********************************************************************************/
 /*
 Uint16 eCanDataRec(Uint16 mbox, DspCanDataStru *data)
@@ -518,54 +614,59 @@ Uint16 eCanDataRec(Uint16 mbox, DspCanDataStru *data)
 	mbox &= 0x1f;
 //	if ( (eCanReEnFlag & (1ul << mbox)) != (1ul << mbox))
 //	{
-//		return (CAN_MBOX_NUM_ERROR);						// CAN锟斤拷锟斤拷懦锟斤拷锟斤拷锟斤拷锟斤拷锟轿达拷锟绞硷拷锟�
+//		return (CAN_MBOX_NUM_ERROR);						// CAN����ų���������δ��ʼ��
 //	}
-	if (ECANREGS.CANRMP.all & (1ul << mbox) )				// 锟斤拷锟斤拷欠锟斤拷薪锟斤拷锟斤拷锟较拷锟斤拷锟�
+	if (ECANREGS.CANRMP.all & (1ul << mbox) )				// ����Ƿ��н�����Ϣ����
 	{
 		pi = (Uint32 *)(&ECANMBOXES.MBOX0.MSGID);			
-		data->msgid = pi[mbox<<2];							//  锟斤拷ID锟斤拷锟斤拷锟斤拷锟斤拷
+		data->msgid = pi[mbox<<2];							//  ��ID��������
 		data->data.mdl= pi[(mbox<<2) + 2];	
 		data->data.mdh = pi[(mbox<<2) + 3];
-        data->len= pi[(mbox<<2) + 1] & 0xf;                 // 锟斤拷取锟斤拷锟斤拷锟斤拷锟捷筹拷锟斤拷
+        data->len= pi[(mbox<<2) + 1] & 0xf;                 // ��ȡ�������ݳ���
 
 //		ECanaShadow = 1ul<<mbox;
 		
-		if (ECANREGS.CANRML.all & (1ul << mbox))			// 锟斤拷锟斤拷锟斤拷锟斤拷欠癖桓锟斤拷枪锟�
+		if (ECANREGS.CANRML.all & (1ul << mbox))			// ��������Ƿ񱻸��ǹ�
 		{
-			ECANREGS.CANRMP.all = 1ul<<mbox;				// 锟斤拷锟斤拷锟较拷锟斤拷锟侥达拷锟斤拷
+			ECANREGS.CANRMP.all = 1ul<<mbox;				// �����Ϣ����Ĵ���
 			return (CAN_MBOX_REC_OVER);
 		}	
 		else
 		{
-			ECANREGS.CANRMP.all = 1ul<<mbox;				// 锟斤拷锟斤拷锟较拷锟斤拷锟侥达拷锟斤拷
+			ECANREGS.CANRMP.all = 1ul<<mbox;				// �����Ϣ����Ĵ���
 			return (CAN_MBOX_REC_SUCC);		
 		}
 	}
 	else
 	{
-		return (CAN_MBOX_EMPTY);							// CAN锟斤拷锟斤拷眨锟斤拷蘅啥锟饺★拷锟斤拷锟�		
+		return (CAN_MBOX_EMPTY);							// CAN����գ��޿ɶ�ȡ����
 	}
 }
 */
 
 /*******************************************************************************
-* 锟斤拷锟斤拷锟斤拷锟斤拷          : Uint16 CanMailBoxEmp()
-* 锟斤拷诓锟斤拷锟�			: 
-* 锟斤拷锟斤拷				: 1  锟叫匡拷锟斤拷
-*                   : 0  锟睫匡拷锟斤拷
-* 锟斤拷锟斤拷	            : 	
-* 锟芥本		        : V0.0.1
-* 时锟斤拷              : 08/25/2010
-* 说锟斤拷				: CAN 锟斤拷锟斤拷锟斤拷锟斤拷占锟斤拷
+* ��������          : Uint16 CanMailBoxEmp()
+* ��ڲ���                        :
+* ����                                : 1  �п���
+*                   : 0  �޿���
+* ����                    :
+* �汾                        : V0.0.1
+* ʱ��              : 08/25/2010
+* ˵��                                : CAN ��������ռ��
 ********************************************************************************/
 #define TX_MAILBOX_MAST (( (1ul << TRAN_MBOX_NUM) - 1) << TRAN_BOX_N)
 Uint16 CanMailBoxEmp(void)
 {
-    if ( (ECANREGS.CANTRS.all & TX_MAILBOX_MAST) == TX_MAILBOX_MAST)
-        return 0;                                           // 锟斤拷锟斤拷锟斤拷锟斤拷忙
-    else
-        return 1;
-
+        mailbox_busy = MCAN_getTxBufReqPend(CAN_BASE);
+        // �ж����з�������
+        for(uint8_t mailbox_i = 0; mailbox_i < TRAN_SIZE; mailbox_i++){
+                if( mailbox_busy & (0x01 << mailbox_i)){
+                        continue;
+                }else{
+                        return 1;
+                }
+        }
+         return 0;                                           // ��������æ
 }
 
 
